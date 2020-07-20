@@ -24,8 +24,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * SpringBoot方式启动类
  *
- * @author stylefeng
- * @Date 2017/5/21 12:06
  */
 @SpringBootApplication(exclude = {MybatisDataSourceAutoConfiguration.class})
 public class GunsApplication {
