@@ -1,0 +1,136 @@
+@layout("/common/_container.html",{js:["/assets/home/home_topic_detail.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">新闻详情</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-inline">
+                        <div style="float: left;margin-top: 2%;margin-right: 30px;"><span style="font-size:16px;">话题名称：</span><span style="color:#ff0000;font-weight:bold;font-size:16px;">${topicName}</span></div>
+                        <a ew-href="/home"><div style="float: left" class="layui-btn icon-btn layui-btn-normal"><i class="layui-icon">&#xe65c;</i>返回</div></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md12">
+            <div class="layui-card">
+                <input type="hidden" id="topicId" value="${topicId}"/>
+                <input type="hidden" id="topicName" value="${topicName}"/>
+                <input type="hidden" id="langType" value="${langType}"/>
+                <div class="layui-card-header">话题综述</div>
+                <div class="layui-card-body" style="height:100px;">
+                    <div id="topicIntroduce" name="topicIntroduce" style="width: 100%;height: 100%; margin-left: 20px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs10 layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">话题新闻</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <select id="sensitiveType">
+                                    <option value="">请选择新闻类型</option>
+                                    <option value="2">敏感</option>
+                                    <option value="1">中性</option>
+                                    <option value="3">正向</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="sensitiveCategory">
+                                    <option value="">请选择敏感类别</option>
+                                    <option value="1">国家安全</option>
+                                    <option value="2">暴恐</option>
+                                    <option value="3">民生</option>
+                                    <option value="4">色情</option>
+                                    <option value="5">贪腐</option>
+                                    <option value="6">其他</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="newsSource" class="layui-input" type="text" placeholder="请输入新闻来源" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="timeLimit" class="layui-input" type="text" placeholder="请选择发布时间" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                            </div>
+                            <table class="layui-table" id="topicNewsTable" lay-filter="topicNewsTable"></table>
+                        </div>
+                    </div>
+                </div >
+            </div>
+        </div >
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">敏感分布</div>
+                <div class="layui-card-body" style="height:270px;">
+                    <div id="sensitive" name="sensitive" style="width: 100%;height: 100%; "></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">新闻来源</div>
+                <div class="layui-card-body" style="height:270px;">
+                    <div id="topicNewsSource" name="" style="width: 100%;height: 100%; "></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">人物统计</div>
+                <div class="layui-card-body" style="height:260px;">
+                    <div id="person" name="person" style="width: 100%;height: 100%; "></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">地点统计</div>
+                <div class="layui-card-body" style="height:260px;">
+                    <div id="location" name="location" style="width: 100%;height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">组织机构统计</div>
+                <div class="layui-card-body" style="height:260px;">
+                    <div id="organize" name="organization" style="width: 100%;height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">实体词云</div>
+                <div class="layui-card-body" style="height:300px;">
+                    <div id="entityWordcloud" name="entityWordcloud" style="width:100%;height: 100%;float: left;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">实体关系</div>
+                <div class="layui-card-body" style="height:300px;">
+                    <div id="entityRelation" name="entityRelation" style="width: 100%;height: 100%; margin-left: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="topicNewsTableBar">
+    <a class="layui-btn layui-btn-xs" lay-event="showTopicNewsDetail">查看详情</a>
+</script>
+
+<script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echarts-wordcloud.js?v=${constants.getReleaseVersion()}"></script>
+@}

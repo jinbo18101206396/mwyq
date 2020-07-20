@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.mwyq.mapper.EntityMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.Entity">
+        <id column="entity_id" property="entityId" />
+        <result column="entity_type" property="entityType" />
+        <result column="entity_key" property="entityKey" />
+        <result column="lang_type" property="langType" />
+        <result column="count" property="count" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        entity_id AS "entityId", entity_type AS "entityType", entity_key AS "entityKey", lang_type AS "langType", count AS "count"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.EntityResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.EntityParam">
+        select
+        <include refid="Base_Column_List"/>
+        from entity where 1 = 1
+            <if test="paramCondition.entityId != null and paramCondition.entityId != ''">
+                and entity_id like CONCAT('%',#{paramCondition.entityId},'%')
+            </if>
+            <if test="paramCondition.entityType != null and paramCondition.entityType != ''">
+                and entity_type like CONCAT('%',#{paramCondition.entityType},'%')
+            </if>
+            <if test="paramCondition.entityKey != null and paramCondition.entityKey != ''">
+                and entity_key like CONCAT('%',#{paramCondition.entityKey},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            </if>
+            <if test="paramCondition.count != null and paramCondition.count != ''">
+                and count like CONCAT('%',#{paramCondition.count},'%')
+            </if>
+        ORDER BY COUNT DESC limit 10;
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.EntityParam">
+        select
+        <include refid="Base_Column_List"/>
+        from entity where 1 = 1
+            <if test="paramCondition.entityId != null and paramCondition.entityId != ''">
+                and entity_id like CONCAT('%',#{paramCondition.entityId},'%')
+            </if>
+            <if test="paramCondition.entityType != null and paramCondition.entityType != ''">
+                and entity_type like CONCAT('%',#{paramCondition.entityType},'%')
+            </if>
+            <if test="paramCondition.entityKey != null and paramCondition.entityKey != ''">
+                and entity_key like CONCAT('%',#{paramCondition.entityKey},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            </if>
+            <if test="paramCondition.count != null and paramCondition.count != ''">
+                and count like CONCAT('%',#{paramCondition.count},'%')
+            </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.EntityResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.EntityParam">
+        select
+        <include refid="Base_Column_List"/>
+        from entity where 1 = 1
+            <if test="paramCondition.entityId != null and paramCondition.entityId != ''">
+                and entity_id like CONCAT('%',#{paramCondition.entityId},'%')
+            </if>
+            <if test="paramCondition.entityType != null and paramCondition.entityType != ''">
+                and entity_type like CONCAT('%',#{paramCondition.entityType},'%')
+            </if>
+            <if test="paramCondition.entityKey != null and paramCondition.entityKey != ''">
+                and entity_key like CONCAT('%',#{paramCondition.entityKey},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            </if>
+            <if test="paramCondition.count != null and paramCondition.count != ''">
+                and count like CONCAT('%',#{paramCondition.count},'%')
+            </if>
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.EntityParam">
+        select
+        <include refid="Base_Column_List"/>
+        from entity where 1 = 1
+            <if test="paramCondition.entityId != null and paramCondition.entityId != ''">
+                and entity_id like CONCAT('%',#{paramCondition.entityId},'%')
+            </if>
+            <if test="paramCondition.entityType != null and paramCondition.entityType != ''">
+                and entity_type like CONCAT('%',#{paramCondition.entityType},'%')
+            </if>
+            <if test="paramCondition.entityKey != null and paramCondition.entityKey != ''">
+                and entity_key like CONCAT('%',#{paramCondition.entityKey},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            </if>
+            <if test="paramCondition.count != null and paramCondition.count != ''">
+                and count like CONCAT('%',#{paramCondition.count},'%')
+            </if>
+    </select>
+
+</mapper>

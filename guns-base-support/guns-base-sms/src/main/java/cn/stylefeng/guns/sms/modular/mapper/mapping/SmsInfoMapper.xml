@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.sms.modular.mapper.SmsInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.sms.modular.entity.SmsInfo">
+        <id column="ID" property="id"/>
+        <result column="PHONE_NUMBERS" property="phoneNumbers"/>
+        <result column="VALIDATE_CODE" property="validateCode"/>
+        <result column="TEMPLATE_CODE" property="templateCode"/>
+        <result column="BIZID" property="bizid"/>
+        <result column="STATUS" property="status"/>
+        <result column="SOURCE" property="source"/>
+        <result column="INVALID_TIME" property="invalidTime"/>
+        <result column="MODIFY_TIME" property="modifyTime"/>
+        <result column="CREATE_TIME" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID as id, PHONE_NUMBERS AS phoneNumbers, VALIDATE_CODE AS validateCode, TEMPLATE_CODE AS templateCode, BIZID as bizid, STATUS as status, SOURCE as source, INVALID_TIME AS invalidTime, MODIFY_TIME AS modifyTime, CREATE_TIME AS createTime
+    </sql>
+
+</mapper>

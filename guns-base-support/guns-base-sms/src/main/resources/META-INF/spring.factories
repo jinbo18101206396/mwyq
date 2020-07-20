@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.stylefeng.guns.sms.config.ServiceAutoConfiguration,\
+cn.stylefeng.guns.sms.config.SmsAutoConfiguration

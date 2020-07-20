@@ -1,0 +1,61 @@
+@layout("/common/_form.html",{js:["/assets/home/home_news_detail.js"]}){
+
+<form class="layui-form" id="sensitiveForm" lay-filter="sensitiveForm">
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs12 layui-col-md8">
+                <div class="layui-card">
+                    <div class="layui-card-header">新闻内容</div>
+                    <div class="layui-card-body" style="height:380px;overflow:auto;">
+                        <div id="newsContent" name="newsContent" style="width: 100%;height: 100%; margin-left: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs12 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">敏感词</div>
+                    <div class="layui-card-body" style="height: 150px;overflow: auto;">
+                        <div id="sensitiveWords" name="sensitiveWords" style="width: 100%;height: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs12 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">关键词</div>
+                    <div class="layui-card-body" style="height: 152px;overflow: auto;">
+                        <div id="keyWords" name="keyWords" style="width: 100%;height: 100%;margin-top: -20px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs12 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">人物词云</div>
+                    <div class="layui-card-body" style="height: 200px;overflow: auto;">
+                        <div id="person" name="person" style="width: 100%;height: 100%;margin-top: -20px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs12 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">地点词云</div>
+                    <div class="layui-card-body" style="height: 200px;overflow: auto;">
+                        <div id="location" name="location" style="width: 100%;height: 100%;margin-top: -20px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs12 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">组织机构词云</div>
+                    <div class="layui-card-body" style="height: 200px;overflow: auto;">
+                        <div id="organization" name="organization" style="width: 100%;height: 100%;margin-top: -20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echarts-wordcloud.js?v=${constants.getReleaseVersion()}"></script>
+@}

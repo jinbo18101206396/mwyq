@@ -1,0 +1,103 @@
+@layout("/common/_container.html",{js:["/assets/customWord/customWord_relate.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">主题管理（主题词【<span style="color: #1E9FFF;">${customWordName}</span> 】相关新闻）</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <input type="hidden" id="customWordId" value="${customWordId}"/>
+                    <input type="hidden" id="lang" value="${lang}"/>
+                    <input type="hidden" id="customWordName" value="${customWordName}"/>
+                    <div class="layui-inline">
+                        <div style="float: left;margin-top: 1%;margin-right: 30px;"><span style="font-size:16px;">主题词：</span><span style="color:#ff0000;font-weight:bold;font-size:16px;">${customWordName}</span></div>
+                        <button id="btnBack" class="layui-btn icon-btn layui-btn-normal"><i class="layui-icon">&#xe65c;</i>返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs4">
+            <div class="layui-card">
+                <div class="layui-card-header">敏感类别</div>
+                <div class="layui-card-body" style="height: 210px;">
+                    <div id="senCategory" style="width: 100%;height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs4">
+            <div class="layui-card">
+                <div class="layui-card-header">新闻类型</div>
+                <div class="layui-card-body" style="height: 210px;overflow: hidden;">
+                    <div id="senType" style="width: 100%;height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs4">
+            <div class="layui-card">
+                <div class="layui-card-header">新闻来源</div>
+                <div class="layui-card-body" style="height: 210px;overflow: hidden;">
+                    <div id="source" style="width: 100%;height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <select id="langType">
+                                    <option value="">请选择语言</option>
+                                    <option value="cn">中文</option>
+                                    <option value="zang">藏文</option>
+                                    <option value="meng">蒙文</option>
+                                    <option value="wei">维吾尔文</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="sensitiveType">
+                                    <option value="">请选择新闻类型</option>
+                                    <option value="2">敏感</option>
+                                    <option value="1">中性</option>
+                                    <option value="3">正向</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="sensitiveCategory">
+                                    <option value="">请选择敏感类别</option>
+                                    <option value="1">国家安全</option>
+                                    <option value="2">暴恐</option>
+                                    <option value="3">民生</option>
+                                    <option value="4">色情</option>
+                                    <option value="5">贪腐</option>
+                                    <option value="6">其他</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="newsSource" class="layui-input" type="text" placeholder="新闻来源" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="timeLimit" class="layui-input" type="text" placeholder="发布时间" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="customWordRelateTable" lay-filter="customWordRelateTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="customWordRelateTableBar">
+    <a class="layui-btn layui-btn-xs" lay-event="showNewsDetail">查看详情</a>
+</script>
+
+<script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js?v=${constants.getReleaseVersion()}"></script>
+@}

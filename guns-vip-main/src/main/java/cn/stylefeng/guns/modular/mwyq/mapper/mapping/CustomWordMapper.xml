@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.mwyq.mapper.CustomWordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.CustomWord">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
+        <result column="lang" property="lang" />
+        <result column="sort" property="sort" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="create_user" property="createUser" />
+        <result column="update_user" property="updateUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", name AS "name", type AS "type",lang AS "lang", sort AS "sort", status AS "status", remark AS "remark", create_user AS "createUser", update_user AS "updateUser", create_time AS "createTime", update_time AS "updateTime"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.CustomWordResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.CustomWordParam">
+        select
+        <include refid="Base_Column_List"/>
+        from custom_word where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id = #{paramCondition.id}
+            </if>
+            <if test="paramCondition.name != null and paramCondition.name != ''">
+                and name like CONCAT('%',#{paramCondition.name},'%')
+            </if>
+            <if test="paramCondition.type != null and paramCondition.type != ''">
+                and type = #{paramCondition.type}
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang = #{paramCondition.lang}
+            </if>
+            <if test="paramCondition.status != null and paramCondition.status != ''">
+                and status like CONCAT('%',#{paramCondition.status},'%')
+            </if>
+            <if test="paramCondition.createUser != null and paramCondition.createUser != ''">
+                and create_user like CONCAT('%',#{paramCondition.createUser},'%')
+            </if>
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+            <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+                and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+            </if>
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.CustomWordParam">
+        select
+        <include refid="Base_Column_List"/>
+        from custom_word where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.name != null and paramCondition.name != ''">
+                and name like CONCAT('%',#{paramCondition.name},'%')
+            </if>
+            <if test="paramCondition.type != null and paramCondition.type != ''">
+                and type like CONCAT('%',#{paramCondition.type},'%')
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang like CONCAT('%',#{paramCondition.lang},'%')
+            </if>
+            <if test="paramCondition.status != null and paramCondition.status != ''">
+                and status like CONCAT('%',#{paramCondition.status},'%')
+            </if>
+            <if test="paramCondition.createUser != null and paramCondition.createUser != ''">
+                and create_user like CONCAT('%',#{paramCondition.createUser},'%')
+            </if>
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+            <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+                and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+            </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.CustomWordResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.CustomWordParam">
+        select
+        <include refid="Base_Column_List"/>
+        from custom_word where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.name != null and paramCondition.name != ''">
+                and name like CONCAT('%',#{paramCondition.name},'%')
+            </if>
+            <if test="paramCondition.type != null and paramCondition.type != ''">
+                and type like CONCAT('%',#{paramCondition.type},'%')
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang like CONCAT('%',#{paramCondition.lang},'%')
+            </if>
+            <if test="paramCondition.status != null and paramCondition.status != ''">
+                and status like CONCAT('%',#{paramCondition.status},'%')
+            </if>
+            <if test="paramCondition.createUser != null and paramCondition.createUser != ''">
+                and create_user like CONCAT('%',#{paramCondition.createUser},'%')
+            </if>
+            <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+                and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+            </if>
+            <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+                and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            </if>
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.CustomWordParam">
+        select
+        <include refid="Base_Column_List"/>
+        from custom_word where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.name != null and paramCondition.name != ''">
+                and name like CONCAT('%',#{paramCondition.name},'%')
+            </if>
+            <if test="paramCondition.type != null and paramCondition.type != ''">
+                and type like CONCAT('%',#{paramCondition.type},'%')
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang like CONCAT('%',#{paramCondition.lang},'%')
+            </if>
+            <if test="paramCondition.status != null and paramCondition.status != ''">
+                and status like CONCAT('%',#{paramCondition.status},'%')
+            </if>
+            <if test="paramCondition.createUser != null and paramCondition.createUser != ''">
+                and create_user like CONCAT('%',#{paramCondition.createUser},'%')
+            </if>
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+            <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+                and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+            </if>
+    </select>
+
+</mapper>

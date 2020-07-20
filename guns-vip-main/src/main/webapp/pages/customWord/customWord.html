@@ -1,0 +1,72 @@
+@layout("/common/_container.html",{js:["/assets/customWord/customWord.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">定制词表管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="name" class="layui-input" type="text" placeholder="主题词"  autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="lang">
+                                    <option value="">主题词语言类型</option>
+                                    <option value="cn">中文</option>
+                                    <option value="zang">藏文</option>
+                                    <option value="meng">蒙文</option>
+                                    <option value="wei">维吾尔文</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="type">
+                                    <option value="">所属领域</option>
+                                    <option value="0">民族宗教</option>
+                                    <option value="1">语言文字</option>
+                                    <option value="2">国家安全</option>
+                                    <option value="3">其他</option>
+                                </select>
+                            </div>
+                            @if(shiro.isAdmin()){
+                            <div class="layui-inline">
+                                <input id="userName" class="layui-input" type="text" placeholder="创建人" autocomplete="off"/>
+                            </div>
+                            @}
+                            <div class="layui-inline">
+                                <input id="timeLimit" class="layui-input" type="text" placeholder="创建时间" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                @if(shiro.hasPermission("/customWord/add")){
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                                @}
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                                <button id="btnImp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导入</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="customWordTable" lay-filter="customWordTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar">
+    @if(shiro.hasPermission("/customWord/edit")){
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    @}
+    @if(shiro.hasPermission("/customWord/delete")){
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    @}
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" lay-filter="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.status=='ENABLE'?'checked':''}} />
+</script>
+@}

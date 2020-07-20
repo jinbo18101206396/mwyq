@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.mwyq.mapper.TopicDocumentRelationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.TopicDocumentRelation">
+        <result column="id" property="id" />
+        <result column="topic_id" property="topicId" />
+        <result column="news_id" property="newsId" />
+        <result column="relation" property="relation" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", topic_id AS "topicId", news_id AS "newsId", relation AS "relation"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicDocumentRelationResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicDocumentRelationParam">
+        select
+        <include refid="Base_Column_List"/>
+        from topic_document_relation where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.topicId != null and paramCondition.topicId != ''">
+                and topic_id like CONCAT('%',#{paramCondition.topicId},'%')
+            </if>
+            <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+                and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+            </if>
+            <if test="paramCondition.relation != null and paramCondition.relation != ''">
+                and relation like CONCAT('%',#{paramCondition.relation},'%')
+            </if>
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicDocumentRelationParam">
+        select
+        <include refid="Base_Column_List"/>
+        from topic_document_relation where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.topicId != null and paramCondition.topicId != ''">
+                and topic_id like CONCAT('%',#{paramCondition.topicId},'%')
+            </if>
+            <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+                and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+            </if>
+            <if test="paramCondition.relation != null and paramCondition.relation != ''">
+                and relation like CONCAT('%',#{paramCondition.relation},'%')
+            </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicDocumentRelationResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicDocumentRelationParam">
+        select
+        <include refid="Base_Column_List"/>
+        from topic_document_relation where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.topicId != null and paramCondition.topicId != ''">
+                and topic_id like CONCAT('%',#{paramCondition.topicId},'%')
+            </if>
+            <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+                and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+            </if>
+            <if test="paramCondition.relation != null and paramCondition.relation != ''">
+                and relation like CONCAT('%',#{paramCondition.relation},'%')
+            </if>
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicDocumentRelationParam">
+        select
+        <include refid="Base_Column_List"/>
+        from topic_document_relation where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.topicId != null and paramCondition.topicId != ''">
+                and topic_id like CONCAT('%',#{paramCondition.topicId},'%')
+            </if>
+            <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+                and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+            </if>
+            <if test="paramCondition.relation != null and paramCondition.relation != ''">
+                and relation like CONCAT('%',#{paramCondition.relation},'%')
+            </if>
+    </select>
+
+</mapper>

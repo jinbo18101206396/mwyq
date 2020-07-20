@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.mwyq.mapper.NewsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.News">
+        <id column="news_id" property="newsId" />
+        <result column="news_token" property="newsToken" />
+        <result column="words_num" property="wordsNum" />
+        <result column="generated_keywords" property="generatedKeywords" />
+        <result column="news_category" property="newsCategory" />
+        <result column="news_source" property="newsSource" />
+        <result column="news_title" property="newsTitle" />
+        <result column="title_token" property="titleToken" />
+        <result column="title_lading" property="titleLading" />
+        <result column="inborn_keywords" property="inbornKeywords" />
+        <result column="news_time" property="newsTime" />
+        <result column="news_url" property="newsUrl" />
+        <result column="news_author" property="newsAuthor" />
+        <result column="news_content" property="newsContent" />
+        <result column="key_words" property="keyWords" />
+        <result column="content_lading" property="contentLading" />
+        <result column="lang_type" property="langType" />
+        <result column="crawl_source" property="crawlSource" />
+        <result column="crawl_time" property="crawlTime" />
+        <result column="news_pictures" property="newsPictures" />
+        <result column="news_video" property="newsVideo" />
+        <result column="news_encode" property="newsEncode" />
+        <result column="news_tendency" property="newsTendency" />
+        <result column="is_seged" property="isSeged" />
+        <result column="update_time" property="updateTime" />
+        <result column="has_video" property="hasVideo" />
+        <result column="is_sensitive" property="isSensitive" />
+        <result column="sensitive_words" property="sensitiveWords" />
+        <result column="sensitive_category" property="sensitiveCategory" />
+        <result column="websitename" property="websitename" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        news_id AS "newsId", news_token AS "newsToken", words_num AS "wordsNum", generated_keywords AS "generatedKeywords", news_category AS "newsCategory", news_source AS "newsSource", news_title AS "newsTitle", title_token AS "titleToken", title_lading AS "titleLading", inborn_keywords AS "inbornKeywords", news_time AS "newsTime", news_url AS "newsUrl", news_author AS "newsAuthor", news_content AS "newsContent",key_words AS "keyWords", content_lading AS "contentLading", lang_type AS "langType", crawl_source AS "crawlSource", crawl_time AS "crawlTime", news_pictures AS "newsPictures", news_video AS "newsVideo", news_encode AS "newsEncode", news_tendency AS "newsTendency", is_seged AS "isSeged", update_time AS "updateTime", has_video AS "hasVideo", is_sensitive AS "isSensitive", sensitive_words AS "sensitiveWords",sensitive_category AS "sensitiveCategory", websitename AS "websitename"
+    </sql>
+
+    <sql id="sensitive_Column_List">
+        t1.news_id AS "newsId", t1.news_token AS "newsToken", t1.words_num AS "wordsNum", t1.generated_keywords AS "generatedKeywords", t1.news_category AS "newsCategory", t1.news_source AS "newsSource", t1.news_title AS "newsTitle", t1.title_token AS "titleToken", t1.title_lading AS "titleLading", t1.inborn_keywords AS "inbornKeywords", t1.news_time AS "newsTime", t1.news_url AS "newsUrl", t1.news_author AS "newsAuthor", t1.news_content AS "newsContent", t1.key_words AS "keyWords", t1.content_lading AS "contentLading", t1.lang_type AS "langType", t1.crawl_source AS "crawlSource", t1.crawl_time AS "crawlTime", t1.news_pictures AS "newsPictures", t1.news_video AS "newsVideo", t1.news_encode AS "newsEncode", t1.news_tendency AS "newsTendency", t1.is_seged AS "isSeged", t1.update_time AS "updateTime", t1.has_video AS "hasVideo", t1.is_sensitive AS "isSensitive", t1.sensitive_words AS "sensitiveWords",t1.sensitive_category AS "sensitiveCategory", t1.websitename AS "websitename"
+    </sql>
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        select
+        <include refid="Base_Column_List"/>
+        from news where 1 = 1
+        <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+            and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+        </if>
+        <if test="paramCondition.newsToken != null and paramCondition.newsToken != ''">
+            and news_token like CONCAT('%',#{paramCondition.newsToken},'%')
+        </if>
+        <if test="paramCondition.wordsNum != null and paramCondition.wordsNum != ''">
+            and words_num like CONCAT('%',#{paramCondition.wordsNum},'%')
+        </if>
+        <if test="paramCondition.generatedKeywords != null and paramCondition.generatedKeywords != ''">
+            and generated_keywords like CONCAT('%',#{paramCondition.generatedKeywords},'%')
+        </if>
+        <if test="paramCondition.newsCategory != null and paramCondition.newsCategory != ''">
+            and news_category like CONCAT('%',#{paramCondition.newsCategory},'%')
+        </if>
+        <if test="paramCondition.newsSource != null and paramCondition.newsSource != ''">
+            and news_source like CONCAT('%',#{paramCondition.newsSource},'%')
+        </if>
+        <if test="paramCondition.newsTitle != null and paramCondition.newsTitle != ''">
+            and news_title like CONCAT('%',#{paramCondition.newsTitle},'%')
+        </if>
+        <if test="paramCondition.titleToken != null and paramCondition.titleToken != ''">
+            and title_token like CONCAT('%',#{paramCondition.titleToken},'%')
+        </if>
+        <if test="paramCondition.titleLading != null and paramCondition.titleLading != ''">
+            and title_lading like CONCAT('%',#{paramCondition.titleLading},'%')
+        </if>
+        <if test="paramCondition.inbornKeywords != null and paramCondition.inbornKeywords != ''">
+            and inborn_keywords like CONCAT('%',#{paramCondition.inbornKeywords},'%')
+        </if>
+        <if test="paramCondition.newsTime != null and paramCondition.newsTime != ''">
+            and news_time like CONCAT('%',#{paramCondition.newsTime},'%')
+        </if>
+        <if test="paramCondition.newsUrl != null and paramCondition.newsUrl != ''">
+            and news_url like CONCAT('%',#{paramCondition.newsUrl},'%')
+        </if>
+        <if test="paramCondition.newsAuthor != null and paramCondition.newsAuthor != ''">
+            and news_author like CONCAT('%',#{paramCondition.newsAuthor},'%')
+        </if>
+        <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+            and news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+        </if>
+        <if test="paramCondition.contentLading != null and paramCondition.contentLading != ''">
+            and content_lading like CONCAT('%',#{paramCondition.contentLading},'%')
+        </if>
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+        </if>
+        <if test="paramCondition.crawlSource != null and paramCondition.crawlSource != ''">
+            and crawl_source like CONCAT('%',#{paramCondition.crawlSource},'%')
+        </if>
+        <if test="paramCondition.crawlTime != null and paramCondition.crawlTime != ''">
+            and crawl_time like CONCAT('%',#{paramCondition.crawlTime},'%')
+        </if>
+        <if test="paramCondition.newsPictures != null and paramCondition.newsPictures != ''">
+            and news_pictures like CONCAT('%',#{paramCondition.newsPictures},'%')
+        </if>
+        <if test="paramCondition.newsVideo != null and paramCondition.newsVideo != ''">
+            and news_video like CONCAT('%',#{paramCondition.newsVideo},'%')
+        </if>
+        <if test="paramCondition.newsEncode != null and paramCondition.newsEncode != ''">
+            and news_encode like CONCAT('%',#{paramCondition.newsEncode},'%')
+        </if>
+        <if test="paramCondition.newsTendency != null and paramCondition.newsTendency != ''">
+            and news_tendency like CONCAT('%',#{paramCondition.newsTendency},'%')
+        </if>
+        <if test="paramCondition.isSeged != null and paramCondition.isSeged != ''">
+            and is_seged like CONCAT('%',#{paramCondition.isSeged},'%')
+        </if>
+        <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+            and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+        </if>
+        <if test="paramCondition.hasVideo != null and paramCondition.hasVideo != ''">
+            and has_video like CONCAT('%',#{paramCondition.hasVideo},'%')
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive like CONCAT('%',#{paramCondition.isSensitive},'%')
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        select
+        <include refid="Base_Column_List"/>
+        from news where 1 = 1
+        <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+            and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+        </if>
+        <if test="paramCondition.newsToken != null and paramCondition.newsToken != ''">
+            and news_token like CONCAT('%',#{paramCondition.newsToken},'%')
+        </if>
+        <if test="paramCondition.wordsNum != null and paramCondition.wordsNum != ''">
+            and words_num like CONCAT('%',#{paramCondition.wordsNum},'%')
+        </if>
+        <if test="paramCondition.generatedKeywords != null and paramCondition.generatedKeywords != ''">
+            and generated_keywords like CONCAT('%',#{paramCondition.generatedKeywords},'%')
+        </if>
+        <if test="paramCondition.newsCategory != null and paramCondition.newsCategory != ''">
+            and news_category like CONCAT('%',#{paramCondition.newsCategory},'%')
+        </if>
+        <if test="paramCondition.newsSource != null and paramCondition.newsSource != ''">
+            and news_source like CONCAT('%',#{paramCondition.newsSource},'%')
+        </if>
+        <if test="paramCondition.newsTitle != null and paramCondition.newsTitle != ''">
+            and news_title like CONCAT('%',#{paramCondition.newsTitle},'%')
+        </if>
+        <if test="paramCondition.titleToken != null and paramCondition.titleToken != ''">
+            and title_token like CONCAT('%',#{paramCondition.titleToken},'%')
+        </if>
+        <if test="paramCondition.titleLading != null and paramCondition.titleLading != ''">
+            and title_lading like CONCAT('%',#{paramCondition.titleLading},'%')
+        </if>
+        <if test="paramCondition.inbornKeywords != null and paramCondition.inbornKeywords != ''">
+            and inborn_keywords like CONCAT('%',#{paramCondition.inbornKeywords},'%')
+        </if>
+        <if test="paramCondition.newsTime != null and paramCondition.newsTime != ''">
+            and news_time like CONCAT('%',#{paramCondition.newsTime},'%')
+        </if>
+        <if test="paramCondition.newsUrl != null and paramCondition.newsUrl != ''">
+            and news_url like CONCAT('%',#{paramCondition.newsUrl},'%')
+        </if>
+        <if test="paramCondition.newsAuthor != null and paramCondition.newsAuthor != ''">
+            and news_author like CONCAT('%',#{paramCondition.newsAuthor},'%')
+        </if>
+        <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+            and news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+        </if>
+        <if test="paramCondition.contentLading != null and paramCondition.contentLading != ''">
+            and content_lading like CONCAT('%',#{paramCondition.contentLading},'%')
+        </if>
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+        </if>
+        <if test="paramCondition.crawlSource != null and paramCondition.crawlSource != ''">
+            and crawl_source like CONCAT('%',#{paramCondition.crawlSource},'%')
+        </if>
+        <if test="paramCondition.crawlTime != null and paramCondition.crawlTime != ''">
+            and crawl_time like CONCAT('%',#{paramCondition.crawlTime},'%')
+        </if>
+        <if test="paramCondition.newsPictures != null and paramCondition.newsPictures != ''">
+            and news_pictures like CONCAT('%',#{paramCondition.newsPictures},'%')
+        </if>
+        <if test="paramCondition.newsVideo != null and paramCondition.newsVideo != ''">
+            and news_video like CONCAT('%',#{paramCondition.newsVideo},'%')
+        </if>
+        <if test="paramCondition.newsEncode != null and paramCondition.newsEncode != ''">
+            and news_encode like CONCAT('%',#{paramCondition.newsEncode},'%')
+        </if>
+        <if test="paramCondition.newsTendency != null and paramCondition.newsTendency != ''">
+            and news_tendency like CONCAT('%',#{paramCondition.newsTendency},'%')
+        </if>
+        <if test="paramCondition.isSeged != null and paramCondition.isSeged != ''">
+            and is_seged like CONCAT('%',#{paramCondition.isSeged},'%')
+        </if>
+        <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+            and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+        </if>
+        <if test="paramCondition.hasVideo != null and paramCondition.hasVideo != ''">
+            and has_video like CONCAT('%',#{paramCondition.hasVideo},'%')
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive like CONCAT('%',#{paramCondition.isSensitive},'%')
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        select
+        <include refid="Base_Column_List"/>
+        from news where 1 = 1
+        <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+            and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+        </if>
+        <if test="paramCondition.newsToken != null and paramCondition.newsToken != ''">
+            and news_token like CONCAT('%',#{paramCondition.newsToken},'%')
+        </if>
+        <if test="paramCondition.wordsNum != null and paramCondition.wordsNum != ''">
+            and words_num like CONCAT('%',#{paramCondition.wordsNum},'%')
+        </if>
+        <if test="paramCondition.generatedKeywords != null and paramCondition.generatedKeywords != ''">
+            and generated_keywords like CONCAT('%',#{paramCondition.generatedKeywords},'%')
+        </if>
+        <if test="paramCondition.newsCategory != null and paramCondition.newsCategory != ''">
+            and news_category like CONCAT('%',#{paramCondition.newsCategory},'%')
+        </if>
+        <if test="paramCondition.newsSource != null and paramCondition.newsSource != ''">
+            and news_source like CONCAT('%',#{paramCondition.newsSource},'%')
+        </if>
+        <if test="paramCondition.newsTitle != null and paramCondition.newsTitle != ''">
+            and news_title like CONCAT('%',#{paramCondition.newsTitle},'%')
+        </if>
+        <if test="paramCondition.titleToken != null and paramCondition.titleToken != ''">
+            and title_token like CONCAT('%',#{paramCondition.titleToken},'%')
+        </if>
+        <if test="paramCondition.titleLading != null and paramCondition.titleLading != ''">
+            and title_lading like CONCAT('%',#{paramCondition.titleLading},'%')
+        </if>
+        <if test="paramCondition.inbornKeywords != null and paramCondition.inbornKeywords != ''">
+            and inborn_keywords like CONCAT('%',#{paramCondition.inbornKeywords},'%')
+        </if>
+        <if test="paramCondition.newsTime != null and paramCondition.newsTime != ''">
+            and news_time like CONCAT('%',#{paramCondition.newsTime},'%')
+        </if>
+        <if test="paramCondition.newsUrl != null and paramCondition.newsUrl != ''">
+            and news_url like CONCAT('%',#{paramCondition.newsUrl},'%')
+        </if>
+        <if test="paramCondition.newsAuthor != null and paramCondition.newsAuthor != ''">
+            and news_author like CONCAT('%',#{paramCondition.newsAuthor},'%')
+        </if>
+        <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+            and news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+        </if>
+        <if test="paramCondition.contentLading != null and paramCondition.contentLading != ''">
+            and content_lading like CONCAT('%',#{paramCondition.contentLading},'%')
+        </if>
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+        </if>
+        <if test="paramCondition.crawlSource != null and paramCondition.crawlSource != ''">
+            and crawl_source like CONCAT('%',#{paramCondition.crawlSource},'%')
+        </if>
+        <if test="paramCondition.crawlTime != null and paramCondition.crawlTime != ''">
+            and crawl_time like CONCAT('%',#{paramCondition.crawlTime},'%')
+        </if>
+        <if test="paramCondition.newsPictures != null and paramCondition.newsPictures != ''">
+            and news_pictures like CONCAT('%',#{paramCondition.newsPictures},'%')
+        </if>
+        <if test="paramCondition.newsVideo != null and paramCondition.newsVideo != ''">
+            and news_video like CONCAT('%',#{paramCondition.newsVideo},'%')
+        </if>
+        <if test="paramCondition.newsEncode != null and paramCondition.newsEncode != ''">
+            and news_encode like CONCAT('%',#{paramCondition.newsEncode},'%')
+        </if>
+        <if test="paramCondition.newsTendency != null and paramCondition.newsTendency != ''">
+            and news_tendency like CONCAT('%',#{paramCondition.newsTendency},'%')
+        </if>
+        <if test="paramCondition.isSeged != null and paramCondition.isSeged != ''">
+            and is_seged like CONCAT('%',#{paramCondition.isSeged},'%')
+        </if>
+        <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+            and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+        </if>
+        <if test="paramCondition.hasVideo != null and paramCondition.hasVideo != ''">
+            and has_video like CONCAT('%',#{paramCondition.hasVideo},'%')
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive like CONCAT('%',#{paramCondition.isSensitive},'%')
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        order by news_time DESC
+    </select>
+
+    <select id="sensitivePageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        select
+        <include refid="sensitive_Column_List"/>
+        from news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
+        where 1=1 and t1.news_id >= t2.news_id and t1.is_sensitive is not null
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and t1.is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and t1.websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        ORDER BY t1.news_id DESC ,t1.sensitive_category ASC
+    </select>
+
+    <select id="hotPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        select
+        <include refid="sensitive_Column_List"/>
+        from news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
+        where 1=1 and t1.news_id >= t2.news_id and t1.is_sensitive is not null
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and t1.is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        ORDER BY t1.news_id DESC
+    </select>
+
+    <select id="newsSourceList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
+        t1.websitename,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
+        WHERE
+        1=1 AND t1.news_id >= t2.news_id AND t1.websitename IS NOT NULL
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY
+        t1.websitename
+        ORDER BY num DESC
+        LIMIT 5;
+    </select>
+
+    <select id="newsDistributionList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT t.lang_type,COUNT(*) AS num FROM news t GROUP BY t.lang_type ORDER BY num DESC
+    </select>
+    <select id="relateNewsSourceList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">        SELECT
+        websitename,COUNT(*) AS num FROM news
+        WHERE 1=1
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type =#{paramCondition.langType}
+        </if>
+        <if test="paramCondition.newsTime != null">
+            and news_time <![CDATA[>=]]> #{paramCondition.newsTime}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between #{paramCondition.beginTime} and #{paramCondition.endTime})
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.ids != null">
+            and news_id in
+            <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY
+        websitename
+        ORDER BY num desc
+    </select>
+
+    <select id="sensitiveTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
+        t1.is_sensitive,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
+        WHERE
+        1=1 AND t1.news_id >= t2.news_id
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type like CONCAT('%',#{paramCondition.langType},'%')
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and t1.is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY
+        t1.is_sensitive
+        ORDER BY num desc
+    </select>
+
+    <select id="sensitiveTypeListByIds" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
+        is_sensitive,COUNT(*) AS num FROM news
+        WHERE 1=1
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type =#{paramCondition.langType}
+        </if>
+        <if test="paramCondition.newsTime != null">
+            and news_time <![CDATA[>=]]> #{paramCondition.newsTime}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between #{paramCondition.beginTime} and #{paramCondition.endTime})
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.ids != null">
+            and news_id in
+            <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY
+        is_sensitive
+        ORDER BY num desc
+    </select>
+
+    <select id="sensitiveCategoryList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
+        t1.sensitive_category,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
+        WHERE
+        1=1 AND t1.news_id >= t2.news_id
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and t1.is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY
+        t1.sensitive_category
+        ORDER BY t1.sensitive_category
+    </select>
+
+    <select id="sensitiveCategoryListByIds" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
+        sensitive_category,COUNT(*) AS num FROM news
+        WHERE 1=1
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type =#{paramCondition.langType}
+        </if>
+        <if test="paramCondition.newsTime != null">
+            and news_time <![CDATA[>=]]> #{paramCondition.newsTime}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between #{paramCondition.beginTime} and #{paramCondition.endTime})
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.ids != null">
+            and news_id in
+            <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY
+        sensitive_category
+        ORDER BY num desc
+    </select>
+
+    <select id="newsCategoryList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT t1.news_category,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
+        WHERE 1=1 AND t1.news_id >= t2.news_id and t1.news_category is not null
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type =#{paramCondition.langType}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY t1.news_category
+        ORDER BY num DESC
+    </select>
+
+    <select id="newsStaticList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsStaticResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
+            YEAR(news_time) as yearTime,
+            MONTH( news_time) as monthTime,
+            CONCAT(YEAR(news_time),'-',MONTH(news_time)) AS dataTime ,
+            COUNT(IF(lang_type="cn",1,NULL)) AS cn,
+            COUNT(IF(lang_type="zang",1,NULL)) AS zang,
+            COUNT(IF(lang_type="wei",1,NULL)) AS wei,
+            COUNT(IF(lang_type="meng",1,NULL)) AS meng
+        FROM
+            news
+        GROUP BY
+            dataTime
+        ORDER BY
+            yearTime DESC,monthTime DESC
+    </select>
+
+    <select id="newsTrendList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsTrendResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
+            YEAR(news_time) as yearTime,
+            MONTH( news_time) as monthTime,
+            CONCAT(YEAR(news_time),'-',MONTH(news_time)) AS data_time ,
+            COUNT(1) AS total,
+            COUNT(IF(is_sensitive=1,1,NULL)) AS neuNum,
+            COUNT(IF(is_sensitive=2,2,NULL)) AS senNum,
+            COUNT(IF(is_sensitive=3,3,NULL)) AS forNum
+        FROM
+            news
+        GROUP BY
+            data_time
+        ORDER BY
+            yearTime DESC,monthTime DESC
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        select
+        <include refid="Base_Column_List"/>
+        from news where 1 = 1
+        <if test="paramCondition.newsId != null and paramCondition.newsId != ''">
+            and news_id like CONCAT('%',#{paramCondition.newsId},'%')
+        </if>
+        <if test="paramCondition.newsToken != null and paramCondition.newsToken != ''">
+            and news_token like CONCAT('%',#{paramCondition.newsToken},'%')
+        </if>
+        <if test="paramCondition.wordsNum != null and paramCondition.wordsNum != ''">
+            and words_num like CONCAT('%',#{paramCondition.wordsNum},'%')
+        </if>
+        <if test="paramCondition.generatedKeywords != null and paramCondition.generatedKeywords != ''">
+            and generated_keywords like CONCAT('%',#{paramCondition.generatedKeywords},'%')
+        </if>
+        <if test="paramCondition.newsCategory != null and paramCondition.newsCategory != ''">
+            and news_category like CONCAT('%',#{paramCondition.newsCategory},'%')
+        </if>
+        <if test="paramCondition.newsSource != null and paramCondition.newsSource != ''">
+            and news_source like CONCAT('%',#{paramCondition.newsSource},'%')
+        </if>
+        <if test="paramCondition.newsTitle != null and paramCondition.newsTitle != ''">
+            and news_title like CONCAT('%',#{paramCondition.newsTitle},'%')
+        </if>
+        <if test="paramCondition.titleToken != null and paramCondition.titleToken != ''">
+            and title_token like CONCAT('%',#{paramCondition.titleToken},'%')
+        </if>
+        <if test="paramCondition.titleLading != null and paramCondition.titleLading != ''">
+            and title_lading like CONCAT('%',#{paramCondition.titleLading},'%')
+        </if>
+        <if test="paramCondition.inbornKeywords != null and paramCondition.inbornKeywords != ''">
+            and inborn_keywords like CONCAT('%',#{paramCondition.inbornKeywords},'%')
+        </if>
+        <if test="paramCondition.newsTime != null and paramCondition.newsTime != ''">
+            and news_time like CONCAT('%',#{paramCondition.newsTime},'%')
+        </if>
+        <if test="paramCondition.newsUrl != null and paramCondition.newsUrl != ''">
+            and news_url like CONCAT('%',#{paramCondition.newsUrl},'%')
+        </if>
+        <if test="paramCondition.newsAuthor != null and paramCondition.newsAuthor != ''">
+            and news_author like CONCAT('%',#{paramCondition.newsAuthor},'%')
+        </if>
+        <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+            and news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+        </if>
+        <if test="paramCondition.contentLading != null and paramCondition.contentLading != ''">
+            and content_lading like CONCAT('%',#{paramCondition.contentLading},'%')
+        </if>
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+        </if>
+        <if test="paramCondition.crawlSource != null and paramCondition.crawlSource != ''">
+            and crawl_source like CONCAT('%',#{paramCondition.crawlSource},'%')
+        </if>
+        <if test="paramCondition.crawlTime != null and paramCondition.crawlTime != ''">
+            and crawl_time like CONCAT('%',#{paramCondition.crawlTime},'%')
+        </if>
+        <if test="paramCondition.newsPictures != null and paramCondition.newsPictures != ''">
+            and news_pictures like CONCAT('%',#{paramCondition.newsPictures},'%')
+        </if>
+        <if test="paramCondition.newsVideo != null and paramCondition.newsVideo != ''">
+            and news_video like CONCAT('%',#{paramCondition.newsVideo},'%')
+        </if>
+        <if test="paramCondition.newsEncode != null and paramCondition.newsEncode != ''">
+            and news_encode like CONCAT('%',#{paramCondition.newsEncode},'%')
+        </if>
+        <if test="paramCondition.newsTendency != null and paramCondition.newsTendency != ''">
+            and news_tendency like CONCAT('%',#{paramCondition.newsTendency},'%')
+        </if>
+        <if test="paramCondition.isSeged != null and paramCondition.isSeged != ''">
+            and is_seged like CONCAT('%',#{paramCondition.isSeged},'%')
+        </if>
+        <if test="paramCondition.updateTime != null and paramCondition.updateTime != ''">
+            and update_time like CONCAT('%',#{paramCondition.updateTime},'%')
+        </if>
+        <if test="paramCondition.hasVideo != null and paramCondition.hasVideo != ''">
+            and has_video like CONCAT('%',#{paramCondition.hasVideo},'%')
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive like CONCAT('%',#{paramCondition.isSensitive},'%')
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.mwyq.mapper.TopicMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.Topic">
+        <result column="topic_id" property="topicId" />
+        <result column="topwords" property="topwords" />
+        <result column="topic_label_candidate" property="topicLabelCandidate" />
+        <result column="topic_name" property="topicName" />
+        <result column="topic_label" property="topicLabel" />
+        <result column="producedtime" property="producedtime" />
+        <result column="lang_type" property="langType" />
+        <result column="keywords" property="keywords" />
+        <result column="topic_dir" property="topicDir" />
+        <result column="topic_index" property="topicIndex" />
+        <result column="news_count" property="newsCount" />
+        <result column="news_time" property="newsTime" />
+        <result column="news_content" property="newsContent" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        topic_id AS "topicId", topwords AS "topwords", topic_label_candidate AS "topicLabelCandidate", topic_name AS "topicName", topic_label AS "topicLabel", producedtime AS "producedtime", lang_type AS "langType", keywords AS "keywords", topic_dir AS "topicDir", topic_index AS "topicIndex", news_count AS "newsCount", news_time AS "newsTime", news_content AS "newsContent"
+    </sql>
+
+    <sql id="topic_Column_List">
+        t1.topic_id AS "topicId", t1.topwords AS "topwords", t1.topic_name AS "topicName", t1.lang_type AS "langType", t1.keywords AS "keywords", t1.news_count AS "newsCount", t1.news_time AS "newsTime", t1.news_content AS "newsContent"
+    </sql>
+    <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
+        select
+        <include refid="Base_Column_List"/>
+        from topic where 1 = 1
+            <if test="paramCondition.topicId != null and paramCondition.topicId != ''">
+                and topic_id like CONCAT('%',#{paramCondition.topicId},'%')
+            </if>
+            <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
+                and topwords like CONCAT('%',#{paramCondition.topwords},'%')
+            </if>
+            <if test="paramCondition.topicLabelCandidate != null and paramCondition.topicLabelCandidate != ''">
+                and topic_label_candidate like CONCAT('%',#{paramCondition.topicLabelCandidate},'%')
+            </if>
+            <if test="paramCondition.topicName != null and paramCondition.topicName != ''">
+                and topic_name like CONCAT('%',#{paramCondition.topicName},'%')
+            </if>
+            <if test="paramCondition.topicLabel != null and paramCondition.topicLabel != ''">
+                and topic_label like CONCAT('%',#{paramCondition.topicLabel},'%')
+            </if>
+            <if test="paramCondition.producedtime != null and paramCondition.producedtime != ''">
+                and producedtime like CONCAT('%',#{paramCondition.producedtime},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            </if>
+            <if test="paramCondition.keywords != null and paramCondition.keywords != ''">
+                and keywords like CONCAT('%',#{paramCondition.keywords},'%')
+            </if>
+            <if test="paramCondition.topicDir != null and paramCondition.topicDir != ''">
+                and topic_dir like CONCAT('%',#{paramCondition.topicDir},'%')
+            </if>
+            <if test="paramCondition.topicIndex != null and paramCondition.topicIndex != ''">
+                and topic_index like CONCAT('%',#{paramCondition.topicIndex},'%')
+            </if>
+            <if test="paramCondition.newsCount != null and paramCondition.newsCount != ''">
+                and news_count like CONCAT('%',#{paramCondition.newsCount},'%')
+            </if>
+            <if test="paramCondition.newsTime != null and paramCondition.newsTime != ''">
+                and news_time like CONCAT('%',#{paramCondition.newsTime},'%')
+            </if>
+            <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+                and news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+            </if>
+    </select>
+
+    <select id="topicCountList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
+        SELECT CONCAT(YEAR(news_time),'/',MONTH(news_time),'/',DAY(news_time)) AS "dataTime" , COUNT(*) AS "count"
+        FROM topic AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(topic_id) FROM topic)) AS topic_id) AS t2
+        WHERE 1=1 AND t1.topic_id >= t2.topic_id
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY YEAR(t1.news_time) DESC,MONTH(t1.news_time) DESC,WEEK(t1.news_time) DESC,DAY(t1.news_time) DESC
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
+        select
+        <include refid="Base_Column_List"/>
+        from topic where 1 = 1
+            <if test="paramCondition.topicId != null and paramCondition.topicId != ''">
+                and topic_id like CONCAT('%',#{paramCondition.topicId},'%')
+            </if>
+            <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
+                and topwords like CONCAT('%',#{paramCondition.topwords},'%')
+            </if>
+            <if test="paramCondition.topicLabelCandidate != null and paramCondition.topicLabelCandidate != ''">
+                and topic_label_candidate like CONCAT('%',#{paramCondition.topicLabelCandidate},'%')
+            </if>
+            <if test="paramCondition.topicName != null and paramCondition.topicName != ''">
+                and topic_name like CONCAT('%',#{paramCondition.topicName},'%')
+            </if>
+            <if test="paramCondition.topicLabel != null and paramCondition.topicLabel != ''">
+                and topic_label like CONCAT('%',#{paramCondition.topicLabel},'%')
+            </if>
+            <if test="paramCondition.producedtime != null and paramCondition.producedtime != ''">
+                and producedtime like CONCAT('%',#{paramCondition.producedtime},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            </if>
+            <if test="paramCondition.keywords != null and paramCondition.keywords != ''">
+                and keywords like CONCAT('%',#{paramCondition.keywords},'%')
+            </if>
+            <if test="paramCondition.topicDir != null and paramCondition.topicDir != ''">
+                and topic_dir like CONCAT('%',#{paramCondition.topicDir},'%')
+            </if>
+            <if test="paramCondition.topicIndex != null and paramCondition.topicIndex != ''">
+                and topic_index like CONCAT('%',#{paramCondition.topicIndex},'%')
+            </if>
+            <if test="paramCondition.newsCount != null and paramCondition.newsCount != ''">
+                and news_count like CONCAT('%',#{paramCondition.newsCount},'%')
+            </if>
+            <if test="paramCondition.newsTime != null and paramCondition.newsTime != ''">
+                and news_time like CONCAT('%',#{paramCondition.newsTime},'%')
+            </if>
+            <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+                and news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+            </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
+        select
+        <include refid="topic_Column_List"/>
+        FROM topic AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(topic_id) FROM topic)) AS topic_id) AS t2
+        WHERE 1=1 AND t1.topic_id >= t2.topic_id
+            <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
+                and t1.topwords like CONCAT('%',#{paramCondition.topwords},'%')
+            </if>
+            <if test="paramCondition.topicName != null and paramCondition.topicName != ''">
+                and t1.topic_name like CONCAT('%',#{paramCondition.topicName},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and t1.lang_type = #{paramCondition.langType}
+            </if>
+            <if test="paramCondition.keywords != null and paramCondition.keywords != ''">
+                and t1.keywords like CONCAT('%',#{paramCondition.keywords},'%')
+            </if>
+            <if test="paramCondition.newsCount != null and paramCondition.newsCount != ''">
+                and t1.news_count like CONCAT('%',#{paramCondition.newsCount},'%')
+            </if>
+            <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+                and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            </if>
+            <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+                and t1.news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+            </if>
+        ORDER BY t1.topic_id DESC
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
+        select
+        <include refid="Base_Column_List"/>
+        from topic where 1 = 1
+            <if test="paramCondition.topicId != null and paramCondition.topicId != ''">
+                and topic_id like CONCAT('%',#{paramCondition.topicId},'%')
+            </if>
+            <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
+                and topwords like CONCAT('%',#{paramCondition.topwords},'%')
+            </if>
+            <if test="paramCondition.topicLabelCandidate != null and paramCondition.topicLabelCandidate != ''">
+                and topic_label_candidate like CONCAT('%',#{paramCondition.topicLabelCandidate},'%')
+            </if>
+            <if test="paramCondition.topicName != null and paramCondition.topicName != ''">
+                and topic_name like CONCAT('%',#{paramCondition.topicName},'%')
+            </if>
+            <if test="paramCondition.topicLabel != null and paramCondition.topicLabel != ''">
+                and topic_label like CONCAT('%',#{paramCondition.topicLabel},'%')
+            </if>
+            <if test="paramCondition.producedtime != null and paramCondition.producedtime != ''">
+                and producedtime like CONCAT('%',#{paramCondition.producedtime},'%')
+            </if>
+            <if test="paramCondition.langType != null and paramCondition.langType != ''">
+                and lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            </if>
+            <if test="paramCondition.keywords != null and paramCondition.keywords != ''">
+                and keywords like CONCAT('%',#{paramCondition.keywords},'%')
+            </if>
+            <if test="paramCondition.topicDir != null and paramCondition.topicDir != ''">
+                and topic_dir like CONCAT('%',#{paramCondition.topicDir},'%')
+            </if>
+            <if test="paramCondition.topicIndex != null and paramCondition.topicIndex != ''">
+                and topic_index like CONCAT('%',#{paramCondition.topicIndex},'%')
+            </if>
+            <if test="paramCondition.newsCount != null and paramCondition.newsCount != ''">
+                and news_count like CONCAT('%',#{paramCondition.newsCount},'%')
+            </if>
+            <if test="paramCondition.newsTime != null and paramCondition.newsTime != ''">
+                and news_time like CONCAT('%',#{paramCondition.newsTime},'%')
+            </if>
+            <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+                and news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+            </if>
+    </select>
+
+</mapper>
