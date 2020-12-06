@@ -69,7 +69,7 @@ public class CustomWordServiceImpl extends ServiceImpl<CustomWordMapper, CustomW
         String lang = customWordParam.getLang();
         if(ToolUtil.isNotEmpty(lang) && !lang.equals("cn")){
             TranslationUtil translationUtil = new TranslationUtil();
-            String name = translationUtil.sendPost(customWordParam.getName(),lang);
+            String name = translationUtil.sendPost(customWordParam.getName(),lang,"paragraph");
             customWordParam.setName(name);
             customWordParam.setLang("cn");
         }

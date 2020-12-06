@@ -289,7 +289,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                                 "red",
                                 "orange",
                                 "#da70d6",
-                                "#1e90ff"
+                                "#FFD700",
+                                "#2E8B57",
+                                "#1E90FF"
                             ];
                             return colorList[params.dataIndex];
                         },
@@ -314,5 +316,4 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
         senCategoryCharts.resize();
         senTypeCharts.resize();
     };
-
 });

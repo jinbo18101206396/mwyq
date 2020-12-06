@@ -2,9 +2,19 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+#    url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+#    username: root
+#    password: root
+
+    url: jdbc:mysql://10.119.130.183:3306/mwyq_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
-    password: root
+    password: mwyq912
+
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://10.119.130.114:3306/mwyqdb?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=CTT
+#    username: root
+#    password: Syzx516912
+
     filters: wall,mergeStat
 
     # 连接池大小根据实际情况调整

@@ -150,7 +150,7 @@ public class NewsController extends BaseController {
         if(ToolUtil.isNotEmpty(lang) && !lang.equals("cn")){
             TranslationUtil trans = new TranslationUtil();
             String sourceTitleAndContent = newsTitle.replace("\n", "")+"\n"+newsContent;
-            String transTitleAndContent = trans.sendPost(sourceTitleAndContent,lang);
+            String transTitleAndContent = trans.sendPost(sourceTitleAndContent,lang,"article");
             if(ToolUtil.isNotEmpty(transTitleAndContent)) {
                 String transTitle = transTitleAndContent.split("\n")[0];
                 String transContent = transTitleAndContent.replace("\n", "\n<br>").replace("\r","\n<br>").replace(transTitle, "");

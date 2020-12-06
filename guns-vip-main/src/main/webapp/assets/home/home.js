@@ -946,7 +946,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         }, 'json');
     }
 
-
     //敏感类别
     var sensitiveCategoryCharts = echarts.init(document.getElementById('senCategory'));
     function loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory){
@@ -993,7 +992,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                                     "red",
                                     "orange",
                                     "#da70d6",
-                                    "#1e90ff"
+                                    "#FFD700",
+                                    "#2E8B57",
+                                    "#1E90FF"
                                 ];
                                 return colorList[params.dataIndex];
                             },

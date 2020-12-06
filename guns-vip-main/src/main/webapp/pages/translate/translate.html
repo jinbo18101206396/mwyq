@@ -1,0 +1,73 @@
+@layout("/common/_container.html",{js:["/assets/translate/translate.js"]}){
+
+<div class="layui-fluid" style="text-align: center;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body" style="height:40px;background-color:#E1FFFF">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <select id="sourceLang">
+                                    <option value="">源语言</option>
+                                    <option value="zang">藏文</option>
+                                    <option value="meng">蒙文</option>
+                                    <option value="wei">维文</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <i class="layui-icon">  >>  </i>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="targetLang">
+                                    <option value="">目标语言</option>
+                                    <option value="cn">中文</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="transModel">
+                                    <option value="">翻译模型</option>
+                                    <option value="nmt">神经机器翻译</option>
+                                    <option value="smt">统计机器翻译</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="translate" class="layui-btn icon-btn"><i class="layui-icon">&#x1005;</i>翻译</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">原 文</div>
+                <div class="layui-card-body" style="height: 400px;">
+                    <div id="sourceContent" style="height: 100%;text-align: left;" contenteditable="true"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">译 文</div>
+                <div class="layui-card-body" style="height: 400px;">
+                    <div id="targetContent" style="height: 100%;text-align: left;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs12 layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body" style="height:50px;background-color:#E1FFFF">
+                        <div class="layui-form toolbar">
+                            <div class="layui-form-item"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@}
