@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <mysql-connector-java.version>8.0.11</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.16</mysql-connector-java.version>
         <!--<mysql-connector-java.version>5.1.37</mysql-connector-java.version>-->
         <kaptcha.version>2.3.2</kaptcha.version>
         <beetl.version>2.9.3</beetl.version>
