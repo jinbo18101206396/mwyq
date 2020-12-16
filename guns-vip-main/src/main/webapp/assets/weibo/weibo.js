@@ -43,60 +43,6 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         });
     };
 
-    /**
-     * 弹出添加对话框
-     */
-    Weibo.openAddDlg = function () {
-        func.open({
-            title: '添加',
-            content: Feng.ctxPath + '/weibo/add',
-            tableId: Weibo.tableId
-        });
-    };
-
-    /**
-    * 点击编辑
-    *
-    * @param data 点击按钮时候的行数据
-    */
-    Weibo.openEditDlg = function (data) {
-        func.open({
-            title: '修改',
-            content: Feng.ctxPath + '/weibo/edit?id=' + data.id,
-            tableId: Weibo.tableId
-        });
-    };
-
-    /**
-     * 导出excel按钮
-     */
-    Weibo.exportExcel = function () {
-        var checkRows = table.checkStatus(Weibo.tableId);
-        if (checkRows.data.length === 0) {
-            Feng.error("请选择要导出的数据");
-        } else {
-            table.exportFile(tableResult.config.id, checkRows.data, 'xls');
-        }
-    };
-
-    /**
-     * 点击删除
-     *
-     * @param data 点击按钮时候的行数据
-     */
-    Weibo.onDeleteItem = function (data) {
-        var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/weibo/delete", function (data) {
-                Feng.success("删除成功!");
-                table.reload(Weibo.tableId);
-            }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
-            });
-            ajax.set("id", data.id);
-            ajax.start();
-        };
-        Feng.confirm("是否删除?", operation);
-    };
 
     // 渲染表格
     var tableResult = table.render({
