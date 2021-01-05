@@ -167,6 +167,12 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
     organizeCharts.showLoading();
     wordcloudCharts.showLoading();
     $.get(Feng.ctxPath + '/topic/entity/static?topicId='+$("#topicId").val()+'&langType='+$("#langType").val(), function (data) {
+
+        //话题概览，人物、地点、组织机构实体个数统计
+        $("#personEntityCount").html(data.personEntityCount);
+        $("#locationEntityCount").html(data.locationEntityCount);
+        $("#organizeEntityCount").html(data.organizeEntityCount);
+
         //人名实体统计
         personCharts.hideLoading();
         personCharts.setOption({

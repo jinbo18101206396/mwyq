@@ -170,7 +170,7 @@ public class TopicController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "topic_hot_"+topicParam.getLangType()+"_"+topicParam.getTimeLimit()+"_"+page+"_"+limit;
+        String cacheKey = "topic_hot_"+topicParam.getLangType()+"_"+topicParam.getTimeLimit()+"_"+topicParam.getTopwords()+"_"+page+"_"+limit;
         LayuiPageInfo hotTopicCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
         if(hotTopicCache != null){
             return hotTopicCache;
@@ -332,6 +332,10 @@ public class TopicController extends BaseController {
 
         JSONArray wordcloudArray = new JSONArray();
 
+        int personEntityCount = 0;
+        int locationEntityCount = 0;
+        int organizeEntityCount = 0;
+
         for (EntityTopicRelation entityTopicRelation : entityTopicRelationList) {
             Double relation = entityTopicRelation.getRelation();
             Entity entity = entityService.getById(entityTopicRelation.getEntityId());
@@ -343,17 +347,17 @@ public class TopicController extends BaseController {
                 keyWordsNameArray.add(entityKey);
                 keyWordsNumArray.add(relation);
             }
-            //人名实体统计
+            //高频人名实体统计（柱状图）
             if (entityType.equals("PER") && personNameArray.size() < 10) {
                 personNameArray.add(entityKey);
                 personNumArray.add(relation);
             }
-            //地名实体统计
+            //高频地名实体统计（柱状图）
             if (entityType.equals("LOC") && locationNameArray.size() < 10) {
                 locationNameArray.add(entityKey);
                 locationNumArray.add(relation);
             }
-            //组织机构实体统计
+            //高频组织机构实体统计（柱状图）
             if (entityType.equals("ORG") && organizeNameArray.size() < 10) {
                 organizeNameArray.add(entityKey);
                 organizeNumArray.add(relation);
@@ -363,18 +367,30 @@ public class TopicController extends BaseController {
             wordcloudJson.put("name", entityKey);
             wordcloudJson.put("value", entity.getCount());
             wordcloudArray.add(wordcloudJson);
+
+            //人物、地点、组织机构实体个数统计（话题概览）
+            if(entityType.equals("PER")){
+                personEntityCount++;
+            }else if(entityType.equals("LOC")){
+                locationEntityCount++;
+            }else if(entityType.equals("ORG")){
+                organizeEntityCount++;
+            }
         }
         entityStaticJson.put("keyWordsName", keyWordsNameArray);
         entityStaticJson.put("keyWordsNum", keyWordsNumArray);
 
         entityStaticJson.put("personName", personNameArray);
         entityStaticJson.put("personNum", personNumArray);
+        entityStaticJson.put("personEntityCount",personEntityCount);
 
         entityStaticJson.put("locationName", locationNameArray);
         entityStaticJson.put("locationNum", locationNumArray);
+        entityStaticJson.put("locationEntityCount",locationEntityCount);
 
         entityStaticJson.put("organizeName", organizeNameArray);
         entityStaticJson.put("organizeNum", organizeNumArray);
+        entityStaticJson.put("organizeEntityCount",organizeEntityCount);
 
         entityStaticJson.put("wordcloud", wordcloudArray);
 
@@ -440,7 +456,7 @@ public class TopicController extends BaseController {
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public JSONObject topicCount(TopicParam topicParam) {
 
-        String cacheKey = "topic_count_"+ topicParam.getLangType()+"_"+topicParam.getTimeLimit();
+        String cacheKey = "topic_count_"+ topicParam.getLangType()+"_"+topicParam.getTimeLimit()+"_"+topicParam.getTopwords();
         JSONObject topicCountCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (topicCountCache != null) {
             return topicCountCache;

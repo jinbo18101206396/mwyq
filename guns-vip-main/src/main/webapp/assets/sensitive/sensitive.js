@@ -70,22 +70,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
     };
 
     /**
-     * 点击查询按钮
-     */
-    sensitive.search = function () {
-        var queryData = {};
-        queryData['langType'] = $("#lang").val();
-        queryData['websitename'] = $("#newsSource").val();
-        queryData['isSensitive'] = $("#sensitiveType").val();
-        queryData['sensitiveWords'] = $("#sensitiveWords").val();
-        queryData['sensitiveCategory'] = $("#sensitiveCategory").val();
-        queryData['timeLimit'] = $("#timeLimit").val();
-        table.reload(sensitive.tableId, {
-            where: queryData, page: {curr: 1}
-        });
-    };
-
-    /**
      * 渲染表格
      */
     var tableResult = table.render({
@@ -108,9 +92,132 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
         max: Feng.currentDate()
     });
 
+    //加载新闻数据
+    function loadNewsData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit){
+        var queryData = {};
+        queryData['langType'] = langType;
+        queryData['websitename'] = websitename;
+        queryData['isSensitive'] = isSensitive;
+        queryData['sensitiveWords'] = sensitiveWords;
+        queryData['keyWords'] = keyWords;
+        queryData['sensitiveCategory'] = sensitiveCategory;
+        queryData['timeLimit'] = timeLimit;
+        table.reload(sensitive.tableId, {
+            where: queryData, page: {curr: 1}
+        });
+    }
+
+    //初始化加载情感走势数据
+    loadSensitiveTrendData('','','','','','','');
+    //初始化加载情感分布数据
+    loadSensitiveTypeData('','','','','','','');
+
+    //加载情感走势数据
+    var sensitiveTrendChart = echarts.init(document.getElementById('sensitiveTrend'));
+    function loadSensitiveTrendData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit){
+        $.get(Feng.ctxPath + '/news/sensitive/trend?langType='+langType+'&websitename='+websitename+'&isSensitive='+isSensitive+'&sensitiveWords='+sensitiveWords+'&keyWords='+keyWords+'&sensitiveCategory='+sensitiveCategory+'&timeLimit='+timeLimit, function (data) {
+            sensitiveTrendChart.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data:['敏感新闻', '中性新闻','正向新闻' ]
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        restore : {show: true},
+                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']}
+                    }
+                },
+                calculable : true,
+                dataZoom : {
+                    show : true,
+                    realtime : true,
+                    start : 0,
+                    end : 100
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : true,
+                        data: data.dataTime
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name: '敏感新闻',
+                        type: 'line',
+                        data: data.senNum
+                    },
+                    {
+                        name: '中性新闻',
+                        type: 'line',
+                        data: data.neuNum
+                    },
+                    {
+                        name: '正向新闻',
+                        type: 'line',
+                        data: data.forNum
+                    }
+                ]
+            })
+        }, 'json');
+    }
+    //加载情感分布数据
+    var senTypeCharts = echarts.init(document.getElementById('senType'), myEchartsTheme);
+    function loadSensitiveTypeData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit){
+        $.get(Feng.ctxPath + '/news/sensitive/type?langType='+langType+'&websitename='+websitename+'&isSensitive='+isSensitive+'&sensitiveWords='+sensitiveWords+'&keyWords='+keyWords+'&sensitiveCategory='+sensitiveCategory+'&timeLimit='+timeLimit, function (data) {
+            senTypeCharts.setOption({
+                title : {
+                    text: '',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                color:["green","blue","red"],
+                series : [
+                    {
+                        name: '新闻类型',
+                        type: 'pie',
+                        radius: '80%',
+                        center: ['50%', '50%'],
+                        data:data.sensitiveTypeData,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            })
+        }, 'json');
+    }
+
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
-        sensitive.search();
+        var langType = $("#lang").val();
+        var websitename = $("#newsSource").val();
+        var isSensitive = $("#sensitiveType").val();
+        var sensitiveWords = $("#sensitiveWords").val();
+        var keyWords = $("#keyWords").val();
+        var sensitiveCategory = $("#sensitiveCategory").val();
+        var timeLimit = $("#timeLimit").val();
+        loadNewsData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit);
+        loadSensitiveTrendData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit);
+        loadSensitiveTypeData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit)
     });
 
     /**
@@ -148,101 +255,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
             sensitive.openEditDlg(data);
         }
     });
-
-    //敏感趋势
-    var sensitiveTrendChart = echarts.init(document.getElementById('sensitiveTrend'));
-    sensitiveTrendChart.showLoading();
-    $.get(Feng.ctxPath + '/news/trend', function (data) {
-        sensitiveTrendChart.hideLoading();
-        sensitiveTrendChart.setOption({
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                data:['敏感新闻', '中性新闻','正向新闻' ]
-            },
-            toolbox: {
-                show : true,
-                feature : {
-                    restore : {show: true},
-                    magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']}
-                }
-            },
-            calculable : true,
-            dataZoom : {
-                show : true,
-                realtime : true,
-                start : 0,
-                end : 40
-            },
-            xAxis : [
-                {
-                    type : 'category',
-                    boundaryGap : true,
-                    data: data.dataTime
-                }
-            ],
-            yAxis : [
-                {
-                    type : 'value'
-                }
-            ],
-            series : [
-                {
-                    name: '敏感新闻',
-                    type: 'line',
-                    data: data.senNum
-                },
-                {
-                    name: '中性新闻',
-                    type: 'line',
-                    data: data.neuNum
-                },
-                {
-                    name: '正向新闻',
-                    type: 'line',
-                    data: data.forNum
-                }
-            ]
-        })
-    }, 'json');
-
-    //敏感分布
-    var senTypeCharts = echarts.init(document.getElementById('senType'), myEchartsTheme);
-    senTypeCharts.showLoading();
-    $.get(Feng.ctxPath + '/news/sensitiveType', function (data) {
-        senTypeCharts.hideLoading();
-        senTypeCharts.setOption({
-            title : {
-                text: '',
-                x: 'center'
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            color:["green","blue","red"],
-            series : [
-                {
-                    name: '新闻类型',
-                    type: 'pie',
-                    radius: '80%',
-                    center: ['50%', '50%'],
-                    data:data.sensitiveTypeData,
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            ]
-        })
-    }, 'json');
 
     //敏感类别
     var senCategoryCharts = echarts.init(document.getElementById('senCategory'), myEchartsTheme);

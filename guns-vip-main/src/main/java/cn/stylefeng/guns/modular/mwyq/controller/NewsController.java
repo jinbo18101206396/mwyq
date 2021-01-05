@@ -189,8 +189,10 @@ public class NewsController extends BaseController {
         if (ToolUtil.isNotEmpty(keyWords)) {
             String[] keyWordAndFrequencys = keyWords.split(",");
             for (String keyWordAndFrequency : keyWordAndFrequencys) {
-                String[] keyWordAndFrequencySplit = keyWordAndFrequency.split(":");
-                keyWordsResult += "<span style=\"color:red\">" + keyWordAndFrequencySplit[0] + "</span> : " + keyWordAndFrequencySplit[1] + "<br>";
+                if(keyWordAndFrequency.contains(":")){
+                    String[] keyWordAndFrequencySplit = keyWordAndFrequency.split(":");
+                    keyWordsResult += "<span style=\"color:red\">" + keyWordAndFrequencySplit[0] + "</span> : " + keyWordAndFrequencySplit[1] + "<br>";
+                }
             }
         }
         news.setKeyWords(keyWordsResult);
@@ -218,7 +220,7 @@ public class NewsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/source", method = RequestMethod.GET)
     public JSONObject newsSource(NewsParam newsParam) {
-        String cacheKey = "news_source_" + newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory();
+        String cacheKey = "news_source_" + newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getWebsitename();
         JSONObject newsSourceCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (newsSourceCache != null) {
             return newsSourceCache;
@@ -233,6 +235,35 @@ public class NewsController extends BaseController {
             jsonArray.add(json);
         }
         newsSourceJson.put("newsSourceData", jsonArray);
+        localCache.put(cacheKey, newsSourceJson);
+        return newsSourceJson;
+    }
+
+    /**
+     * 新闻来源（宗教新闻）
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    @ResponseBody
+    @RequestMapping(value = "/religion/source", method = RequestMethod.GET)
+    public JSONObject religionNewsSource(NewsParam newsParam) {
+
+        String cacheKey = "religion_news_source_" + newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory();
+        JSONObject newsSourceCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+        if (newsSourceCache != null) {
+            return newsSourceCache;
+        }
+        JSONObject newsSourceJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        List<NewsResult> religionNewsSourceList = newsService.religionNewsSourceList(newsParam);
+        for (NewsResult religionNewsSource : religionNewsSourceList) {
+            JSONObject json = new JSONObject();
+            json.put("value", religionNewsSource.getNum());
+            json.put("name", religionNewsSource.getWebsitename());
+            jsonArray.add(json);
+        }
+        newsSourceJson.put("religionNewsSourceData", jsonArray);
         localCache.put(cacheKey, newsSourceJson);
         return newsSourceJson;
     }
@@ -272,11 +303,11 @@ public class NewsController extends BaseController {
      * @Date 2020-06-14
      */
     @ResponseBody
-    @RequestMapping(value = "/sensitiveType", method = RequestMethod.GET)
+    @RequestMapping(value = "/sensitive/type", method = RequestMethod.GET)
     public JSONObject sensitiveType(NewsParam newsParam) {
 
         //新闻类型数据准备
-        String cacheKey = "sensitive_type_" + newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getTimeLimit();
+        String cacheKey = "sensitive_type_" + newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getKeyWords()+"_"+newsParam.getWebsitename()+"_"+newsParam.getTimeLimit();
         JSONObject sensitiveTypeCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveTypeCache != null) {
             return sensitiveTypeCache;
@@ -291,6 +322,35 @@ public class NewsController extends BaseController {
             jsonArray.add(json);
         }
         sensitiveTypeJson.put("sensitiveTypeData", jsonArray);
+        localCache.put(cacheKey, sensitiveTypeJson);
+        return sensitiveTypeJson;
+    }
+
+    /**
+     * 新闻类型（宗教新闻）
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    @ResponseBody
+    @RequestMapping(value = "/religion/sensitive", method = RequestMethod.GET)
+    public JSONObject religionNewsSensitiveType(NewsParam newsParam) {
+
+        String cacheKey = "religion_sensitive_type_" + newsParam.getLangType()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory();
+        JSONObject sensitiveTypeCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+        if (sensitiveTypeCache != null) {
+            return sensitiveTypeCache;
+        }
+        List<NewsResult> sensitiveTypeList = newsService.religionSensitiveTypeList(newsParam);
+        JSONObject sensitiveTypeJson = new JSONObject();
+        JSONArray sensitiveTypeArray = new JSONArray();
+        for (NewsResult news : sensitiveTypeList) {
+            JSONObject sensitiveType = new JSONObject();
+            sensitiveType.put("value", news.getNum());
+            sensitiveType.put("name", SensitiveType.getDescription(news.getIsSensitive()));
+            sensitiveTypeArray.add(sensitiveType);
+        }
+        sensitiveTypeJson.put("sensitiveTypeData", sensitiveTypeArray);
         localCache.put(cacheKey, sensitiveTypeJson);
         return sensitiveTypeJson;
     }
@@ -319,24 +379,12 @@ public class NewsController extends BaseController {
             JSONObject json = new JSONObject();
             String category = newscategory.getNewsCategory();
             Integer num = newscategory.getNum();
-            //中文类别
-            if (category.equals("国内") || category.equals("国际") || category.equals("军事")
-                    || category.equals("文化") || category.equals("体育") || category.equals("教育")
-                    || category.equals("社会") || category.equals("港澳台") || category.equals("娱乐")) {
-                json.put("value", num);
-                json.put("name", category);
-                categoryNameArray.add(category);
-                newsCategoryArray.add(json);
-            }
-            //少数民族语言取Top10
-            if(lang.equals("zang") || lang.equals("meng") || lang.equals("wei")){
-                json.put("value", num);
-                json.put("name", category);
-                categoryNameArray.add(category);
-                newsCategoryArray.add(json);
-                if (newsCategoryArray.size() >= 10) {
-                    break;
-                }
+            json.put("value", num);
+            json.put("name", category);
+            categoryNameArray.add(category);
+            newsCategoryArray.add(json);
+            if (newsCategoryArray.size() > 5) {
+                break;
             }
         }
         newsCategoryJson.put("newsCategoryData", newsCategoryArray);
@@ -355,7 +403,7 @@ public class NewsController extends BaseController {
     @RequestMapping(value = "/sensitive/category", method = RequestMethod.GET)
     public JSONObject sensitiveCategory(NewsParam newsParam) {
 
-        String cacheKey = "sensitive_category_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit();
+        String cacheKey = "sensitive_category_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename();
         JSONObject sensitiveCategoryCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveCategoryCache != null) {
             return sensitiveCategoryCache;
@@ -417,7 +465,7 @@ public class NewsController extends BaseController {
     }
 
     /**
-     * 新闻趋势统计
+     * 首页>>敏感统计
      *
      * @author jinbo
      * @Date 2020-06-14
@@ -425,13 +473,49 @@ public class NewsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/trend", method = RequestMethod.GET)
     public JSONObject newsTrend(NewsParam newsParam) {
-        String cacheKey = "news_trend";
+        String cacheKey = "home_news_trend";
         JSONObject newsTrendCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (newsTrendCache != null) {
             return newsTrendCache;
         }
-
         List<NewsTrendResult> newsTrendList = newsService.newsTrendList();
+        JSONObject newsTrendJson = new JSONObject();
+
+        List<String> dataTimeList = newsTrendList.stream().map(NewsTrendResult::getDataTime).collect(Collectors.toList());
+        newsTrendJson.put("dataTime", JSONArray.parseArray(JSON.toJSONString(dataTimeList)));
+
+        List<String> forNumList = newsTrendList.stream().map(NewsTrendResult::getForNum).collect(Collectors.toList());
+        newsTrendJson.put("forNum", JSONArray.parseArray(JSON.toJSONString(forNumList)));
+
+        List<String> neuNumList = newsTrendList.stream().map(NewsTrendResult::getNeuNum).collect(Collectors.toList());
+        newsTrendJson.put("neuNum", JSONArray.parseArray(JSON.toJSONString(neuNumList)));
+
+        List<String> senNumList = newsTrendList.stream().map(NewsTrendResult::getSenNum).collect(Collectors.toList());
+        newsTrendJson.put("senNum", JSONArray.parseArray(JSON.toJSONString(senNumList)));
+
+        List<String> totalList = newsTrendList.stream().map(NewsTrendResult::getTotal).collect(Collectors.toList());
+        newsTrendJson.put("total", JSONArray.parseArray(JSON.toJSONString(totalList)));
+
+        localCache.put(cacheKey, newsTrendJson);
+        return newsTrendJson;
+    }
+
+
+    /**
+     * 情感分析>>情感走势
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sensitive/trend", method = RequestMethod.GET)
+    public JSONObject sensitiveNewsTrend(NewsParam newsParam) {
+        String cacheKey = "sen_news_trend_"+newsParam.getLangType()+"_"+newsParam.getKeyWords()+"_"+newsParam.getWebsitename()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getTimeLimit();
+        JSONObject newsTrendCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+        if (newsTrendCache != null) {
+            return newsTrendCache;
+        }
+        List<NewsTrendResult> newsTrendList = newsService.sensitiveNewsTrendList(newsParam);
         JSONObject newsTrendJson = new JSONObject();
 
         List<String> dataTimeList = newsTrendList.stream().map(NewsTrendResult::getDataTime).collect(Collectors.toList());
@@ -465,7 +549,7 @@ public class NewsController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "news_hot_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getTimeLimit()+"_"+page+"_"+limit;
+        String cacheKey = "news_hot_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory()+"_"+page+"_"+limit;
         LayuiPageInfo hotNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
         if(hotNewsCache != null){
             return hotNewsCache;
@@ -487,7 +571,7 @@ public class NewsController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "sen_news_"+newsParam.getLangType()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit()+""+page+"_"+limit;
+        String cacheKey = "sen_news_"+newsParam.getLangType()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename()+"_"+page+"_"+limit;
         LayuiPageInfo sensitiveNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
         if(sensitiveNewsCache != null){
             return sensitiveNewsCache;
@@ -495,6 +579,28 @@ public class NewsController extends BaseController {
         LayuiPageInfo sensitiveNewsPage = this.newsService.sensitivePageList(newsParam);
         localCache.put(cacheKey,sensitiveNewsPage);
         return sensitiveNewsPage;
+    }
+
+    /**
+     * 宗教新闻列表
+     *
+     * @author jinbo
+     * @Date 2020-07-01
+     */
+    @ResponseBody
+    @RequestMapping("/religion/list")
+    public LayuiPageInfo religionNews(NewsParam newsParam) {
+        HttpServletRequest request = HttpContext.getRequest();
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        String cacheKey = "religion_news_list"+newsParam.getLangType()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getIsSensitive()+"_"+page+"_"+limit;
+        LayuiPageInfo religionNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
+        if(religionNewsCache != null){
+            return religionNewsCache;
+        }
+        LayuiPageInfo religionNews = this.newsService.religionPageList(newsParam);
+        localCache.put(cacheKey,religionNews);
+        return religionNews;
     }
 }
 

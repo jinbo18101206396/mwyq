@@ -104,12 +104,20 @@ public interface NewsMapper extends BaseMapper<News> {
     List<NewsStaticResult> newsStaticList();
 
     /**
-     * 敏感趋势统计
+     * 首页>>敏感趋势统计
      *
      * @author jinbo
      * @Date 2020-06-14
      */
     List<NewsTrendResult> newsTrendList();
+
+    /**
+     * 情感分析>>情感走势
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    List<NewsTrendResult> sensitiveNewsTrendList(@Param("paramCondition") NewsParam paramCondition);
 
 
     /**

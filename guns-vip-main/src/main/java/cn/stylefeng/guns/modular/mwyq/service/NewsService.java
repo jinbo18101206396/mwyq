@@ -103,6 +103,14 @@ public interface NewsService extends IService<News> {
     public List<NewsResult> newsSourceList(NewsParam newsParam);
 
     /**
+     * 宗教新闻来源数据
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    public List<NewsResult> religionNewsSourceList(NewsParam newsParam);
+
+    /**
      * 新闻分布数据
      *
      * @author jinbo
@@ -191,6 +199,14 @@ public interface NewsService extends IService<News> {
     public List<NewsResult> sensitiveTypeListByIds(List<Integer> list,TopicParam topicParam);
 
     /**
+     * 宗教新闻类型数据
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    public List<NewsResult> religionSensitiveTypeList(NewsParam newsParam);
+
+    /**
      * 敏感类别数据
      *
      * @author jinbo
@@ -214,6 +230,14 @@ public interface NewsService extends IService<News> {
      */
     public List<NewsTrendResult> newsTrendList();
 
+    /**
+     * 情感分析>>情感走势
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    public List<NewsTrendResult> sensitiveNewsTrendList(NewsParam newsParam);
+
 
     /**
      * 热门新闻
@@ -230,4 +254,12 @@ public interface NewsService extends IService<News> {
      * @Date 2020-06-14
      */
     public LayuiPageInfo sensitivePageList(NewsParam newsParam);
+
+    /**
+     * 宗教新闻
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    public LayuiPageInfo religionPageList(NewsParam newsParam);
 }

@@ -349,10 +349,13 @@
             and t1.websitename like CONCAT('%',#{paramCondition.websitename},'%')
         </if>
         <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
-            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+            and t1.sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and t1.key_words like CONCAT('%',#{paramCondition.keyWords},'%')
         </if>
         <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
-            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+            and t1.sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
@@ -370,6 +373,9 @@
         </if>
         <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
             and t1.is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
@@ -390,6 +396,9 @@
         </if>
         <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
             and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and t1.websitename like CONCAT('%',#{paramCondition.websitename},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
@@ -441,13 +450,25 @@
         WHERE
         1=1 AND t1.news_id >= t2.news_id
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
-            and t1.lang_type like CONCAT('%',#{paramCondition.langType},'%')
+            and lang_type = #{paramCondition.langType}
         </if>
         <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
-            and t1.is_sensitive = #{paramCondition.isSensitive}
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
         t1.is_sensitive
@@ -500,6 +521,9 @@
         </if>
         <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
             and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
@@ -574,6 +598,23 @@
 
     <select id="newsTrendList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsTrendResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         SELECT
+        YEAR(news_time) as yearTime,
+        MONTH( news_time) as monthTime,
+        CONCAT(YEAR(news_time),'-',MONTH(news_time)) AS data_time ,
+        COUNT(1) AS total,
+        COUNT(IF(is_sensitive=1,1,NULL)) AS neuNum,
+        COUNT(IF(is_sensitive=2,2,NULL)) AS senNum,
+        COUNT(IF(is_sensitive=3,3,NULL)) AS forNum
+        FROM
+        news
+        GROUP BY
+        data_time
+        ORDER BY
+        yearTime DESC,monthTime DESC
+    </select>
+
+    <select id="sensitiveNewsTrendList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsTrendResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT
             YEAR(news_time) as yearTime,
             MONTH( news_time) as monthTime,
             CONCAT(YEAR(news_time),'-',MONTH(news_time)) AS data_time ,
@@ -582,7 +623,29 @@
             COUNT(IF(is_sensitive=2,2,NULL)) AS senNum,
             COUNT(IF(is_sensitive=3,3,NULL)) AS forNum
         FROM
-            news
+            news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
+        where 1=1 and t1.news_id >= t2.news_id and t1.is_sensitive is not null
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
         GROUP BY
             data_time
         ORDER BY

@@ -79,6 +79,9 @@
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and t1.lang_type = #{paramCondition.langType}
         </if>
+        <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
+            and topwords like CONCAT('%',#{paramCondition.topwords},'%')
+        </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
@@ -156,7 +159,7 @@
             <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
                 and t1.news_content like CONCAT('%',#{paramCondition.newsContent},'%')
             </if>
-        ORDER BY t1.topic_id DESC
+        ORDER BY t1.news_time DESC,t1.topic_id DESC
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">

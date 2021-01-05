@@ -6,26 +6,26 @@
 
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
-        <div class="layui-col-xs12 layui-col-md8">
+        <div class="layui-col-xs4 layui-col-md8">
             <div class="layui-card" style="">
-                <div class="layui-card-header">敏感趋势</div>
-                <div class="layui-card-body" style="height: 500px;">
+                <div class="layui-card-header">情感走势</div>
+                <div class="layui-card-body" style="height: 300px;">
                     <div id="sensitiveTrend" style="float:left;height: 100%;width: 100%;"></div>
                 </div>
             </div>
         </div>
-        <div class="layui-col-xs4">
+        <!--<div class="layui-col-xs4">
             <div class="layui-card">
                 <div class="layui-card-header">敏感类别</div>
                 <div class="layui-card-body" style="height: 210px;">
                     <div id="senCategory" style="width: 100%;height: 100%;"></div>
                 </div>
             </div>
-        </div>
-        <div class="layui-col-xs4">
+        </div>-->
+        <div class="layui-col-xs4 layui-col-md4">
             <div class="layui-card">
-                <div class="layui-card-header">敏感分布</div>
-                <div class="layui-card-body" style="height: 210px;overflow: hidden;">
+                <div class="layui-card-header">情感分布</div>
+                <div class="layui-card-body" style="height: 300px;overflow: hidden;">
                     <div id="senType" style="width: 100%;height: 100%;"></div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <select id="lang">
-                                    <option value="">请选择语言类型</option>
+                                    <option value="">语言类型</option>
                                     <option value="cn">中文</option>
                                     <option value="zang">藏文</option>
                                     <option value="meng">蒙文</option>
@@ -46,7 +46,7 @@
                             </div>
                             <div class="layui-inline">
                                 <select id="sensitiveType">
-                                    <option value="">请选择新闻类型</option>
+                                    <option value="">新闻类型</option>
                                     <option value="2">敏感</option>
                                     <option value="1">中性</option>
                                     <option value="3">正向</option>
@@ -54,7 +54,7 @@
                             </div>
                             <div class="layui-inline">
                                 <select id="sensitiveCategory">
-                                    <option value="">请选择敏感类别</option>
+                                    <option value="">敏感类别</option>
                                     <option value="1">国家安全</option>
                                     <option value="2">暴恐</option>
                                     <option value="3">民生</option>
@@ -65,6 +65,9 @@
                             </div>
                             <div class="layui-inline">
                                 <input id="sensitiveWords" class="layui-input" type="text" placeholder="请输入敏感词" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="keyWords" class="layui-input" type="text" placeholder="请输入关键词" autocomplete="off"/>
                             </div>
                             <div class="layui-inline">
                                 <input id="newsSource" class="layui-input" type="text" placeholder="请输入新闻来源" autocomplete="off"/>

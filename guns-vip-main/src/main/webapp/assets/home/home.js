@@ -20,6 +20,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     var CustomWord = {
         tableId:"customWordTable"
     };
+    var Religion = {
+        tableId:"religionTable"
+    };
 
     /**
      * 热门话题表格的列
@@ -29,12 +32,13 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             {type: 'checkbox'},
             {field: 'topicId',align: "center", hide: true, title: '话题id'},
             {
-                field: 'topicName',align: "center", sort: true, title: '话题名称',minWidth: 500,templet:function (d) {
-                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + d.topicId +'&topicName='+d.topicName+'&langType=' + d.langType;
+                field: 'topicName',align: "center", sort: true, title: '话题名称',minWidth: 400,templet:function (d) {
+                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + d.topicId +'&topicName='+d.topicName+'&langType=' + d.langType+'&topwords='+d.topwords+'&newsCount='+d.newsCount+'&newsTime='+d.newsTime;
                     return '<div style="text-align: left"><a style="color: #01AAED;" href="'+url+'">'+d.topicName+'</a></div>';
                 }
             },
-            {field: 'newsCount',align: "center", sort: true, title: '新闻数量'},
+            {field: 'newsCount',align: "center", sort: true, title: '新闻数量',width:100},
+            {field: 'topwords',align: "center", sort: true, title: '关键词',minWidth: 300},
             {field: 'newsTime',align: "center", sort: true, title: '发布时间'},
         ]];
     };
@@ -59,8 +63,23 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                         return "<p style='color:blue;font-weight: bold'>中性</p>";
                     } else if(d.isSensitive === 2){
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
-                    }else{
-                        return "<p style='font-weight: bold'>其他</p>";
+                    }
+                }
+            },
+            {
+                field: 'sensitiveCategory', align: "center", sort: true, title: '敏感类别', templet: function (d) {
+                    if(d.sensitiveCategory === 1){
+                        return "<p>国家安全</p>";
+                    }else if (d.sensitiveCategory === 2) {
+                        return "<p>暴恐</p>";
+                    } else if(d.sensitiveCategory === 3){
+                        return "<p>民生</p>";
+                    }else if (d.sensitiveCategory === 4) {
+                        return "<p>色情</p>";
+                    } else if(d.sensitiveCategory === 5){
+                        return "<p>贪腐</p>";
+                    }else if(d.sensitiveCategory === 6){
+                        return "<p>其他</p>";
                     }
                 }
             },
@@ -83,6 +102,65 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
+                field: 'sensitive', align: "center", sort: true, title: '新闻类型', templet: function (d) {
+                    if(d.isSensitive === 3){
+                        return "<p style='color:green;font-weight: bold'>正向</p>";
+                    }else if (d.isSensitive === 1) {
+                        return "<p style='color:blue;font-weight: bold'>中性</p>";
+                    } else if(d.isSensitive === 2){
+                        return "<p style='color:red;font-weight: bold'>敏感</p>";
+                    }
+                }
+            },
+            {
+                field: 'sensitiveCategory', align: "center", sort: true, title: '敏感类别', templet: function (d) {
+                    if(d.sensitiveCategory === 1){
+                        return "<p>国家安全</p>";
+                    }else if (d.sensitiveCategory === 2) {
+                        return "<p>暴恐</p>";
+                    } else if(d.sensitiveCategory === 3){
+                        return "<p>民生</p>";
+                    }else if (d.sensitiveCategory === 4) {
+                        return "<p>色情</p>";
+                    } else if(d.sensitiveCategory === 5){
+                        return "<p>贪腐</p>";
+                    }else if(d.sensitiveCategory === 6){
+                        return "<p>其他</p>";
+                    }
+                }
+            },
+            {field: 'websitename', align: "center", sort: true, title: '新闻来源'},
+            {field: 'newsTime', align: "center", sort: true, title: '发布时间'},
+            {fixed: 'right',align: "center",toolbar: '#sensitiveTableBar', minWidth: 120,title: '操作'}
+        ]];
+    };
+
+    /**
+     * 宗教新闻表格的列
+     */
+    Religion.initColumn = function () {
+        return [[
+            {type: 'checkbox'},
+            {field: 'id', align: "center", hide: true, title: '新闻Id'},
+            {
+                field: 'title', align: "center", sort: true, title: '新闻标题',minWidth: 370, templet: function (d) {
+                    return '<div style="text-align: left"><a href="'+d.newsUrl+'" class="layui-table-link" target="_blank">'+d.newsTitle+'</a></div>';
+                }
+            },
+            {
+                field: 'sensitive', align: "center", sort: true, title: '新闻类型', templet: function (d) {
+                    if(d.isSensitive === 3){
+                        return "<p style='color:green;font-weight: bold'>正向</p>";
+                    }else if (d.isSensitive === 1) {
+                        return "<p style='color:blue;font-weight: bold'>中性</p>";
+                    } else if(d.isSensitive === 2){
+                        return "<p style='color:red;font-weight: bold'>敏感</p>";
+                    }else{
+                        return "<p style='font-weight: bold'>其他</p>";
+                    }
+                }
+            },
+            {
                 field: 'sensitiveCategory', align: "center", sort: true, title: '敏感类别', templet: function (d) {
                     if(d.sensitiveCategory === 1){
                         return "<p>国家安全</p>";
@@ -101,7 +179,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             },
             {field: 'websitename', align: "center", sort: true, title: '新闻来源'},
             {field: 'newsTime', align: "center", sort: true, title: '发布时间'},
-            {fixed: 'right',align: "center",toolbar: '#sensitiveTableBar', minWidth: 120,title: '操作'}
+            {fixed: 'right',align: "center",toolbar: '#religionTableBar', minWidth: 120,title: '操作'}
         ]];
     };
 
@@ -173,11 +251,12 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         $("#newsShow").css("display", "none");//解决display样式变形
         $("#sensitiveShow").css("display", "none");
         loadNewsCategryData('cn',''); //初始化加载新闻类别数据
-        loadTopicCount('cn',''); //初始化加载话题数量数据
+        loadTopicCount('cn','',''); //初始化加载话题数量数据
 
-         //查询条件
+        //查询条件
         $("#senTypeSearch").hide();
         $("#senCategorySearch").hide();
+        $("#websiteSearch").hide();
 
         var customWordIdArray = data.ids;
         var customWordNameArray = data.names;
@@ -187,10 +266,10 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     }, 'json');
 
     //加载热门话题数据
-    function loadHotTopicData(lang,timeLimit){
+    function loadHotTopicData(lang,timeLimit,topwords){
         table.render({
             elem: '#' + Topic.tableId,
-            url: Feng.ctxPath + '/topic/hot/list?langType='+lang+'&timeLimit='+timeLimit,
+            url: Feng.ctxPath + '/topic/hot/list?langType='+lang+'&timeLimit='+timeLimit+'&topwords='+topwords,
             title: '热门话题',
             page: true,
             height : 500,
@@ -204,10 +283,10 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     };
 
     //加载热门新闻数据
-    function loadHotNewsData(lang,timeLimit,isSensitive){
+    function loadHotNewsData(lang,timeLimit,isSensitive,sensitiveCategory){
         table.render({
             elem: '#' + News.tableId,
-            url: Feng.ctxPath + '/news/hot/list?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive,
+            url: Feng.ctxPath + '/news/hot/list?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory,
             title: '热门新闻',
             page: true,
             height : 500,
@@ -221,15 +300,32 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     };
 
     //加载敏感新闻数据
-    function loadSensitiveNewsData(lang,timeLimit,sensitiveCategory){
+    function loadSensitiveNewsData(lang,timeLimit,sensitiveCategory,websitename){
         table.render({
             elem: '#' + Sensitive.tableId,
-            url: Feng.ctxPath + '/news/sensitive/list?isSensitive=2&timeLimit='+timeLimit+'&langType='+lang+'&sensitiveCategory='+sensitiveCategory,
+            url: Feng.ctxPath + '/news/sensitive/list?isSensitive=2&timeLimit='+timeLimit+'&langType='+lang+'&sensitiveCategory='+sensitiveCategory+'&websitename='+websitename,
             title: '敏感新闻',
             page: true,
             height : 500,
             cellMinWidth: 100,
             cols: Sensitive.initColumn(),
+            initSort:{
+                field:'newsTime',
+                type:'desc'
+            }
+        });
+    };
+
+    //加载宗教新闻数据
+    function loadReligionNewsData(lang,timeLimit,isSensitive,sensitiveCategory){
+        table.render({
+            elem: '#' + Religion.tableId,
+            url: Feng.ctxPath + '/news/religion/list?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory,
+            title: '宗教新闻',
+            page: true,
+            height : 500,
+            cellMinWidth: 100,
+            cols: Religion.initColumn(),
             initSort:{
                 field:'newsTime',
                 type:'desc'
@@ -263,9 +359,13 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         var timeLimit = $("#timeLimit").val();
         var isSensitive = $("#sensitive_type").val();
         var sensitiveCategory = $("#sensitive_category").val();
+        var websitename = $("#websitename").val();
+        var topwords = $("#topwords").val();
+
         if(index === 0){ //热门话题
             $("#newsTableDiv").hide();
             $("#sensitiveTableDiv").hide();
+            $("#religionTableDiv").hide();
             $("#customWordTableDiv").hide();
             $("#topicTableDiv").show();
 
@@ -276,14 +376,17 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             //查询条件
             $("#senTypeSearch").hide();
             $("#senCategorySearch").hide();
+            $("#websiteSearch").hide();
+            $("#topwordsSearch").show();
 
             //统计图
-            loadHotTopicData(lang,timeLimit);
+            loadHotTopicData(lang,timeLimit,topwords);
             loadNewsCategryData(lang,timeLimit);
-            loadTopicCount(lang,timeLimit);
+            loadTopicCount(lang,timeLimit,topwords);
         }else if(index === 1){//热门新闻(新闻来源、新闻类型)
             $("#topicTableDiv").hide();
             $("#sensitiveTableDiv").hide();
+            $("#religionTableDiv").hide();
             $("#customWordTableDiv").hide();
             $("#newsTableDiv").show();
 
@@ -292,15 +395,18 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             $("#newsShow").css("display", "block");
 
             //查询条件
+            $("#websiteSearch").hide();
+            $("#topwordsSearch").hide();
             $("#senTypeSearch").show();
-            $("#senCategorySearch").hide();
+            $("#senCategorySearch").show();
 
-            loadHotNewsData(lang,timeLimit,isSensitive);
-            loadHotNewsSourceData(lang,timeLimit,isSensitive);
-            loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive);
+            loadHotNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
+            loadHotNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory);
+            loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
         }else if(index === 2){//敏感新闻
             $("#topicTableDiv").hide();
             $("#newsTableDiv").hide();
+            $("#religionTableDiv").hide();
             $("#customWordTableDiv").hide();
             $("#sensitiveTableDiv").show();
 
@@ -310,15 +416,39 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
             //查询条件
             $("#senTypeSearch").hide();
+            $("#topwordsSearch").hide();
+            $("#senCategorySearch").show();
+            $("#websiteSearch").show();
+
+            loadSensitiveNewsData(lang,timeLimit,sensitiveCategory,websitename);
+            loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory,websitename);
+            loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory,websitename);
+        }else if(index === 3){//宗教新闻
+
+            $("#topicTableDiv").hide();
+            $("#newsTableDiv").hide();
+            $("#sensitiveTableDiv").hide();
+            $("#customWordTableDiv").hide();
+            $("#religionTableDiv").show();
+
+            $("#topicShow").css("display", "none");
+            $("#sensitiveShow").css("display", "none");
+            $("#newsShow").css("display", "block");
+
+            //查询条件
+            $("#websiteSearch").hide();
+            $("#topwordsSearch").hide();
+            $("#senTypeSearch").show();
             $("#senCategorySearch").show();
 
-            loadSensitiveNewsData(lang,timeLimit,sensitiveCategory);
-            loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory);
-            loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory);
+            loadReligionNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
+            loadReligionNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory)
+            loadReligionNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
         }else {//定制新闻
             $("#topicTableDiv").hide();
-            $("#sensitiveTableDiv").hide();
             $("#newsTableDiv").hide();
+            $("#sensitiveTableDiv").hide();
+            $("#religionTableDiv").hide();
             $("#customWordTableDiv").show();
 
             $("#topicShow").css("display", "none");
@@ -326,6 +456,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             $("#newsShow").css("display", "block");
 
             //查询条件
+            $("#websiteSearch").hide();
+            $("#topwordsSearch").hide();
             $("#senTypeSearch").show();
             $("#senCategorySearch").show();
 
@@ -342,18 +474,24 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         var timeLimit = $("#timeLimit").val();
         var isSensitive = $("#sensitive_type").val();
         var sensitiveCategory = $("#sensitive_category").val();
-       if(index === 0){ //热门话题
-            loadHotTopicData(lang,timeLimit);
+        var topwords = $("#topwords").val();
+
+        if(index === 0){ //热门话题
+            loadHotTopicData(lang,timeLimit,topwords);
             loadNewsCategryData(lang,timeLimit);
-            loadTopicCount(lang,timeLimit);
+            loadTopicCount(lang,timeLimit,topwords);
         }else if(index === 1){//热门新闻
-            loadHotNewsData(lang,timeLimit,isSensitive);
-            loadHotNewsSourceData(lang,timeLimit,isSensitive);
-            loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive);
+            loadHotNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
+            loadHotNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory);
+            loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
         }else if(index === 2){//敏感新闻
             loadSensitiveNewsData(lang,timeLimit,sensitiveCategory);
             loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory);
             loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory);
+        }else if(index === 3){//宗教新闻
+            loadReligionNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
+            loadReligionNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory)
+            loadReligionNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
         }else{//定制新闻
             loadCustomWordNewsData(customWordId,lang,timeLimit,isSensitive,sensitiveCategory);
             loadCustomWordNewsSourceData(customWordId,lang,timeLimit,isSensitive,sensitiveCategory)
@@ -590,31 +728,31 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     //热门网站
     var newsWebCharts = echarts.init(document.getElementById('newWeb'));
     newsWebCharts.showLoading();
-        $.get(Feng.ctxPath + '/news/source', function (data) {
-            newsWebCharts.hideLoading();
-            newsWebCharts.setOption({
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                series : [
-                    {
-                        name: '新闻网站',
-                        type: 'pie',
-                        radius: '55%',
-                        center: ['50%', '50%'],
-                        data:data.newsSourceData,
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
+    $.get(Feng.ctxPath + '/news/source', function (data) {
+        newsWebCharts.hideLoading();
+        newsWebCharts.setOption({
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            series : [
+                {
+                    name: '新闻网站',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '50%'],
+                    data:data.newsSourceData,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
                     }
-                ]
-            },true)
-        }, 'json');
+                }
+            ]
+        },true)
+    }, 'json');
 
     //敏感统计
     var sensitiveTrendChart = echarts.init(document.getElementById('sensitiveTrend'));
@@ -718,9 +856,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
     //话题数量
     var topicCountChart = echarts.init(document.getElementById('topicCount'));
-    function loadTopicCount(lang,timeLimit){
+    function loadTopicCount(lang,timeLimit,topwords){
         topicCountChart.showLoading();
-        $.get(Feng.ctxPath + '/topic/count?langType='+lang+'&timeLimit='+timeLimit, function (data) {
+        $.get(Feng.ctxPath + '/topic/count?langType='+lang+'&timeLimit='+timeLimit+'&topwords='+topwords, function (data) {
             topicCountChart.hideLoading();
             topicCountChart.setOption({
                 tooltip: {
@@ -791,9 +929,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
     //热门新闻来源
     var hotNewsSourceCharts = echarts.init(document.getElementById('newsSource'));
-    function loadHotNewsSourceData(lang,timeLimit,isSensitive){
+    function loadHotNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory){
         hotNewsSourceCharts.showLoading();
-        $.get(Feng.ctxPath + '/news/source?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive, function (data) {
+        $.get(Feng.ctxPath + '/news/source?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory, function (data) {
             hotNewsSourceCharts.hideLoading();
             hotNewsSourceCharts.setOption({
                 tooltip: {
@@ -822,9 +960,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
     //敏感新闻来源
     var sensitiveSourceCharts = echarts.init(document.getElementById('senSource'));
-    function loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory){
+    function loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory,websitename){
         sensitiveSourceCharts.showLoading();
-        $.get(Feng.ctxPath + '/news/source?isSensitive=2&langType='+lang+'&timeLimit='+timeLimit+'&sensitiveCategory='+sensitiveCategory, function (data) {
+        $.get(Feng.ctxPath + '/news/source?isSensitive=2&langType='+lang+'&timeLimit='+timeLimit+'&sensitiveCategory='+sensitiveCategory+'&websitename='+websitename, function (data) {
             sensitiveSourceCharts.hideLoading();
             sensitiveSourceCharts.setOption({
                 tooltip: {
@@ -838,6 +976,37 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                         radius: '75%',
                         center: ['50%', '50%'],
                         data:data.newsSourceData,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            },true)
+        }, 'json');
+    }
+
+    //宗教新闻来源
+    var religionSourceCharts = echarts.init(document.getElementById('newsSource'));
+    function loadReligionNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory){
+        religionSourceCharts.showLoading();
+        $.get(Feng.ctxPath + '/news/religion/source?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory, function (data) {
+            religionSourceCharts.hideLoading();
+            religionSourceCharts.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                series : [
+                    {
+                        name: '新闻来源',
+                        type: 'pie',
+                        radius: '75%',
+                        center: ['50%', '50%'],
+                        data:data.religionNewsSourceData,
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,
@@ -884,11 +1053,43 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
     //热门新闻敏感类型
     var hotNewsSensitiveTypeCharts = echarts.init(document.getElementById('sensitiveType'), myEchartsTheme);
-    function loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive){
+    function loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory){
         hotNewsSensitiveTypeCharts.showLoading();
-        $.get(Feng.ctxPath + '/news/sensitiveType?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive, function (data) {
+        $.get(Feng.ctxPath + '/news/sensitive/type?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory, function (data) {
             hotNewsSensitiveTypeCharts.hideLoading();
             hotNewsSensitiveTypeCharts.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                color:["green","blue","red"],
+                series : [
+                    {
+                        name: '新闻类型',
+                        type: 'pie',
+                        radius: '75%',
+                        center: ['50%', '50%'],
+                        data:data.sensitiveTypeData,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            },true)
+        }, 'json');
+    }
+
+    //宗教新闻敏感类型
+    var religionNewsSensitiveTypeCharts = echarts.init(document.getElementById('sensitiveType'), myEchartsTheme);
+    function loadReligionNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory){
+        religionNewsSensitiveTypeCharts.showLoading();
+        $.get(Feng.ctxPath + '/news/religion/sensitive?langType='+lang+'&timeLimit='+timeLimit+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory, function (data) {
+            religionNewsSensitiveTypeCharts.hideLoading();
+            religionNewsSensitiveTypeCharts.setOption({
                 tooltip: {
                     trigger: 'item',
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -948,9 +1149,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
     //敏感类别
     var sensitiveCategoryCharts = echarts.init(document.getElementById('senCategory'));
-    function loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory){
+    function loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory,websitename){
         sensitiveCategoryCharts.showLoading();
-        $.get(Feng.ctxPath + '/news/sensitive/category?isSensitive=2&langType='+lang+'&timeLimit='+timeLimit+'&sensitiveCategory='+sensitiveCategory, function (data) {
+        $.get(Feng.ctxPath + '/news/sensitive/category?isSensitive=2&langType='+lang+'&timeLimit='+timeLimit+'&sensitiveCategory='+sensitiveCategory+'&websitename='+websitename, function (data) {
             sensitiveCategoryCharts.hideLoading();
             sensitiveCategoryCharts.setOption({
                 title: {
@@ -1033,6 +1234,15 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     });
 
     // 定制新闻工具条点击事件
+    table.on('tool(' + Religion.tableId + ')', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+        if (layEvent === 'showReligionDetail') {
+            Religion.openDetailDlg(data);
+        }
+    });
+
+    // 定制新闻工具条点击事件
     table.on('tool(' + CustomWord.tableId + ')', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
@@ -1059,6 +1269,15 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         });
     };
 
+    //查看宗教新闻详情
+    Religion.openDetailDlg = function (data) {
+        func.open({
+            title: '详细信息',
+            content: Feng.ctxPath + '/home/news/detail?newsId=' + data.newsId+'&lang='+data.langType,
+            tableId: Religion.tableId
+        });
+    };
+
     //查看定制新闻详情
     CustomWord.openDetailDlg = function (data) {
         func.open({
@@ -1079,28 +1298,45 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     Topic.search = function () {
         var lang = $("#lang_type").val();
         var timeLimit = $("#timeLimit").val();
-        loadHotTopicData(lang,timeLimit);
+        var topwords = $("#topwords").val();
+
+        loadHotTopicData(lang,timeLimit,topwords);
         loadNewsCategryData(lang,timeLimit);
-        loadTopicCount(lang,timeLimit);
+        loadTopicCount(lang,timeLimit,topwords);
     };
     //热门新闻搜索
     News.search = function () {
         var lang = $("#lang_type").val();
         var timeLimit = $("#timeLimit").val();
         var isSensitive = $("#sensitive_type").val();
-        loadHotNewsData(lang,timeLimit,isSensitive);
-        loadHotNewsSourceData(lang,timeLimit,isSensitive);
-        loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive);
+        var sensitiveCategory = $("#sensitive_category").val();
+
+        loadHotNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
+        loadHotNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory);
+        loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
     };
     //敏感新闻搜索
     Sensitive.search = function () {
         var lang = $("#lang_type").val();
         var timeLimit = $("#timeLimit").val();
         var sensitiveCategory = $("#sensitive_category").val();
-        loadSensitiveNewsData(lang,timeLimit,sensitiveCategory);
-        loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory);
-        loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory);
+        var websitename = $("#websitename").val();
+        loadSensitiveNewsData(lang,timeLimit,sensitiveCategory,websitename);
+        loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory,websitename);
+        loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory,websitename);
     };
+    //宗教新闻搜索
+    Religion.search = function () {
+        var lang = $("#lang_type").val();
+        var timeLimit = $("#timeLimit").val();
+        var isSensitive = $("#sensitive_type").val();
+        var sensitiveCategory = $("#sensitive_category").val();
+
+        loadReligionNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
+        loadReligionNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory)
+        loadReligionNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
+    };
+
     //定制新闻搜索
     CustomWord.search = function () {
         var lang = $("#lang_type").val();
@@ -1115,12 +1351,14 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
-       if(index === 0){ //热门话题搜索
+        if(index === 0){ //热门话题搜索
             Topic.search();
         }else if(index === 1){//热门新闻搜索
             News.search();
         }else if(index === 2){//敏感新闻搜索
             Sensitive.search();
+        }else if(index === 3){//宗教新闻
+            Religion.search();
         }else{//定制新闻搜索
             CustomWord.search();
         }

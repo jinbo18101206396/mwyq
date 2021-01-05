@@ -77,6 +77,19 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         }
         Page pageContext = getPageContext();
         IPage page = this.baseMapper.customPageList(pageContext, param);
+        List<TopicResult> records = page.getRecords();
+        for (TopicResult record : records) {
+            String topwords = record.getTopwords();
+            if (ToolUtil.isNotEmpty(topwords) && (topwords.startsWith(",") || topwords.endsWith(","))) {
+                if(topwords.startsWith(",")){
+                    topwords = topwords.substring(1,topwords.length());
+                }
+                if(topwords.endsWith(",")){
+                    topwords = topwords.substring(0,topwords.length()-1);
+                }
+                record.setTopwords(topwords);
+            }
+        }
         return LayuiPageFactory.createPageInfo(page);
     }
 

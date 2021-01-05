@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,7 +48,7 @@ public class HomeController extends BaseController {
     }
 
     /**
-     * 新闻详情页面(热门新闻、敏感新闻、话题相关新闻、定制新闻、主题词相关新闻)
+     * 新闻详情页面(热门新闻、敏感新闻、话题相关新闻、宗教新闻、定制新闻、主题词相关新闻)
      *
      * @author jinbo
      * @Date 2020-06-11
@@ -67,11 +68,14 @@ public class HomeController extends BaseController {
      * @Date 2020-06-11
      */
     @RequestMapping("/topic/detail")
-    public String topicDetailPage(String topicId,String topicName,Integer isSensitive,Integer sensitiveCategory,String langType,Model model) {
+    public String topicDetailPage(String topicId, String topicName, String langType, String topwords, int newsCount, String newsTime,Model model) {
 
         model.addAttribute("topicId", topicId);
         model.addAttribute("langType", langType);
         model.addAttribute("topicName", topicName);
+        model.addAttribute("topwords", topwords);
+        model.addAttribute("newsCount", newsCount);
+        model.addAttribute("newsTime", newsTime);
 
         return PREFIX + "/home_topic_detail.html";
     }

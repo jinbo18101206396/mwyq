@@ -110,7 +110,7 @@ public class SensitiveController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "sensitive_news_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getWebsitename()+"_"+newsParam.getTimeLimit()+"_"+page+"_"+limit;
+        String cacheKey = "sensitive_news_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getKeyWords()+"_"+newsParam.getWebsitename()+"_"+newsParam.getTimeLimit()+"_"+page+"_"+limit;
         LayuiPageInfo sensitiveNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
         if(sensitiveNewsCache != null){
             return sensitiveNewsCache;

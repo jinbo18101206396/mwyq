@@ -2,6 +2,9 @@ package cn.stylefeng.guns.modular.mwyq.service.impl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.mwyq.entity.EntityNewsRelation;
+import cn.stylefeng.guns.modular.mwyq.entity.ReligionEntity;
+import cn.stylefeng.guns.modular.mwyq.mapper.ReligionEntityMapper;
 import cn.stylefeng.guns.modular.mwyq.model.params.CustomWordParam;
 import cn.stylefeng.guns.modular.mwyq.entity.News;
 import cn.stylefeng.guns.modular.mwyq.mapper.EntityMapper;
@@ -22,8 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -44,6 +49,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Autowired
     private EntityMapper entityMapper;
+
+    @Autowired
+    private ReligionEntityMapper religionEntityMapper;
 
     @Override
     public void add(NewsParam param) {
@@ -184,6 +192,42 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         return newsMapper.newsSourceList(newsParam);
     }
 
+
+    @Override
+    public List<NewsResult> religionNewsSourceList(NewsParam newsParam) {
+
+        String timeLimit = newsParam.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            newsParam.setBeginTime(split[0]);
+            newsParam.setEndTime(split[1]);
+        }
+
+        //查询religion_entity
+        String lang = newsParam.getLangType();
+        QueryWrapper religionEntityQuery = new QueryWrapper();
+        if (ToolUtil.isNotEmpty(lang)) {
+            religionEntityQuery.eq("lang", lang);
+        }
+        List<ReligionEntity> religionEntityList = religionEntityMapper.selectList(religionEntityQuery);
+        List<EntityNewsRelation> entityNewsRelationList = new ArrayList<EntityNewsRelation>();
+
+        if(religionEntityList.size()>0){
+            //查询entity_news_relation
+            List<Integer> religionEntityIdList = religionEntityList.stream().map(ReligionEntity::getEntityId).collect(Collectors.toList());
+            QueryWrapper entityNewsRelationQuery = new QueryWrapper();
+            entityNewsRelationQuery.in("entity_id",religionEntityIdList);
+            entityNewsRelationList = entityNewsRelationMapper.selectList(entityNewsRelationQuery);
+        }
+        List<NewsResult> newsSourceList = new ArrayList<NewsResult>();
+        if(entityNewsRelationList.size() > 0){
+            List<Integer> newsIdList = entityNewsRelationList.stream().map(EntityNewsRelation::getNewsId).collect(Collectors.toList());
+            newsParam.setIds(newsIdList);
+            newsSourceList = newsMapper.relateNewsSourceList(newsIdList, newsParam);
+        }
+        return newsSourceList;
+    }
+
     @Override
     public List<NewsResult> newsDistributionList(NewsParam newsParam) {
         return newsMapper.newsDistributionList(newsParam);
@@ -301,6 +345,40 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     }
 
     @Override
+    public List<NewsResult> religionSensitiveTypeList(NewsParam newsParam) {
+
+        String timeLimit = newsParam.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            newsParam.setBeginTime(split[0]);
+            newsParam.setEndTime(split[1]);
+        }
+        //查询religion_entity
+        String lang = newsParam.getLangType();
+        QueryWrapper religionEntityQuery = new QueryWrapper();
+        if (ToolUtil.isNotEmpty(lang)) {
+            religionEntityQuery.eq("lang", lang);
+        }
+        List<ReligionEntity> religionEntityList = religionEntityMapper.selectList(religionEntityQuery);
+        List<EntityNewsRelation> entityNewsRelationList = new ArrayList<>();
+
+        if(religionEntityList.size()>0){
+            //查询entity_news_relation
+            List<Integer> religionEntityIdList = religionEntityList.stream().map(ReligionEntity::getEntityId).collect(Collectors.toList());
+            QueryWrapper entityNewsRelationQuery = new QueryWrapper();
+            entityNewsRelationQuery.in("entity_id",religionEntityIdList);
+            entityNewsRelationList = entityNewsRelationMapper.selectList(entityNewsRelationQuery);
+        }
+        List<NewsResult> sensitiveTypeList = new ArrayList<>();
+        if(entityNewsRelationList.size() > 0){
+            List<Integer> newsIdList = entityNewsRelationList.stream().map(EntityNewsRelation::getNewsId).collect(Collectors.toList());
+            newsParam.setIds(newsIdList);
+            sensitiveTypeList = newsMapper.sensitiveTypeListByIds(newsIdList,newsParam);
+        }
+        return sensitiveTypeList;
+    }
+
+    @Override
     public List<NewsResult> newsCategoryList(NewsParam newsParam) {
         String timeLimit = newsParam.getTimeLimit();
         if (ToolUtil.isNotEmpty(timeLimit)) {
@@ -350,6 +428,17 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     }
 
     @Override
+    public List<NewsTrendResult> sensitiveNewsTrendList(NewsParam newsParam) {
+        String timeLimit = newsParam.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            newsParam.setBeginTime(split[0]);
+            newsParam.setEndTime(split[1]);
+        }
+        return newsMapper.sensitiveNewsTrendList(newsParam);
+    }
+
+    @Override
     public LayuiPageInfo hotPageList(NewsParam newsParam) {
 
         String timeLimit = newsParam.getTimeLimit();
@@ -377,7 +466,51 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         return LayuiPageFactory.createPageInfo(page);
     }
 
+    @Override
+    public LayuiPageInfo religionPageList(NewsParam newsParam) {
 
+        //查询religion_entity
+        String lang = newsParam.getLangType();
+        QueryWrapper religionEntityQuery = new QueryWrapper();
+        if (ToolUtil.isNotEmpty(lang)) {
+            religionEntityQuery.eq("lang", lang);
+        }
+        List<ReligionEntity> religionEntityList = religionEntityMapper.selectList(religionEntityQuery);
+        List<EntityNewsRelation> entityNewsRelationList = new ArrayList<EntityNewsRelation>();
+
+        if(religionEntityList.size()>0){
+            //查询entity_news_relation
+            List<Integer> religionEntityIdList = religionEntityList.stream().map(ReligionEntity::getEntityId).collect(Collectors.toList());
+            QueryWrapper entityNewsRelationQuery = new QueryWrapper();
+            entityNewsRelationQuery.in("entity_id",religionEntityIdList);
+            entityNewsRelationQuery.orderByDesc("news_id");
+            entityNewsRelationList = entityNewsRelationMapper.selectList(entityNewsRelationQuery);
+        }
+
+        IPage page = getPageContext();
+        if(entityNewsRelationList.size() > 0){
+            //查询news
+            QueryWrapper newsQuery = new QueryWrapper();
+            newsQuery.in("news_id",entityNewsRelationList.stream().map(EntityNewsRelation::getNewsId).collect(Collectors.toList()));
+
+            String timeLimit = newsParam.getTimeLimit();
+            if (ToolUtil.isNotEmpty(timeLimit)) {
+                String[] split = timeLimit.split(" - ");
+                newsQuery.between("news_time", split[0], split[1]);
+            }
+            Integer sensitive = newsParam.getIsSensitive();
+            if (ToolUtil.isNotEmpty(sensitive)) {
+                newsQuery.eq("is_sensitive", sensitive);
+            }
+            Integer sensitiveCategory = newsParam.getSensitiveCategory();
+            if (ToolUtil.isNotEmpty(sensitiveCategory)) {
+                newsQuery.eq("sensitive_category", sensitiveCategory);
+            }
+            newsQuery.orderByDesc("news_time");
+            page = newsMapper.selectPage(getPageContext(), newsQuery);
+        }
+        return LayuiPageFactory.createPageInfo(page);
+    }
 
     @Override
     public LayuiPageInfo selectPage(NewsParam newsParam) {
