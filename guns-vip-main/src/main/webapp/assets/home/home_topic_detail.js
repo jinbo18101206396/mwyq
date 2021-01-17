@@ -20,7 +20,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '新闻类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -138,7 +138,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 color : ['#00a6ac', '#33a3dc','#f3704b'],
                 series : [
                     {
-                        name: '新闻类型',
+                        name: '情感类型',
                         type: 'pie',
                         radius: '65%',
                         center: ['55%', '55%'],

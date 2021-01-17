@@ -47,6 +47,17 @@ public class SensitiveController extends BaseController {
     }
 
     /**
+     * 跳转到主页面
+     *
+     * @author jinbo
+     * @Date 2020-06-19
+     */
+    @RequestMapping("/religion")
+    public String religion() {
+        return PREFIX + "/religion.html";
+    }
+
+    /**
      * 详情页面
      *
      * @author jinbo
@@ -98,7 +109,7 @@ public class SensitiveController extends BaseController {
     }
 
     /**
-     * 查询列表(初始化10%新闻，按时间倒序排列)
+     * 查询综合新闻列表(初始化10%新闻，按时间倒序排列)
      *
      * @author jinbo
      * @Date 2020-06-19
@@ -119,6 +130,30 @@ public class SensitiveController extends BaseController {
         localCache.put(cacheKey,sensitiveNewsPage);
         return sensitiveNewsPage;
     }
+
+    /**
+     * 查询宗教新闻列表
+     *
+     * @author jinbo
+     * @Date 2020-06-19
+     */
+    @ResponseBody
+    @RequestMapping("/religion/list")
+    public LayuiPageInfo religionList(NewsParam newsParam) {
+
+        HttpServletRequest request = HttpContext.getRequest();
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        String cacheKey = "sensitive_news_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getKeyWords()+"_"+newsParam.getWebsitename()+"_"+newsParam.getTimeLimit()+"_"+page+"_"+limit;
+        LayuiPageInfo sensitiveNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
+        if(sensitiveNewsCache != null){
+            return sensitiveNewsCache;
+        }
+        LayuiPageInfo sensitiveNewsPage = this.newsService.selectPage(newsParam);
+        localCache.put(cacheKey,sensitiveNewsPage);
+        return sensitiveNewsPage;
+    }
+
 }
 
 

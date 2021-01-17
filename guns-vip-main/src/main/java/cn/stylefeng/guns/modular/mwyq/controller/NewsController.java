@@ -593,7 +593,7 @@ public class NewsController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "religion_news_list"+newsParam.getLangType()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getIsSensitive()+"_"+page+"_"+limit;
+        String cacheKey = "religion_news_list"+newsParam.getLangType()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getKeyWords()+"_"+newsParam.getSensitiveWords()+"_"+"_"+newsParam.getWebsitename()+"_"+page+"_"+limit;
         LayuiPageInfo religionNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
         if(religionNewsCache != null){
             return religionNewsCache;

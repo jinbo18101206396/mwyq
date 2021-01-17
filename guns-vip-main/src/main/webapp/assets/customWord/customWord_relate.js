@@ -83,17 +83,19 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
         }
     });
     //初始加载新闻类型数据
-    loadSensitiveTypeData(customWordId,'','','','','');
+    loadSensitiveTypeData(customWordId,'','','','','','','');
     //初始加载新闻来源数据
-    loadNewsSourceData(customWordId,'','','','','');
+    loadNewsSourceData(customWordId,'','','','','','','');
     //初始加载敏感类别数据
-    loadSenCategoryData(customWordId,'','','','','');
+    loadSenCategoryData(customWordId,'','','','','','','');
 
-    function loadCustomWordRelateNewsData(customWordId,lang,isSensitive,sensitiveCategory,newsSource,timeLimit){
+    function loadCustomWordRelateNewsData(customWordId,langType,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit){
         var queryData = {};
-        queryData['lang'] = lang;
+        queryData['lang'] = langType;
         queryData['isSensitive'] = isSensitive;
         queryData['sensitiveCategory'] = sensitiveCategory;
+        queryData['sensitiveWords'] = sensitiveWords;
+        queryData['keyWords'] = keyWords;
         queryData['newsSource'] = newsSource;
         queryData['timeLimit'] = timeLimit;
         table.reload(customWordRelate.tableId, {
@@ -103,8 +105,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
 
     //新闻类型
     var SensitiveTypeCharts = echarts.init(document.getElementById('senType'));
-    function loadSensitiveTypeData(customWordId,lang,isSensitive,sensitiveCategory,newsSource,timeLimit){
-        $.get(Feng.ctxPath + '/customWord/relate/sensitive/type?modular=2&id='+customWordId+'&lang='+lang+'&newsSource='+newsSource+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory+'&timeLimit='+timeLimit, function (data) {
+    function loadSensitiveTypeData(customWordId,lang,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit){
+        $.get(Feng.ctxPath + '/customWord/relate/sensitive/type?modular=2&id='+customWordId+'&lang='+lang+'&newsSource='+newsSource+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory+'&sensitiveWords='+sensitiveWords+'&keyWords='+keyWords+'&timeLimit='+timeLimit, function (data) {
             SensitiveTypeCharts.setOption({
                 tooltip: {
                     trigger: 'item',
@@ -133,8 +135,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
 
     //新闻来源
     var newsSourceCharts = echarts.init(document.getElementById('source'),myEchartsTheme);
-    function loadNewsSourceData(customWordId,lang,isSensitive,sensitiveCategory,newsSource,timeLimit) {
-        $.get(Feng.ctxPath + '/customWord/relate/news/source?modular=2&id='+customWordId+'&lang='+lang+'&newsSource='+newsSource+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory+'&timeLimit='+timeLimit, function (data) {
+    function loadNewsSourceData(customWordId,lang,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit) {
+        $.get(Feng.ctxPath + '/customWord/relate/news/source?modular=2&id='+customWordId+'&lang='+lang+'&newsSource='+newsSource+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory+'&sensitiveWords='+sensitiveWords+'&keyWords='+keyWords+'&timeLimit='+timeLimit, function (data) {
             newsSourceCharts.setOption({
                 tooltip: {
                     trigger: 'item',
@@ -162,8 +164,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
 
     //敏感类别
     var senCategoryCharts = echarts.init(document.getElementById('senCategory'),myEchartsTheme);
-    function loadSenCategoryData(customWordId,lang,isSensitive,sensitiveCategory,newsSource,timeLimit){
-        $.get(Feng.ctxPath + '/customWord/relate/news/sensitive/category?id='+customWordId+'&lang='+lang+'&newsSource='+newsSource+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory+'&timeLimit='+timeLimit, function (data) {
+    function loadSenCategoryData(customWordId,lang,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit){
+        $.get(Feng.ctxPath + '/customWord/relate/news/sensitive/category?id='+customWordId+'&lang='+lang+'&newsSource='+newsSource+'&isSensitive='+isSensitive+'&sensitiveCategory='+sensitiveCategory+'&sensitiveWords='+sensitiveWords+'&keyWords='+keyWords+'&timeLimit='+timeLimit, function (data) {
             senCategoryCharts.setOption({
                 tooltip: {
                     trigger: 'item',
@@ -205,13 +207,15 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
         var langType = $("#langType").val();
         var isSensitive = $("#sensitiveType").val();
         var sensitiveCategory = $("#sensitiveCategory").val();
+        var sensitiveWords = $("#sensitiveWords").val();
+        var keyWords = $("#keyWords").val();
         var newsSource = $("#newsSource").val();
         var timeLimit = $("#timeLimit").val();
 
-        loadCustomWordRelateNewsData(customWordId,langType,isSensitive,sensitiveCategory,newsSource,timeLimit);
-        loadSensitiveTypeData(customWordId,langType,isSensitive,sensitiveCategory,newsSource,timeLimit);
-        loadNewsSourceData(customWordId,langType,isSensitive,sensitiveCategory,newsSource,timeLimit);
-        loadSenCategoryData(customWordId,langType,isSensitive,sensitiveCategory,newsSource,timeLimit);
+        loadCustomWordRelateNewsData(customWordId,langType,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit);
+        loadSensitiveTypeData(customWordId,langType,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit);
+        loadNewsSourceData(customWordId,langType,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit);
+        loadSenCategoryData(customWordId,langType,isSensitive,sensitiveCategory,sensitiveWords,keyWords,newsSource,timeLimit);
     };
 
     //渲染时间选择框

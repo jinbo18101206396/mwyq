@@ -37,6 +37,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!--solr-->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>4.10.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

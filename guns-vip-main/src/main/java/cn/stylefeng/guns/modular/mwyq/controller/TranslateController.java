@@ -33,12 +33,13 @@ public class TranslateController extends BaseController {
 
         String sourceLang = translateParam.getSourceLang();
         String sourceContent = translateParam.getSourceContent();
+        String targetLang = translateParam.getTargetLang();
         String transModel = translateParam.getTransModel();
         String targetContent = "";
 
         TranslationUtil trans = new TranslationUtil();
-        if(!StringUtils.isEmpty(sourceLang) && !StringUtils.isEmpty(sourceContent)){
-            sourceContent = processContent(sourceContent,sourceLang);
+        if(!StringUtils.isEmpty(sourceLang) && !StringUtils.isEmpty(sourceContent) && !StringUtils.isEmpty(targetLang) && !StringUtils.isEmpty(transModel)){
+            sourceContent = trans.processContent(sourceContent,sourceLang);
             if("nmt".equals(transModel)){ //神经机器翻译
                 targetContent = trans.sendPost(sourceContent, sourceLang,"paragraph");
             }else if("smt".equals(transModel)){ //统计机器翻译
@@ -50,17 +51,4 @@ public class TranslateController extends BaseController {
         transJson.put("targetContent",targetContent);
         return transJson;
     }
-
-    public String processContent(String content,String lang){
-
-        if(lang.equals("zang")){
-            content = content.replace("åï¿½","åï¿½ ");
-        }else if(lang.equals("meng")){
-
-        }else if(lang.equals("wei")){
-
-        }
-        return content;
-    }
-
 }

@@ -44,6 +44,8 @@ public class TopicResult implements Serializable {
 
     private String newsContent;
 
+    private String summarize;
+
     private String dataTime;
     private Integer count;
 

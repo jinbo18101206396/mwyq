@@ -150,6 +150,14 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         if (ToolUtil.isNotEmpty(sensitiveCategory)) {
             queryWrapper.eq("sensitive_category", sensitiveCategory);
         }
+        String sensitiveWords = customWordParam.getSensitiveWords();
+        if (ToolUtil.isNotEmpty(sensitiveWords)) {
+            queryWrapper.like("sensitive_words", sensitiveWords);
+        }
+        String keyWords = customWordParam.getKeyWords();
+        if (ToolUtil.isNotEmpty(keyWords)) {
+            queryWrapper.like("key_words", keyWords);
+        }
         String newsSource = customWordParam.getNewsSource();
         if (ToolUtil.isNotEmpty(newsSource)) {
             queryWrapper.like("websitename", newsSource);
@@ -165,10 +173,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         List<String> names = customWordParam.getNames();
         for (News record : records) {
-            String sensitiveWords = record.getSensitiveWords();
-            if (ToolUtil.isNotEmpty(sensitiveWords) && sensitiveWords.endsWith("*")) {
-                sensitiveWords = sensitiveWords.substring(0, sensitiveWords.length() - 1);
-                record.setSensitiveWords(sensitiveWords.replace("*", ","));
+            String senWords = record.getSensitiveWords();
+            if (ToolUtil.isNotEmpty(senWords) && senWords.endsWith("*")) {
+                senWords = senWords.substring(0, senWords.length() - 1);
+                record.setSensitiveWords(senWords.replace("*", ","));
             }
             //新闻列表中标出领域主题词
             String newsTitle = record.getNewsTitle();
@@ -258,6 +266,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         newsParam.setIds(ids);
         newsParam.setIsSensitive(customWordParam.getIsSensitive());
         newsParam.setSensitiveCategory(customWordParam.getSensitiveCategory());
+        newsParam.setSensitiveWords(customWordParam.getSensitiveWords());
+        newsParam.setKeyWords(customWordParam.getKeyWords());
         newsParam.setWebsitename(customWordParam.getNewsSource());
         return newsMapper.relateNewsSourceList(ids, newsParam);
     }
@@ -288,6 +298,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         newsParam.setIds(ids);
         newsParam.setIsSensitive(customWordParam.getIsSensitive());
         newsParam.setSensitiveCategory(customWordParam.getSensitiveCategory());
+        newsParam.setSensitiveWords(customWordParam.getSensitiveWords());
+        newsParam.setKeyWords(customWordParam.getKeyWords());
         newsParam.setWebsitename(customWordParam.getNewsSource());
         return newsMapper.sensitiveTypeListByIds(ids, newsParam);
     }
@@ -311,7 +323,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         newsParam.setIsSensitive(customWordParam.getIsSensitive());
         newsParam.setSensitiveCategory(customWordParam.getSensitiveCategory());
         newsParam.setWebsitename(customWordParam.getNewsSource());
-
+        newsParam.setSensitiveWords(customWordParam.getSensitiveWords());
+        newsParam.setKeyWords(customWordParam.getKeyWords());
         return newsMapper.sensitiveCategoryListByIds(ids, newsParam);
     }
 
@@ -505,6 +518,18 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             Integer sensitiveCategory = newsParam.getSensitiveCategory();
             if (ToolUtil.isNotEmpty(sensitiveCategory)) {
                 newsQuery.eq("sensitive_category", sensitiveCategory);
+            }
+            String sensitiveWords = newsParam.getSensitiveWords();
+            if (ToolUtil.isNotEmpty(sensitiveWords)) {
+                newsQuery.like("sensitive_words", sensitiveWords);
+            }
+            String keyWords = newsParam.getKeyWords();
+            if (ToolUtil.isNotEmpty(keyWords)) {
+                newsQuery.like("key_words", keyWords);
+            }
+            String websitename = newsParam.getWebsitename();
+            if (ToolUtil.isNotEmpty(websitename)) {
+                newsQuery.like("websitename", websitename);
             }
             newsQuery.orderByDesc("news_time");
             page = newsMapper.selectPage(getPageContext(), newsQuery);

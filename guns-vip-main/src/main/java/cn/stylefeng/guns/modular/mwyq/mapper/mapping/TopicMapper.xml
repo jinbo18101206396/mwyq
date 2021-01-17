@@ -25,7 +25,7 @@
     </sql>
 
     <sql id="topic_Column_List">
-        t1.topic_id AS "topicId", t1.topwords AS "topwords", t1.topic_name AS "topicName", t1.lang_type AS "langType", t1.keywords AS "keywords", t1.news_count AS "newsCount", t1.news_time AS "newsTime", t1.news_content AS "newsContent"
+        t1.topic_id AS "topicId", t1.topwords AS "topwords", t1.topic_name AS "topicName", t1.lang_type AS "langType", t1.keywords AS "keywords", t1.news_count AS "newsCount", t1.news_time AS "newsTime", t1.news_content AS "newsContent",t1.summarize AS "summarize"
     </sql>
     <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
         select

@@ -43,7 +43,7 @@
                 <input type="hidden" id="langType" value="${langType}"/>
                 <div class="layui-card-header">话题综述</div>
                 <div class="layui-card-body" style="height:190px;">
-                    <div id="topicIntroduce" name="topicIntroduce"></div>
+                    <div id="topicIntroduce" name="topicIntroduce">${summarize}</div>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <select id="sensitiveType">
-                                    <option value="">请选择新闻类型</option>
+                                    <option value="">请选择情感类型</option>
                                     <option value="2">敏感</option>
                                     <option value="1">中性</option>
                                     <option value="3">正向</option>
@@ -89,7 +89,7 @@
         </div >
         <div class="layui-col-xs12 layui-col-md4">
             <div class="layui-card">
-                <div class="layui-card-header">敏感分布</div>
+                <div class="layui-card-header">情感分布</div>
                 <div class="layui-card-body" style="height:248px;">
                     <div id="sensitive" name="sensitive" style="width: 100%;height: 100%; "></div>
                 </div>

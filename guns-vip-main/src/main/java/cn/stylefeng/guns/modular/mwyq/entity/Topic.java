@@ -59,6 +59,9 @@ public class Topic implements Serializable {
     @TableField("news_content")
     private String newsContent;
 
+    @TableField("summarize")
+    private String summarize;
+
     public String getTopicId() {
         return topicId;
     }
@@ -163,6 +166,14 @@ public class Topic implements Serializable {
         this.newsContent = newsContent;
     }
 
+    public String getSummarize() {
+        return summarize;
+    }
+
+    public void setSummarize(String summarize) {
+        this.summarize = summarize;
+    }
+
     @Override
     public String toString() {
         return "Topic{" +
@@ -179,6 +190,7 @@ public class Topic implements Serializable {
         ", newsCount=" + newsCount +
         ", newsTime=" + newsTime +
         ", newsContent=" + newsContent +
+                ", summarize=" + summarize +
         "}";
     }
 }

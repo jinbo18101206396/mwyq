@@ -112,6 +112,16 @@ public class CustomWordParam implements Serializable, BaseValidatingParam {
     private String modular;
 
     /**
+     * 关键词
+     */
+    private String keyWords;
+
+    /**
+     * 敏感词
+     */
+    private String sensitiveWords;
+
+    /**
      * 新闻作者
      */
     private String newsAuthor;

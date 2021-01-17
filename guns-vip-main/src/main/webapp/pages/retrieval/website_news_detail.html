@@ -1,0 +1,44 @@
+@layout("/common/_container.html",{js:["/assets/retrieval/website_news_detail.js"]}){
+
+<div class="layui-fluid" style="text-align: left;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <a ew-href="/retrieval/website?langType=${langType}&keyWords=${keyWords}"><div class="layui-btn icon-btn layui-btn-normal"><i class="layui-icon">&#xe65c;</i>返回</div></a><br />
+                </div>
+            </div>
+        </div>
+        <input id="newsId" type="hidden" value="${newsId}">
+        <input id="keyWords" type="hidden" value="${keyWords}">
+        <input id="langType" type="hidden" value="${langType}">
+        <div class="layui-col-xs12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">原 文</div>
+                <div class="layui-card-body" style="height: 400px;">
+                    <div id="newsContent" style="height: 100%;text-align: left;overflow: auto;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">译 文</div>
+                <div class="layui-card-body" style="height: 400px;">
+                    <div id="translateContent" style="height: 100%;text-align: left;overflow: auto;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs12 layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body" style="height:50px;background-color:#E1FFFF">
+                        <div class="layui-form toolbar">
+                            <div class="layui-form-item"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@}

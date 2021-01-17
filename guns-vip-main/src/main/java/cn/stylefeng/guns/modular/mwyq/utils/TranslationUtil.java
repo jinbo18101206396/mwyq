@@ -60,8 +60,7 @@ public class TranslationUtil {
             out.print(param);
             out.flush();
             in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            line = in.toString();
+            String line = in.toString();
             while ((line = in.readLine()) != null) {
                 result += line;
             }
@@ -85,5 +84,17 @@ public class TranslationUtil {
             result = result.replace(" ", "");
         }
         return result;
+    }
+
+    public String processContent(String content,String lang){
+
+        if(lang.equals("zang")){
+            content = content.replace("åï¿½","åï¿½ ");
+        }else if(lang.equals("meng")){
+
+        }else if(lang.equals("wei")){
+
+        }
+        return content;
     }
 }

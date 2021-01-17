@@ -57,6 +57,8 @@ public class TopicParam implements Serializable, BaseValidatingParam {
 
     private String websitename;
 
+    private String summarize;
+
     @Override
     public String checkParam() {
         return null;

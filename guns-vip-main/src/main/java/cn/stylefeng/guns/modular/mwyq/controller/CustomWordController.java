@@ -245,7 +245,7 @@ public class CustomWordController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "customWord_relate_news_" + customWordParam.getModular() + "_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit() + "_" + page + "_" + limit;
+        String cacheKey = "customWord_relate_news_" + customWordParam.getModular() + "_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_"+customWordParam.getKeyWords()+"_"+customWordParam.getSensitiveWords()+ "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit() + "_" + page + "_" + limit;
         LayuiPageInfo customWordNewsCache = ( LayuiPageInfo ) localCache.getIfPresent(cacheKey);
         if (customWordNewsCache != null) {
             return customWordNewsCache;
@@ -280,7 +280,7 @@ public class CustomWordController extends BaseController {
     @ResponseBody
     @RequestMapping("/relate/news/source")
     public JSONObject relateNewsSource(CustomWordParam customWordParam) {
-        String cacheKey = "relate_news_source_" + customWordParam.getModular() + "_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit();
+        String cacheKey = "relate_news_source_" + customWordParam.getModular() + "_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource()+"_"+customWordParam.getSensitiveWords()+"_"+customWordParam.getKeyWords()+ "_" + customWordParam.getTimeLimit();
         JSONObject newsSourceCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (newsSourceCache != null) {
             return newsSourceCache;
@@ -321,7 +321,7 @@ public class CustomWordController extends BaseController {
     @ResponseBody
     @RequestMapping("/relate/sensitive/type")
     public JSONObject relateSensitiveType(CustomWordParam customWordParam) {
-        String cacheKey = "cus_rel_sen_type_" + customWordParam.getModular() + "_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit();
+        String cacheKey = "cus_rel_sen_type_" + customWordParam.getModular() + "_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_"+customWordParam.getSensitiveWords()+"_"+customWordParam.getKeyWords()+"_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit();
         JSONObject sensitiveTypeCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveTypeCache != null) {
             return sensitiveTypeCache;
@@ -363,12 +363,11 @@ public class CustomWordController extends BaseController {
     @RequestMapping(value = "/relate/news/sensitive/category", method = RequestMethod.GET)
     public JSONObject sensitiveCategory(CustomWordParam customWordParam) {
 
-        String cacheKey = "sensitive_category_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit();
+        String cacheKey = "sensitive_category_" + customWordParam.getId() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource()+"_"+customWordParam.getSensitiveWords()+"_"+customWordParam.getKeyWords() + "_" + customWordParam.getTimeLimit();
         JSONObject sensitiveCategoryCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveCategoryCache != null) {
             return sensitiveCategoryCache;
         }
-
         CustomWord customWord = customWordService.getById(customWordParam.getId());
         //将中文主题词翻译成少数民族语言
         //List<String> customWordNames = customWordService.translateCnCustomwordName(customWord.getName(),customWordParam.getLang());
@@ -405,7 +404,7 @@ public class CustomWordController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "customWord_field_list_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit() + "_" + page + "_" + limit;
+        String cacheKey = "customWord_field_list_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" +customWordParam.getKeyWords()+"_"+customWordParam.getSensitiveWords()+"_"+ customWordParam.getTimeLimit() + "_" + page + "_" + limit;
         LayuiPageInfo fieldNewsPageCache = ( LayuiPageInfo ) localCache.getIfPresent(cacheKey);
         if (fieldNewsPageCache != null) {
             return fieldNewsPageCache;
@@ -436,7 +435,7 @@ public class CustomWordController extends BaseController {
     @ResponseBody
     @RequestMapping("/field/sensitive/type")
     public JSONObject fieldSensitiveType(CustomWordParam customWordParam) {
-        String cacheKey = "field_sen_type_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit();
+        String cacheKey = "field_sen_type_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" +customWordParam.getSensitiveWords()+"_"+customWordParam.getKeyWords()+"_"+ customWordParam.getTimeLimit();
         JSONObject sensitiveTypeCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveTypeCache != null) {
             return sensitiveTypeCache;
@@ -475,7 +474,7 @@ public class CustomWordController extends BaseController {
     @ResponseBody
     @RequestMapping("/field/news/sensitive/category")
     public JSONObject fieldSensitiveCategory(CustomWordParam customWordParam) {
-        String cacheKey = "field_news_sen_category_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit();
+        String cacheKey = "field_news_sen_category_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" +customWordParam.getSensitiveWords()+"_"+customWordParam.getKeyWords()+"_"+ customWordParam.getTimeLimit();
         JSONObject sensitiveTypeCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveTypeCache != null) {
             return sensitiveTypeCache;
@@ -514,7 +513,7 @@ public class CustomWordController extends BaseController {
     @ResponseBody
     @RequestMapping("/field/news/source")
     public JSONObject fieldNewsSource(CustomWordParam customWordParam) {
-        String cacheKey = "field_news_source_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" + customWordParam.getTimeLimit();
+        String cacheKey = "field_news_source_" + customWordParam.getType() + "_" + customWordParam.getLang() + "_" + customWordParam.getIsSensitive() + "_" + customWordParam.getSensitiveCategory() + "_" + customWordParam.getNewsSource() + "_" +customWordParam.getKeyWords()+"_"+customWordParam.getSensitiveWords()+"_"+ customWordParam.getTimeLimit();
         JSONObject newsSourceCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (newsSourceCache != null) {
             return newsSourceCache;

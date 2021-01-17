@@ -23,7 +23,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     var Religion = {
         tableId:"religionTable"
     };
-
     /**
      * 热门话题表格的列
      */
@@ -33,7 +32,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             {field: 'topicId',align: "center", hide: true, title: '话题id'},
             {
                 field: 'topicName',align: "center", sort: true, title: '话题名称',minWidth: 400,templet:function (d) {
-                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + d.topicId +'&topicName='+d.topicName+'&langType=' + d.langType+'&topwords='+d.topwords+'&newsCount='+d.newsCount+'&newsTime='+d.newsTime;
+                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + d.topicId +'&topicName='+d.topicName+'&langType=' + d.langType+'&topwords='+d.topwords+'&newsCount='+d.newsCount+'&newsTime='+d.newsTime+'&summarize='+d.summarize;
                     return '<div style="text-align: left"><a style="color: #01AAED;" href="'+url+'">'+d.topicName+'</a></div>';
                 }
             },
@@ -56,7 +55,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '新闻类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -102,7 +101,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '新闻类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -148,7 +147,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '新闻类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -196,7 +195,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '新闻类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -354,6 +353,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     var customWordId = "";
     //主题标签事件
     element.on('tab(all)', function(data){
+
         index = data.index;
         var lang =  $("#lang_type option:selected").val();
         var timeLimit = $("#timeLimit").val();
@@ -383,7 +383,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             loadHotTopicData(lang,timeLimit,topwords);
             loadNewsCategryData(lang,timeLimit);
             loadTopicCount(lang,timeLimit,topwords);
-        }else if(index === 1){//热门新闻(新闻来源、新闻类型)
+        }else if(index === 1){//热门新闻(新闻来源、情感类型)
             $("#topicTableDiv").hide();
             $("#sensitiveTableDiv").hide();
             $("#religionTableDiv").hide();
@@ -423,7 +423,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             loadSensitiveNewsData(lang,timeLimit,sensitiveCategory,websitename);
             loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory,websitename);
             loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory,websitename);
-        }else if(index === 3){//宗教新闻
+        }else if(index === 3){//“宗教新闻” 变更为 “新词术语”
 
             $("#topicTableDiv").hide();
             $("#newsTableDiv").hide();
@@ -1065,7 +1065,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '新闻类型',
+                        name: '情感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
@@ -1097,7 +1097,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '新闻类型',
+                        name: '情感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
@@ -1129,7 +1129,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '新闻类型',
+                        name: '情感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],

@@ -26,7 +26,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                     return '<div style="text-align: left"><a href="'+d.newsUrl+'" class="layui-table-link" target="_blank">'+d.newsTitle+'</a></div>';
                 }},
             {
-                field: 'sensitive', align: "center", sort: true, title: '新闻类型',minWidth: 120, templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '敏感类型',minWidth: 120, templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -188,7 +188,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '新闻类型',
+                        name: '敏感分布',
                         type: 'pie',
                         radius: '80%',
                         center: ['50%', '50%'],

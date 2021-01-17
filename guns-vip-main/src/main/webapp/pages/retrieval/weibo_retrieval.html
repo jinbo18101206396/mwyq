@@ -1,0 +1,93 @@
+@layout("/common/_container.html",{js:["/assets/retrieval/weibo_retrieval.js"]}){
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15 ">
+        <div class="layui-col-xs12 layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body" style="height: 35px;">
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="weibo_key_words" style="width: 500px;" class="layui-input" type="text" value="中国" placeholder="请输入微博关键词"/>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="weibo_lang">
+                                    <option value="cn">单/跨语言检索</option>
+                                    <option value="cn" selected>汉语</option>
+                                    <option value="ti">藏语</option>
+                                    <option value="meng">蒙古语</option>
+                                    <option value="uy">维吾尔语</option>
+                                    <option value="cn-zang">汉语 >> 藏语</option>
+                                    <option value="cn-meng">汉语 >> 蒙古语</option>
+                                    <option value="cn-wei">汉语 >> 维吾尔语</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="weibo_scope">
+                                    <option value="author-all">检索范围</option>
+                                    <option value="author-all">所有相关</option>
+                                    <option value="author-single">只看博主</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="weibo_sensitive">
+                                    <option value="emotion-all">情感类型</option>
+                                    <option value="emotion-all">全部</option>
+                                    <option value="emotion-positive">正面</option>
+                                    <option value="emotion-negative">负面</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="weibo_cycle">
+                                    <option value="time-all">检索周期</option>
+                                    <option value="time-all">全部</option>
+                                    <option value="time-week">一周内</option>
+                                    <option value="time-month">一月内</option>
+                                    <option value="time-year">一年内</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md12">
+            <div class="layui-card" style="">
+                <div class="layui-card-header">微博概览</div>
+                <div class="layui-card-body" style="height: 30px;">
+                    <div id="basicDataDiv" style="height:100%;width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md7">
+            <div class="layui-card" style="">
+                <div class="layui-card-header">微博列表</div>
+                <div class="layui-card-body" style="height: 630px;">
+                    <div id="weiboListDiv" style="height:100%;width: 100%;overflow:auto;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md5">
+            <div class="layui-card">
+                <div class="layui-card-header">倾向性分析</div>
+                <div class="layui-card-body" style="height: 200px;">
+                    <div id="senChartDiv" style="width: 100%;height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md5">
+            <div class="layui-card">
+                <div class="layui-card-header">热门微博</div>
+                <div class="layui-card-body" style="height: 353px;">
+                    <div id="hotWeiboDiv" style="width: 100%;height: 100%;overflow: auto"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js?v=${constants.getReleaseVersion()}"></script>
+@}
