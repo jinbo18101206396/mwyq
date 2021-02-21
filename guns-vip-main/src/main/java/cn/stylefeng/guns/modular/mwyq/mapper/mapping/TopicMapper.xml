@@ -85,7 +85,8 @@
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        GROUP BY YEAR(t1.news_time) DESC,MONTH(t1.news_time) DESC,WEEK(t1.news_time) DESC,DAY(t1.news_time) DESC
+        GROUP BY YEAR(t1.news_time),MONTH(t1.news_time),DAY(t1.news_time)
+        ORDER BY YEAR(t1.news_time) DESC,MONTH(t1.news_time) DESC,DAY(t1.news_time) DESC
     </select>
 
     <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
