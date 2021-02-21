@@ -55,7 +55,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -101,7 +101,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -147,7 +147,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -195,7 +195,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -383,7 +383,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             loadHotTopicData(lang,timeLimit,topwords);
             loadNewsCategryData(lang,timeLimit);
             loadTopicCount(lang,timeLimit,topwords);
-        }else if(index === 1){//热门新闻(新闻来源、情感类型)
+        }else if(index === 1){//热门新闻(新闻来源、敏感类型)
             $("#topicTableDiv").hide();
             $("#sensitiveTableDiv").hide();
             $("#religionTableDiv").hide();
@@ -442,7 +442,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             $("#senCategorySearch").show();
 
             loadReligionNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
-            loadReligionNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory)
+            loadReligionNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory);
             loadReligionNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
         }else {//定制新闻
             $("#topicTableDiv").hide();
@@ -1065,7 +1065,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '情感类型',
+                        name: '敏感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
@@ -1097,7 +1097,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '情感类型',
+                        name: '敏感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
@@ -1129,7 +1129,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '情感类型',
+                        name: '敏感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
