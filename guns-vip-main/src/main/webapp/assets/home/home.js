@@ -62,6 +62,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                         return "<p style='color:blue;font-weight: bold'>中性</p>";
                     } else if(d.isSensitive === 2){
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
+                    }else{
+                        return "<p style='font-weight: bold'>其他</p>";
                     }
                 }
             },
@@ -637,7 +639,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             legend: {
                 orient: 'horizontal',
                 top:'30px',
-                data:['蒙文','中文','藏文','维吾尔文']
+                data:['蒙古文','中文','藏文','维吾尔文']
             },
             calculable : true,
             series : [
@@ -672,7 +674,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             legend: {
-                data:['中文', '蒙文', '藏文', '维文']
+                data:['中文', '蒙古文', '藏文', '维吾尔文']
             },
             toolbox: {
                 show : true,
@@ -707,7 +709,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     data: data.cnNum
                 },
                 {
-                    name: '蒙文',
+                    name: '蒙古文',
                     type: 'bar',
                     data: data.mengNum
                 },
@@ -717,7 +719,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     data: data.zangNum
                 },
                 {
-                    name: '维文',
+                    name: '维吾尔文',
                     type: 'bar',
                     data: data.weiNum
                 }

@@ -43,6 +43,11 @@
             <artifactId>solr-solrj</artifactId>
             <version>4.10.1</version>
         </dependency>
+        <dependency>
+            <groupId>cn.stylefeng.roses</groupId>
+            <artifactId>kernel-core</artifactId>
+            <version>2.2.4</version>
+        </dependency>
 
     </dependencies>
 

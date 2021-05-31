@@ -40,9 +40,9 @@ public class TranslateController extends BaseController {
         TranslationUtil trans = new TranslationUtil();
         if(!StringUtils.isEmpty(sourceLang) && !StringUtils.isEmpty(sourceContent) && !StringUtils.isEmpty(targetLang) && !StringUtils.isEmpty(transModel)){
             sourceContent = trans.processContent(sourceContent,sourceLang);
-            if("nmt".equals(transModel)){ //神经机器翻译
+            if("nmt".equals(transModel)){
                 targetContent = trans.sendPost(sourceContent, sourceLang,"paragraph");
-            }else if("smt".equals(transModel)){ //统计机器翻译
+            }else if("smt".equals(transModel)){
 
             }
             targetContent.replace(" ","");

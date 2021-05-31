@@ -600,6 +600,7 @@ public class NewsController extends BaseController {
         }
         LayuiPageInfo religionNews = this.newsService.religionPageList(newsParam);
         localCache.put(cacheKey,religionNews);
+
         return religionNews;
     }
 }
