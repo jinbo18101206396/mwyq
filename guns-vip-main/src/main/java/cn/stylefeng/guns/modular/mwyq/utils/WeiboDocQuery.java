@@ -30,7 +30,12 @@ public class WeiboDocQuery {
     public WeiboDocQuery(){
     }
 
-    public List<SolrWeiboDocResEntity> query(String keyWords, String langType, String conetent_emotion, String content_author, String content_time, int start, int rows_num,boolean method){
+	/**
+	 * 查询微博列表
+	 *
+	 * @author zhangliang
+	 */
+    public List<SolrWeiboDocResEntity> query(String keyWords, String blogger,String langType, String conetent_emotion, String content_author, String content_time, int start, int rows_num,boolean method){
     	List<SolrWeiboDocResEntity> docResList = new ArrayList<SolrWeiboDocResEntity>();
         int rows = rows_num;
         if (rows < 1){
@@ -232,8 +237,7 @@ public class WeiboDocQuery {
         return docResList;
     }
     
-    public long queryNum(String keyWords, String langType, String conetent_emotion, String content_author, String content_time, int start, int rows_num,boolean method){
-    	System.out.println("solrSearch count num of the different emotion of "+keyWords+"...");
+    public long queryNum(String keyWords, String blogger,String langType, String conetent_emotion, String content_author, String content_time, int start, int rows_num,boolean method){
         long num=0;
     	int rows = rows_num;
         if (rows < 1){

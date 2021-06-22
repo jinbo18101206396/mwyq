@@ -23,9 +23,9 @@ import lombok.Getter;
 @Getter
 public enum SensitiveType {
 
-    NEUTRAL(1,"中性新闻"),
-    SENSITIVE(2,"敏感新闻"),
-    FORWARD(3,"正向新闻");
+    NEUTRAL(1,"中性"),
+    SENSITIVE(2,"敏感"),
+    FORWARD(3,"正向");
 
     private Integer code;
     private String message;

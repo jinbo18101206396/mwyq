@@ -83,13 +83,14 @@ public class RetrievalController extends BaseController {
     public JSONObject weiboSearch(WeiboRetrievalParam wrParam) {
 
         String keyword = wrParam.getKeyword();
+        String blogger = wrParam.getBlogger();
         String lang = wrParam.getLang();
         String cycle = wrParam.getCycle();
         String scope = wrParam.getScope();
         String sensitive = wrParam.getSensitive();
 
         JSONObject weiboSearchJson = new JSONObject();
-        String cacheKey = "weibo_search_"+wrParam.getKeyword()+"_"+wrParam.getLang()+"_"+wrParam.getCycle()+"_"+wrParam.getScope()+"_"+wrParam.getSensitive();
+        String cacheKey = "weibo_search_"+wrParam.getKeyword()+"_"+wrParam.getBlogger()+"_"+wrParam.getLang()+"_"+wrParam.getCycle()+"_"+wrParam.getScope()+"_"+wrParam.getSensitive();
         JSONObject weiboSearchCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (weiboSearchCache != null) {
             return weiboSearchCache;
@@ -99,21 +100,21 @@ public class RetrievalController extends BaseController {
         long allNum=0;
         WeiboDocQuery docQuery = new WeiboDocQuery();
         if(sensitive.equals("emotion-all")){
-            positiveNum = (long) docQuery.queryNum(keyword, lang, "emotion-positive", scope, cycle, 1, 100000, true);
-            negativeNum = (long) docQuery.queryNum(keyword, lang, "emotion-negative", scope, cycle, 1, 100000, true);
-            allNum = (long) docQuery.queryNum(keyword, lang, "emotion-all", scope, cycle, 1, 100000, true);
+            positiveNum = (long) docQuery.queryNum(keyword, blogger,lang, "emotion-positive", scope, cycle, 1, 100000, true);
+            negativeNum = (long) docQuery.queryNum(keyword, blogger,lang, "emotion-negative", scope, cycle, 1, 100000, true);
+            allNum = (long) docQuery.queryNum(keyword, blogger, lang, "emotion-all", scope, cycle, 1, 100000, true);
         }else if(sensitive.equals("emotion-positive")){
-            positiveNum = (long) docQuery.queryNum(keyword, lang, sensitive, scope, cycle, 1, 100000, true);
+            positiveNum = (long) docQuery.queryNum(keyword, blogger,lang, sensitive, scope, cycle, 1, 100000, true);
             allNum = positiveNum;
         }else{
-            negativeNum = (long) docQuery.queryNum(keyword, lang, sensitive, scope, cycle, 1, 100000, true);
+            negativeNum = (long) docQuery.queryNum(keyword, blogger,lang, sensitive, scope, cycle, 1, 100000, true);
             allNum = negativeNum;
         }
         weiboSearchJson.put("positiveNum",positiveNum);
         weiboSearchJson.put("negativeNum",negativeNum);
         weiboSearchJson.put("neutralNum",allNum-positiveNum-negativeNum);
 
-        List<SolrWeiboDocResEntity> weiboList = docQuery.query(keyword, lang, sensitive, scope, cycle, 1, 1000, true);
+        List<SolrWeiboDocResEntity> weiboList = docQuery.query(keyword, blogger,lang, sensitive, scope, cycle, 1, 1000, true);
         weiboSearchJson.put("docResList",weiboList);
 
         String earlyTime = "-";

@@ -123,8 +123,8 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
         }
     }
 
-    function loadWeiboData(keyword,scope,lang,sensitive,cycle){
-        $.get(Feng.ctxPath + '/retrieval/search/weibo?keyword=' + keyword+'&scope='+scope+'&lang='+lang+'&sensitive='+sensitive+'&cycle='+cycle, function (data) {
+    function loadWeiboData(keyword,blogger,scope,lang,sensitive,cycle){
+        $.get(Feng.ctxPath + '/retrieval/search/weibo?keyword=' + keyword+'&blogger='+blogger+'&scope='+scope+'&lang='+lang+'&sensitive='+sensitive+'&cycle='+cycle, function (data) {
             //基本数据展示
             loadBasicData(keyword,data.allNum,data.earlyTime,data.latestTime);
             //微博列表展示
@@ -139,6 +139,7 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
         var keyword = $("#weibo_key_words").val();
+        var blogger = $("#blogger").val();
         var scope = $("#weibo_scope").val();
         var lang = $("#weibo_lang").val();
         var sensitive = $("#weibo_sensitive").val();
@@ -152,6 +153,6 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
         $("#weiboListDiv").html("");
         $("#hotWeiboDiv").html("");
 
-        loadWeiboData(keyword,scope,lang,sensitive,cycle);
+        loadWeiboData(keyword,blogger,scope,lang,sensitive,cycle);
     });
 });
