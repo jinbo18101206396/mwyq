@@ -59,7 +59,7 @@ public class TopicController extends BaseController {
     @Autowired
     private EntityNewsRelationService entityNewsRelationService;
 
-    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.DAYS).recordStats().build();
+    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.HOURS).recordStats().build();
 
     /**
      * 跳转到主页面

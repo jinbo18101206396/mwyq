@@ -42,6 +42,7 @@ public class TranslateController extends BaseController {
             sourceContent = trans.processContent(sourceContent,sourceLang);
             if("nmt".equals(transModel)){
                 targetContent = trans.sendPost(sourceContent, sourceLang,"paragraph");
+                targetContent = targetContent.replace("\n", "\n<br>").replace("\r","\n<br>");
             }else if("smt".equals(transModel)){
 
             }

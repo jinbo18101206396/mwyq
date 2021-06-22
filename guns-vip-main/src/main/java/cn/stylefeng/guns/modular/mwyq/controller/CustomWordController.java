@@ -67,7 +67,7 @@ public class CustomWordController extends BaseController {
     @Autowired
     private EntityNewsRelationService entityNewsRelationService;
 
-    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.DAYS).recordStats().build();
+    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.HOURS).recordStats().build();
 
     /**
      * 跳转到主页面
@@ -262,11 +262,9 @@ public class CustomWordController extends BaseController {
         List<Integer> newsIdList = getNewsIdsByCustomWordNames(customWordNames);
 
         LayuiPageInfo customWordNewsPage = new LayuiPageInfo();
-        if (newsIdList == null) {
-            return customWordNewsPage;
+        if (newsIdList.size() > 0) {
+            customWordNewsPage = newsService.selectPage(newsIdList, customWordParam);
         }
-        //分页查询news并返回
-        customWordNewsPage = newsService.selectPage(newsIdList, customWordParam);
         localCache.put(cacheKey, customWordNewsPage);
         return customWordNewsPage;
     }
