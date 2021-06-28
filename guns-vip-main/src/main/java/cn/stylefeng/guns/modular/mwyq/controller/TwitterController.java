@@ -34,7 +34,7 @@ public class TwitterController extends BaseController {
 
     private String PREFIX = "/twitter";
 
-    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.HOURS).recordStats().build();
+    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.DAYS).recordStats().build();
 
 
     @Autowired

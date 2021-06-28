@@ -55,7 +55,7 @@
     </select>
 
     <select id="sentimentList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TwitterResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TwitterParam">
-        SELECT sentiment,COUNT(*) AS sentimentCount FROM twitter GROUP BY sentiment  ORDER BY sentimentCount desc
+        SELECT sentiment,COUNT(*) AS sentimentCount FROM twitter  GROUP BY sentiment  ORDER BY sentimentCount desc limit 10
     </select>
 
 </mapper>
