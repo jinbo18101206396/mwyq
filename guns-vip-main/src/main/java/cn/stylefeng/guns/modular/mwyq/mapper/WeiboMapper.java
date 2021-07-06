@@ -3,6 +3,7 @@ package cn.stylefeng.guns.modular.mwyq.mapper;
 import cn.stylefeng.guns.modular.mwyq.entity.Weibo;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam;
 import cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult;
+import cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
@@ -52,4 +53,17 @@ public interface WeiboMapper extends BaseMapper<Weibo> {
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") WeiboParam paramCondition);
 
+    /**
+     * 微博情感类型
+     * @param paramCondition
+     * @return
+     */
+    List<WeiboResult> sentimentTypeList(@Param("paramCondition") WeiboParam paramCondition);
+
+    /**
+     * 微博趋势
+     * @param paramCondition
+     * @return
+     */
+    List<WeiboTrendResult> sentimentTrendList(@Param("paramCondition") WeiboParam paramCondition);
 }

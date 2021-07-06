@@ -4,6 +4,7 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.mwyq.entity.Weibo;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam;
 import cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult;
+import cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -66,4 +67,7 @@ public interface WeiboService extends IService<Weibo> {
      */
      LayuiPageInfo findPageBySpec(WeiboParam param);
 
+    List<WeiboResult> sentimentTypeList(WeiboParam weiboParam);
+
+    List<WeiboTrendResult> sentimentTrendList(WeiboParam weiboParam);
 }

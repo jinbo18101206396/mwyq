@@ -19,7 +19,7 @@ public class WeiboResult implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private Long id;
+    private String id;
 
     /**
      * 微博内容
@@ -75,5 +75,7 @@ public class WeiboResult implements Serializable {
      * 创建时间
      */
     private Date createTime;
+
+    private Integer num;
 
 }

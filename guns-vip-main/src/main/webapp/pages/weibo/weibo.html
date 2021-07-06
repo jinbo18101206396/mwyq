@@ -5,24 +5,87 @@
 </div>
 
 <div class="layui-fluid">
-    <div class="layui-row layui-col-space15">
-        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-xs4 layui-col-md8">
+            <div class="layui-card" style="">
+                <div class="layui-card-header">微博情感走势</div>
+                <div class="layui-card-body" style="height: 300px;">
+                    <div id="weiboTrend" style="float:left;height: 100%;width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs4 layui-col-md4">
             <div class="layui-card">
-                <div class="layui-card-body">
-                    <div class="layui-form toolbar">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <input id="condition" class="layui-input" type="text" placeholder=""/>
-                            </div>
-                            <div class="layui-inline">
-                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="layui-table" id="weiboTable" lay-filter="weiboTable"></table>
+                <div class="layui-card-header">微博情感分布</div>
+                <div class="layui-card-body" style="height: 300px; overflow: hidden">
+                    <div id="weiboSentiment" style="width: 100%;height: 100%;"></div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="layui-col-xs12 layui-col-md8">
+        <div class="layui-card" style="">
+            <div class="layui-card-header">博主地域分布</div>
+            <div class="layui-card-body" style="height: 500px;">
+                <div id="areaMap" style="float:left;height: 100%;width: 84%;"></div>
+                <div class="map-table" style="float:left;height: 100%;width: 16%;">
+                    <table class="layui-table">
+                        <thead><tr><th>省份</th><th>数量</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md4">
+        <div class="layui-card" style="">
+            <div class="layui-card-header">博主排行</div>
+            <div class="layui-card-body" style="height: 500px;">
+                <div id="followers" style="float:left;height: 100%;width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <select id="lang">
+                                <option value="">语言类型</option>
+                                <option value="cn">中文</option>
+                                <option value="zang">藏文</option>
+                                <option value="meng">蒙文</option>
+                                <option value="wei">维吾尔文</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <select id="sentiment">
+                                <option value="">情感类型</option>
+                                <option value="3">正向</option>
+                                <option value="2">中性</option>
+                                <option value="1">负向</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <input id="timeLimit" class="layui-input" type="text" placeholder="请选择微博发布时间" autocomplete="off"/>
+                        </div>
+                        <div class="layui-inline">
+                            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="layui-table" id="weiboTable" lay-filter="weiboTable"></table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/map/js/china.js?v=${constants.getReleaseVersion()}"></script>
+
+<script type="text/html" id="transBar">
+    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="translate">译</button>
+</script>
 @}

@@ -20,7 +20,7 @@ public class WeiboParam implements Serializable, BaseValidatingParam {
     private static final long serialVersionUID = 1L;
 
 
-    private Long id;
+    private String id;
 
     /**
      * 微博内容
@@ -76,6 +76,12 @@ public class WeiboParam implements Serializable, BaseValidatingParam {
      * 创建时间
      */
     private Date createTime;
+
+    private String timeLimit;
+
+    private String beginTime;
+
+    private String endTime;
 
     @Override
     public String checkParam() {

@@ -5,179 +5,87 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.Weibo">
         <id column="id" property="id" />
-        <result column="content" property="content" />
         <result column="author_id" property="authorId" />
-        <result column="read_count" property="readCount" />
-        <result column="comment_count" property="commentCount" />
+        <result column="content" property="content" />
+        <result column="article_url" property="articleUrl" />
+        <result column="original" property="original" />
+        <result column="create_time" property="createTime" />
+        <result column="device_type" property="deviceType" />
         <result column="like_count" property="likeCount" />
         <result column="transmit_count" property="transmitCount" />
-        <result column="content_type" property="contentType" />
-        <result column="device_type" property="deviceType" />
+        <result column="comment_count" property="commentCount" />
         <result column="sentiment" property="sentiment" />
         <result column="lang" property="lang" />
-        <result column="create_time" property="createTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", content AS "content", author_id AS "authorId", read_count AS "readCount", comment_count AS "commentCount", like_count AS "likeCount", transmit_count AS "transmitCount", content_type AS "contentType", device_type AS "deviceType", sentiment AS "sentiment", lang AS "lang", create_time AS "createTime"
+        id AS "id", author_id AS "authorId", content AS "content", article_url AS "articleUrl", original As "original", create_time AS "createTime", device_type AS "deviceType", like_count AS "likeCount", transmit_count AS "transmitCount",  comment_count AS "commentCount",  sentiment AS "sentiment", lang AS "lang"
     </sql>
-
 
     <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
-        from weibo where 1 = 1
-            <if test="paramCondition.content != null and paramCondition.content != ''">
-                and content like CONCAT('%',#{paramCondition.content},'%')
-            </if>
-            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
-                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
-            </if>
-            <if test="paramCondition.readCount != null and paramCondition.readCount != ''">
-                and read_count like CONCAT('%',#{paramCondition.readCount},'%')
-            </if>
-            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
-                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
-            </if>
-            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
-                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
-            </if>
-            <if test="paramCondition.transmitCount != null and paramCondition.transmitCount != ''">
-                and transmit_count like CONCAT('%',#{paramCondition.transmitCount},'%')
-            </if>
-            <if test="paramCondition.contentType != null and paramCondition.contentType != ''">
-                and content_type like CONCAT('%',#{paramCondition.contentType},'%')
-            </if>
-            <if test="paramCondition.deviceType != null and paramCondition.deviceType != ''">
-                and device_type like CONCAT('%',#{paramCondition.deviceType},'%')
-            </if>
-            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
-                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
-            </if>
-            <if test="paramCondition.lang != null and paramCondition.lang != ''">
-                and lang like CONCAT('%',#{paramCondition.lang},'%')
-            </if>
-            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
-            </if>
+        from weibo order by createTime desc
     </select>
 
     <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
-        from weibo where 1 = 1
-            <if test="paramCondition.content != null and paramCondition.content != ''">
-                and content like CONCAT('%',#{paramCondition.content},'%')
-            </if>
-            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
-                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
-            </if>
-            <if test="paramCondition.readCount != null and paramCondition.readCount != ''">
-                and read_count like CONCAT('%',#{paramCondition.readCount},'%')
-            </if>
-            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
-                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
-            </if>
-            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
-                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
-            </if>
-            <if test="paramCondition.transmitCount != null and paramCondition.transmitCount != ''">
-                and transmit_count like CONCAT('%',#{paramCondition.transmitCount},'%')
-            </if>
-            <if test="paramCondition.contentType != null and paramCondition.contentType != ''">
-                and content_type like CONCAT('%',#{paramCondition.contentType},'%')
-            </if>
-            <if test="paramCondition.deviceType != null and paramCondition.deviceType != ''">
-                and device_type like CONCAT('%',#{paramCondition.deviceType},'%')
-            </if>
-            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
-                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
-            </if>
-            <if test="paramCondition.lang != null and paramCondition.lang != ''">
-                and lang like CONCAT('%',#{paramCondition.lang},'%')
-            </if>
-            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
-            </if>
+        from weibo order by createTime desc
     </select>
 
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
-        from weibo where 1 = 1
-            <if test="paramCondition.content != null and paramCondition.content != ''">
-                and content like CONCAT('%',#{paramCondition.content},'%')
-            </if>
-            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
-                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
-            </if>
-            <if test="paramCondition.readCount != null and paramCondition.readCount != ''">
-                and read_count like CONCAT('%',#{paramCondition.readCount},'%')
-            </if>
-            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
-                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
-            </if>
-            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
-                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
-            </if>
-            <if test="paramCondition.transmitCount != null and paramCondition.transmitCount != ''">
-                and transmit_count like CONCAT('%',#{paramCondition.transmitCount},'%')
-            </if>
-            <if test="paramCondition.contentType != null and paramCondition.contentType != ''">
-                and content_type like CONCAT('%',#{paramCondition.contentType},'%')
-            </if>
-            <if test="paramCondition.deviceType != null and paramCondition.deviceType != ''">
-                and device_type like CONCAT('%',#{paramCondition.deviceType},'%')
-            </if>
-            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
-                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
-            </if>
-            <if test="paramCondition.lang != null and paramCondition.lang != ''">
-                and lang like CONCAT('%',#{paramCondition.lang},'%')
-            </if>
-            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
-            </if>
+        FROM weibo WHERE 1=1
+        <if test="paramCondition.lang != null and paramCondition.lang != ''">
+            and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
+        <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+            and createTime = #{paramCondition.createTime}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (weibo.create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        order by createTime desc
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
-        from weibo where 1 = 1
-            <if test="paramCondition.content != null and paramCondition.content != ''">
-                and content like CONCAT('%',#{paramCondition.content},'%')
-            </if>
-            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
-                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
-            </if>
-            <if test="paramCondition.readCount != null and paramCondition.readCount != ''">
-                and read_count like CONCAT('%',#{paramCondition.readCount},'%')
-            </if>
-            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
-                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
-            </if>
-            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
-                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
-            </if>
-            <if test="paramCondition.transmitCount != null and paramCondition.transmitCount != ''">
-                and transmit_count like CONCAT('%',#{paramCondition.transmitCount},'%')
-            </if>
-            <if test="paramCondition.contentType != null and paramCondition.contentType != ''">
-                and content_type like CONCAT('%',#{paramCondition.contentType},'%')
-            </if>
-            <if test="paramCondition.deviceType != null and paramCondition.deviceType != ''">
-                and device_type like CONCAT('%',#{paramCondition.deviceType},'%')
-            </if>
-            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
-                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
-            </if>
-            <if test="paramCondition.lang != null and paramCondition.lang != ''">
-                and lang like CONCAT('%',#{paramCondition.lang},'%')
-            </if>
-            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
-            </if>
+        from weibo order by createTime desc
+
+    </select>
+    <select id="sentimentTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+        SELECT
+        w1.sentiment,COUNT(*) AS num FROM weibo AS w1 JOIN (SELECT ROUND(0.9*(SELECT MAX(id) FROM `weibo`)) AS id) AS w2
+        WHERE
+        1=1 AND w1.id >= w2.id
+        GROUP BY
+        w1.sentiment
+        ORDER BY num desc
+    </select>
+
+    <select id="sentimentTrendList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+        SELECT
+            YEAR(create_time) as yearTime,
+            MONTH( create_time) as monthTime,
+            CONCAT(YEAR(create_time),'-',MONTH(create_time)) AS data_time ,
+            COUNT(1) AS total,
+            COUNT(IF(sentiment=1,1,NULL)) AS neuNum,
+            COUNT(IF(sentiment=2,2,NULL)) AS senNum,
+            COUNT(IF(sentiment=3,3,NULL)) AS forNum
+        FROM
+            weibo AS w1 JOIN (SELECT ROUND(0.9*(SELECT MAX(id) FROM `weibo`)) AS id) AS w2
+            where 1=1 and w1.id >= w2.id and w1.sentiment is not null
+        GROUP BY
+            data_time
+        ORDER BY
+            yearTime DESC,monthTime DESC
     </select>
 
 </mapper>

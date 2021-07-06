@@ -21,14 +21,8 @@ public class Weibo implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-      @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
-    /**
-     * 微博内容
-     */
-    @TableField("content")
-    private String content;
+    @TableId(value = "id", type = IdType.AUTO)
+    private String id;
 
     /**
      * 博主id
@@ -37,16 +31,28 @@ public class Weibo implements Serializable {
     private Long authorId;
 
     /**
-     * 阅读量
+     * 微博内容
      */
-    @TableField("read_count")
-    private Integer readCount;
+    @TableField("content")
+    private String content;
+
+    @TableField("article_url")
+    private String articleUrl;
+
+    @TableField("original")
+    private Integer original;
 
     /**
-     * 评论量
+     * 创建时间
      */
-    @TableField("comment_count")
-    private Integer commentCount;
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private Date createTime;
+
+    /**
+     * 设备类型
+     */
+    @TableField("device_type")
+    private String deviceType;
 
     /**
      * 点赞量
@@ -61,16 +67,11 @@ public class Weibo implements Serializable {
     private Integer transmitCount;
 
     /**
-     * 内容类型
+     * 评论量
      */
-    @TableField("content_type")
-    private String contentType;
+    @TableField("comment_count")
+    private Integer commentCount;
 
-    /**
-     * 设备类型
-     */
-    @TableField("device_type")
-    private String deviceType;
 
     /**
      * 情感类型
@@ -84,18 +85,17 @@ public class Weibo implements Serializable {
     @TableField("lang")
     private String lang;
 
-    /**
-     * 创建时间
-     */
-      @TableField(value = "create_time", fill = FieldFill.INSERT)
-    private Date createTime;
+    @TableField(exist = false)
+    private String translateContent;
 
+    public Weibo() {
+    }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -113,14 +113,6 @@ public class Weibo implements Serializable {
 
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
-    }
-
-    public Integer getReadCount() {
-        return readCount;
-    }
-
-    public void setReadCount(Integer readCount) {
-        this.readCount = readCount;
     }
 
     public Integer getCommentCount() {
@@ -145,14 +137,6 @@ public class Weibo implements Serializable {
 
     public void setTransmitCount(Integer transmitCount) {
         this.transmitCount = transmitCount;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     public String getDeviceType() {
@@ -187,21 +171,46 @@ public class Weibo implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getOriginal() {
+        return original;
+    }
+
+    public void setOriginal(Integer original) {
+        this.original = original;
+    }
+
+    public String getArticleUrl() {
+        return articleUrl;
+    }
+
+    public void setArticleUrl(String articleUrl) {
+        this.articleUrl = articleUrl;
+    }
+
+    public String getTranslateContent() {
+        return translateContent;
+    }
+
+    public void setTranslateContent(String translateContent) {
+        this.translateContent = translateContent;
+    }
+
     @Override
     public String toString() {
         return "Weibo{" +
-        "id=" + id +
-        ", content=" + content +
-        ", authorId=" + authorId +
-        ", readCount=" + readCount +
-        ", commentCount=" + commentCount +
-        ", likeCount=" + likeCount +
-        ", transmitCount=" + transmitCount +
-        ", contentType=" + contentType +
-        ", deviceType=" + deviceType +
-        ", sentiment=" + sentiment +
-        ", lang=" + lang +
-        ", createTime=" + createTime +
-        "}";
+                "id='" + id + '\'' +
+                ", authorId=" + authorId +
+                ", content='" + content + '\'' +
+                ", articleUrl='" + articleUrl + '\'' +
+                ", original=" + original +
+                ", createTime=" + createTime +
+                ", deviceType='" + deviceType + '\'' +
+                ", likeCount=" + likeCount +
+                ", transmitCount=" + transmitCount +
+                ", commentCount=" + commentCount +
+                ", sentiment=" + sentiment +
+                ", lang='" + lang + '\'' +
+                ", translateContent='" + translateContent + '\'' +
+                '}';
     }
 }
