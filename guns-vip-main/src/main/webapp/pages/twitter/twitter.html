@@ -28,7 +28,13 @@
                     <div class="layui-form toolbar">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <input id="name" class="layui-input" type="text" placeholder="推特作者"/>
+                                <select id="lang">
+                                    <option value="">语言类型</option>
+                                    <option value="cn">中文</option>
+                                    <option value="zang">藏文</option>
+                                    <option value="meng">蒙文</option>
+                                    <option value="wei">维吾尔文</option>
+                                </select>
                             </div>
                             <div class="layui-inline">
                                 <select id="sentiment">
@@ -37,6 +43,12 @@
                                     <option value="1">中性</option>
                                     <option value="3">正向</option>
                                 </select>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="name" class="layui-input" type="text" placeholder="推特作者"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="location" class="layui-input" type="text" placeholder="发布位置"/>
                             </div>
                             <div class="layui-inline">
                                 <input id="timeLimit" class="layui-input" type="text" placeholder="请选择发布时间" autocomplete="off"/>

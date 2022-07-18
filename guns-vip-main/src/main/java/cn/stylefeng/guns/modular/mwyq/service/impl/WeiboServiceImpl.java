@@ -2,7 +2,6 @@ package cn.stylefeng.guns.modular.mwyq.service.impl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
-
 import cn.stylefeng.guns.modular.mwyq.entity.Weibo;
 import cn.stylefeng.guns.modular.mwyq.mapper.WeiboMapper;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam;
@@ -17,12 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author jinbo
@@ -34,18 +32,18 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
     private WeiboMapper weiboMapper;
 
     @Override
-    public void add(WeiboParam param){
+    public void add(WeiboParam param) {
         Weibo entity = getEntity(param);
         this.save(entity);
     }
 
     @Override
-    public void delete(WeiboParam param){
+    public void delete(WeiboParam param) {
         this.removeById(getKey(param));
     }
 
     @Override
-    public void update(WeiboParam param){
+    public void update(WeiboParam param) {
         Weibo oldEntity = getOldEntity(param);
         Weibo newEntity = getEntity(param);
         ToolUtil.copyProperties(newEntity, oldEntity);
@@ -53,23 +51,29 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
     }
 
     @Override
-    public WeiboResult findBySpec(WeiboParam param){
+    public WeiboResult findBySpec(WeiboParam param) {
         return null;
     }
 
     @Override
-    public List<WeiboResult> findListBySpec(WeiboParam param){
+    public List<WeiboResult> findListBySpec(WeiboParam param) {
         return null;
     }
 
     @Override
-    public LayuiPageInfo findPageBySpec(WeiboParam param){
+    public LayuiPageInfo findPageBySpec(WeiboParam param) {
+        String timeLimit = param.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split("至");
+            param.setBeginTime(split[0]);
+            param.setEndTime(split[1]);
+        }
         Page pageContext = getPageContext();
         IPage page = this.baseMapper.customPageList(pageContext, param);
         return LayuiPageFactory.createPageInfo(page);
     }
 
-    private Serializable getKey(WeiboParam param){
+    private Serializable getKey(WeiboParam param) {
         return param.getId();
     }
 
@@ -90,8 +94,8 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
     @Override
     public List<WeiboResult> sentimentTypeList(WeiboParam weiboParam) {
         String timeLimit = weiboParam.getTimeLimit();
-        if (ToolUtil.isNotEmpty(timeLimit)){
-            String[] split = timeLimit.split("-");
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split("至");
             weiboParam.setBeginTime(split[0]);
             weiboParam.setEndTime(split[1]);
         }
@@ -99,10 +103,15 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
     }
 
     @Override
+    public List<WeiboResult> areaMapList(WeiboParam weiboParam) {
+        return weiboMapper.areaMapList(weiboParam);
+    }
+
+    @Override
     public List<WeiboTrendResult> sentimentTrendList(WeiboParam weiboParam) {
         String timeLimit = weiboParam.getTimeLimit();
-        if (ToolUtil.isNotEmpty(timeLimit)){
-            String[] split = timeLimit.split("-");
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split("至");
             weiboParam.setBeginTime(split[0]);
             weiboParam.setEndTime(split[1]);
         }

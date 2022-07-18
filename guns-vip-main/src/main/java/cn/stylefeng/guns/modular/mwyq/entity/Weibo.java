@@ -31,6 +31,12 @@ public class Weibo implements Serializable {
     private Long authorId;
 
     /**
+     * 博主姓名
+     */
+    @TableField("author_name")
+    private Long authorName;
+
+    /**
      * 微博内容
      */
     @TableField("content")
@@ -39,20 +45,14 @@ public class Weibo implements Serializable {
     @TableField("article_url")
     private String articleUrl;
 
-    @TableField("original")
-    private Integer original;
+    @TableField("location")
+    private String location;
 
     /**
      * 创建时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
-
-    /**
-     * 设备类型
-     */
-    @TableField("device_type")
-    private String deviceType;
 
     /**
      * 点赞量
@@ -88,23 +88,12 @@ public class Weibo implements Serializable {
     @TableField(exist = false)
     private String translateContent;
 
-    public Weibo() {
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public Long getAuthorId() {
@@ -115,12 +104,44 @@ public class Weibo implements Serializable {
         this.authorId = authorId;
     }
 
-    public Integer getCommentCount() {
-        return commentCount;
+    public Long getAuthorName() {
+        return authorName;
     }
 
-    public void setCommentCount(Integer commentCount) {
-        this.commentCount = commentCount;
+    public void setAuthorName(Long authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getArticleUrl() {
+        return articleUrl;
+    }
+
+    public void setArticleUrl(String articleUrl) {
+        this.articleUrl = articleUrl;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Integer getLikeCount() {
@@ -139,12 +160,12 @@ public class Weibo implements Serializable {
         this.transmitCount = transmitCount;
     }
 
-    public String getDeviceType() {
-        return deviceType;
+    public Integer getCommentCount() {
+        return commentCount;
     }
 
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 
     public Integer getSentiment() {
@@ -163,30 +184,6 @@ public class Weibo implements Serializable {
         this.lang = lang;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getOriginal() {
-        return original;
-    }
-
-    public void setOriginal(Integer original) {
-        this.original = original;
-    }
-
-    public String getArticleUrl() {
-        return articleUrl;
-    }
-
-    public void setArticleUrl(String articleUrl) {
-        this.articleUrl = articleUrl;
-    }
-
     public String getTranslateContent() {
         return translateContent;
     }
@@ -200,11 +197,11 @@ public class Weibo implements Serializable {
         return "Weibo{" +
                 "id='" + id + '\'' +
                 ", authorId=" + authorId +
+                ", authorName=" + authorName +
                 ", content='" + content + '\'' +
                 ", articleUrl='" + articleUrl + '\'' +
-                ", original=" + original +
+                ", location='" + location + '\'' +
                 ", createTime=" + createTime +
-                ", deviceType='" + deviceType + '\'' +
                 ", likeCount=" + likeCount +
                 ", transmitCount=" + transmitCount +
                 ", commentCount=" + commentCount +

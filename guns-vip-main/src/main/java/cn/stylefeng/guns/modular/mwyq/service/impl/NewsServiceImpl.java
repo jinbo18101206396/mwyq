@@ -174,8 +174,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         List<String> names = customWordParam.getNames();
         for (News record : records) {
             String senWords = record.getSensitiveWords();
-            if (ToolUtil.isNotEmpty(senWords) && senWords.endsWith("*")) {
-                senWords = senWords.substring(0, senWords.length() - 1);
+            if (ToolUtil.isNotEmpty(senWords)) {
+                if(senWords.endsWith("*")){
+                    senWords = senWords.substring(0, senWords.length() - 1);
+                }
                 record.setSensitiveWords(senWords.replace("*", ","));
             }
             //新闻列表中标出领域主题词
@@ -551,8 +553,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         List<NewsResult> records = page.getRecords();
         for (NewsResult record : records) {
             String sensitiveWords = record.getSensitiveWords();
-            if (ToolUtil.isNotEmpty(sensitiveWords) && sensitiveWords.endsWith("*")) {
-                sensitiveWords = sensitiveWords.substring(0, sensitiveWords.length() - 1);
+            if (ToolUtil.isNotEmpty(sensitiveWords)) {
+                if(sensitiveWords.endsWith("*")){
+                    sensitiveWords = sensitiveWords.substring(0, sensitiveWords.length() - 1);
+                }
                 record.setSensitiveWords(sensitiveWords.replace("*", ","));
             }
         }

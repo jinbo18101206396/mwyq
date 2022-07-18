@@ -69,5 +69,7 @@ public interface WeiboService extends IService<Weibo> {
 
     List<WeiboResult> sentimentTypeList(WeiboParam weiboParam);
 
+    List<WeiboResult> areaMapList(WeiboParam weiboParam);
+
     List<WeiboTrendResult> sentimentTrendList(WeiboParam weiboParam);
 }

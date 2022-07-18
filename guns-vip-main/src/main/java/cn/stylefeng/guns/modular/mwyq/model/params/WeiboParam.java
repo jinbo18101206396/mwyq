@@ -23,14 +23,29 @@ public class WeiboParam implements Serializable, BaseValidatingParam {
     private String id;
 
     /**
+     * 博主id
+     */
+    private Long authorId;
+
+    /**
+     * 博主姓名
+     */
+    private String authorName;
+
+    /**
      * 微博内容
      */
     private String content;
 
     /**
-     * 博主id
+     * 博文地址
      */
-    private Long authorId;
+    private String articleUrl;
+
+    /**
+     * 发布位置
+     */
+    private String location;
 
     /**
      * 阅读量
@@ -56,11 +71,6 @@ public class WeiboParam implements Serializable, BaseValidatingParam {
      * 内容类型
      */
     private String contentType;
-
-    /**
-     * 设备类型
-     */
-    private String deviceType;
 
     /**
      * 情感类型

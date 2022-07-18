@@ -22,14 +22,34 @@ public class WeiboResult implements Serializable {
     private String id;
 
     /**
+     * 博主id
+     */
+    private Long authorId;
+
+    /**
+     * 博主姓名
+     */
+    private String authorName;
+
+    /**
+     * 博主认证
+     */
+    private String verifiedReason;
+
+    /**
      * 微博内容
      */
     private String content;
 
     /**
-     * 博主id
+     * 博文地址
      */
-    private Long authorId;
+    private String articleUrl;
+
+    /**
+     * 发布位置
+     */
+    private String location;
 
     /**
      * 阅读量
@@ -45,6 +65,7 @@ public class WeiboResult implements Serializable {
      * 点赞量
      */
     private Integer likeCount;
+
 
     /**
      * 转发量

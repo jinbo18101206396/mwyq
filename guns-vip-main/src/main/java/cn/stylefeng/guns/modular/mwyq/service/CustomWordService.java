@@ -73,7 +73,7 @@ public interface CustomWordService extends IService<CustomWord> {
      * @author jinbo
      * @Date 2020-06-11
      */
-    List<String> translateCnCustomwordName(String name, String lang);
+    List<String> translateCnCustomWordName(String customWordName, String lang);
 
     List<String> translateCnCustomwordNames(List<String> names, String lang);
 }

@@ -33,7 +33,13 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                         return "<p style='color:blue;font-weight: bold'>中性</p>";
                     } else if(d.isSensitive === 2){
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
-                    }else{
+                    } else if(d.isSensitive === 34){
+                        return "<p style='color:yellow;font-weight: bold'>正向-禁用词</p>";
+                    } else if(d.isSensitive === 14){
+                        return "<p style='color:yellow;font-weight: bold'>中性-禁用词</p>";
+                    } else if(d.isSensitive === 24){
+                        return "<p style='color:yellow;font-weight: bold'>敏感-禁用词</p>";
+                    } else {
                         return "<p style='font-weight: bold'>其他</p>";
                     }
                 }
@@ -42,6 +48,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                 field: 'sensitiveCategory', align: "center", sort: true, title: '敏感类别',minWidth: 150, templet: function (d) {
                     if(d.sensitiveCategory === 1){
                         return "<p>国家安全</p>";
+                    }else if (d.sensitiveCategory === 7) {
+                        return "<p>政治</p>";
                     }else if (d.sensitiveCategory === 2) {
                         return "<p>暴恐</p>";
                     } else if(d.sensitiveCategory === 3){
@@ -138,7 +146,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                     show : true,
                     realtime : true,
                     start : 0,
-                    end : 100
+                    end : 5
                 },
                 xAxis : [
                     {

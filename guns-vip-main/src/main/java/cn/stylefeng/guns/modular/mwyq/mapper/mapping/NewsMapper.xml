@@ -337,8 +337,7 @@
     <select id="sensitivePageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         select
         <include refid="sensitive_Column_List"/>
-        from news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
-        where 1=1 and t1.news_id >= t2.news_id and t1.is_sensitive is not null
+        from news AS t1 where DATE_FORMAT(t1.news_time,'%Y-%m') > DATE_FORMAT(date_sub(curdate(), interval 3 month),'%Y-%m')
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and t1.lang_type = #{paramCondition.langType}
         </if>

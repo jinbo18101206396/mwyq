@@ -196,5 +196,3 @@ public class TwitterController extends BaseController {
         return sentimentJson;
     }
 }
-
-

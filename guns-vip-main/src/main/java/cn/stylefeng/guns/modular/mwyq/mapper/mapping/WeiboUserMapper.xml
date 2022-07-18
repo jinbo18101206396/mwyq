@@ -31,6 +31,8 @@
     <select id="userMapList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboUserMapResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboUserParam">
         select left(location, 3) as 'province',COUNT(*) as 'userCount'
         from weibo_user GROUP BY left(location, 3)
+
+
     </select>
 
 </mapper>

@@ -20,10 +20,23 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: ''},
-            {field: 'content',  align: "center",sort: true, title: '推特内容',minWidth: 600,templet:function (d) {
+            {field: 'content',  align: "center",sort: true, title: '推特内容',minWidth: 450,templet:function (d) {
                     return '<div style="text-align: left"><a style="color: #01AAED;">'+d.content+'</a></div>';
             }},
             {field: 'name',align: "center",sort: true, title: '推特作者'},
+            {field: 'lang', align: "center", sort: true, title: '语言类型', templet: function (d) {
+                    if(d.lang == 'cn'){
+                        return "<p>中文</p>>";
+                    }else if (d.lang == 'zang') {
+                        return "<p>藏文</p>";
+                    } else if(d.lang == 'wei'){
+                        return "<p>维吾尔文</p>";
+                    }else if(d.lang == 'meng'){
+                        return "<p>蒙古文</p>";
+                    }else{
+                        return "<p></p>";
+                    }
+                }},
             {field: 'sentiment', align: "center", sort: true, title: '情感倾向', templet: function (d) {
                     if (d.sentiment === '3') {
                         return "<p style='color:green;font-weight: bold'>正向</p>";
@@ -32,11 +45,12 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
                     } else if (d.sentiment === '2') {
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
                     } else {
-                        return "<p style='font-weight: bold'>其他</p>";
+                        return "<p style='font-weight: bold'></p>";
                     }
                 }
             },
-            {field: 'time',  align: "center",sort: true, title: '发布时间'}
+            {field: 'time',  align: "center",sort: true, title: '发布时间'},
+            {field: 'location',  align: "center",sort: true, title: '发布位置'}
         ]];
     };
 
@@ -126,32 +140,10 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
         queryData['name'] = $("#name").val();
         queryData['sentiment'] = $("#sentiment").val();
         queryData['timeLimit'] = $("#timeLimit").val();
+        queryData['lang'] = $("#lang").val();
+        queryData['location'] = $("#location").val();
         table.reload(Twitter.tableId, {
             where: queryData, page: {curr: 1}
-        });
-    };
-
-    /**
-     * 弹出添加对话框
-     */
-    Twitter.openAddDlg = function () {
-        func.open({
-            title: '添加',
-            content: Feng.ctxPath + '/twitter/add',
-            tableId: Twitter.tableId
-        });
-    };
-
-    /**
-    * 点击编辑
-    *
-    * @param data 点击按钮时候的行数据
-    */
-    Twitter.openEditDlg = function (data) {
-        func.open({
-            title: '修改',
-            content: Feng.ctxPath + '/twitter/edit?id=' + data.id,
-            tableId: Twitter.tableId
         });
     };
 
@@ -165,25 +157,6 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
         } else {
             table.exportFile(tableResult.config.id, checkRows.data, 'xls');
         }
-    };
-
-    /**
-     * 点击删除
-     *
-     * @param data 点击按钮时候的行数据
-     */
-    Twitter.onDeleteItem = function (data) {
-        var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/twitter/delete", function (data) {
-                Feng.success("删除成功!");
-                table.reload(Twitter.tableId);
-            }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
-            });
-            ajax.set("id", data.id);
-            ajax.start();
-        };
-        Feng.confirm("是否删除?", operation);
     };
 
     // 渲染表格
@@ -209,7 +182,7 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
     //渲染时间选择框
     laydate.render({
         elem: '#timeLimit',
-        range: true,
+        range: "至",
         max: Feng.currentDate()
     });
 
@@ -218,10 +191,5 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
         var data = obj.data;
         var layEvent = obj.event;
 
-        if (layEvent === 'edit') {
-            Twitter.openEditDlg(data);
-        } else if (layEvent === 'delete') {
-            Twitter.onDeleteItem(data);
-        }
     });
 });

@@ -9,13 +9,14 @@
         <result column="name" property="name" />
         <result column="time" property="time" />
         <result column="sentiment" property="sentiment" />
+        <result column="lang" property="lang" />
+        <result column="location" property="location" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", content AS "content", name AS "name", time AS "time", sentiment AS "sentiment"
+        id AS "id", content AS "content", name AS "name", time AS "time", sentiment AS "sentiment",lang AS "lang",location AS "location"
     </sql>
-
 
     <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TwitterResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TwitterParam">
         select
@@ -36,12 +37,19 @@
         <if test="paramCondition.name != null and paramCondition.name != ''">
             and name like CONCAT('%',#{paramCondition.name},'%')
         </if>
+        <if test="paramCondition.lang != null and paramCondition.lang != ''">
+            and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.location != null and paramCondition.location != ''">
+            and location = #{paramCondition.location}
+        </if>
         <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
             and sentiment = #{paramCondition.sentiment}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
+        ORDER BY time DESC
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TwitterParam">

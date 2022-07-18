@@ -35,6 +35,11 @@ public class Twitter implements Serializable {
     @TableField("sentiment")
     private Integer sentiment;
 
+    @TableField("lang")
+    private String lang;
+
+    @TableField("location")
+    private String location;
 
     public Integer getId() {
         return id;
@@ -76,14 +81,32 @@ public class Twitter implements Serializable {
         this.sentiment = sentiment;
     }
 
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return "Twitter{" +
-        "id=" + id +
-        ", content=" + content +
-        ", name=" + name +
-        ", time=" + time +
-        ", sentiment=" + sentiment +
-        "}";
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", name='" + name + '\'' +
+                ", time=" + time +
+                ", sentiment=" + sentiment +
+                ", lang='" + lang + '\'' +
+                ", location='" + location + '\'' +
+                '}';
     }
 }

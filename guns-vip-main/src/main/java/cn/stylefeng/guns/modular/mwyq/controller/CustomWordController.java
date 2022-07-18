@@ -32,6 +32,7 @@ import com.google.common.cache.CacheBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,7 +68,7 @@ public class CustomWordController extends BaseController {
     @Autowired
     private EntityNewsRelationService entityNewsRelationService;
 
-    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.HOURS).recordStats().build();
+    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.SECONDS).recordStats().build();
 
     /**
      * 跳转到主页面
@@ -253,16 +254,16 @@ public class CustomWordController extends BaseController {
         CustomWord customWord = customWordService.getById(customWordParam.getId());
         String modular = customWordParam.getModular();
         if (modular.equals("1")) {
-            customWordParam.setCreateTime(customWord.getCreateTime());
+           //customWordParam.setCreateTime(customWord.getCreateTime());
         }
         //将中文主题词翻译成少数民族语言
-        //List<String> customWordNames = customWordService.translateCnCustomwordName(customWord.getName(),customWordParam.getLang());
+        //List<String> customWordNames = customWordService.translateCnCustomWordName(customWord.getName(),customWord.getLang());
         List<String> customWordNames = Stream.of(customWord.getName()).collect(Collectors.toList());
         customWordParam.setNames(customWordNames);
         List<Integer> newsIdList = getNewsIdsByCustomWordNames(customWordNames);
 
         LayuiPageInfo customWordNewsPage = new LayuiPageInfo();
-        if (newsIdList.size() > 0) {
+        if (newsIdList != null && newsIdList.size() > 0) {
             customWordNewsPage = newsService.selectPage(newsIdList, customWordParam);
         }
         localCache.put(cacheKey, customWordNewsPage);
@@ -604,6 +605,11 @@ public class CustomWordController extends BaseController {
         QueryWrapper entityQueryWrapper = new QueryWrapper();
         entityQueryWrapper.in("entity_key", customWordNames);
         List<Entity> entityResultList = entityService.list(entityQueryWrapper);
+
+        if(entityResultList.size() <= 0){
+            return null;
+        }
+
         //查询newsIdList
         QueryWrapper entityNewsRelationQueryWrapper = new QueryWrapper();
         List<Integer> entityIdList = entityResultList.stream().map(Entity::getEntityId).collect(Collectors.toList());

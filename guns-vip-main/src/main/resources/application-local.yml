@@ -2,14 +2,14 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://127.0.0.1:3306/mwyq_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+#    url: jdbc:mysql://127.0.0.1:3306/mwyq?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
 #    username: root
 #    password: 7271009boe
-
+#app
     url: jdbc:mysql://10.119.130.183:3306/mwyq_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
     password: mwyq912
-
+#app
 #    driver-class-name: com.mysql.jdbc.Driver
 #    url: jdbc:mysql://10.119.130.114:3306/mwyqdb?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=CTT
 #    username: root
@@ -18,8 +18,8 @@ spring:
     filters: wall,mergeStat
 
     # 连接池大小根据实际情况调整
-    max-active: 20
-    max-pool-prepared-statement-per-connection-size: 20
+    max-active: 2000
+    max-pool-prepared-statement-per-connection-size: 2000
 
   # 邮件发送配置（改为自己的账号和密码）
   mail:

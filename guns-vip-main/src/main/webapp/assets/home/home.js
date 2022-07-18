@@ -261,8 +261,11 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
 
         var customWordIdArray = data.ids;
         var customWordNameArray = data.names;
+        var len = 0
         for(var i=0;i<customWordNameArray.length;i++){
-            $("#customWordTab").append("<li custom_word_id="+customWordIdArray[i]+">"+customWordNameArray[i]+"</li>");
+            if(len++ < 6){
+                $("#customWordTab").append("<li custom_word_id="+customWordIdArray[i]+">"+customWordNameArray[i]+"</li>");
+            }
         }
     }, 'json');
 
@@ -639,7 +642,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             legend: {
                 orient: 'horizontal',
                 top:'30px',
-                data:['蒙古文','中文','藏文','维吾尔文']
+                data:['中文','蒙文','藏文','维文','外蒙']
             },
             calculable : true,
             series : [

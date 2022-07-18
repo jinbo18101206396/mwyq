@@ -60,7 +60,7 @@ public class TwitterServiceImpl extends ServiceImpl<TwitterMapper, Twitter> impl
     public LayuiPageInfo findPageBySpec(TwitterParam twitterParam){
         String timeLimit = twitterParam.getTimeLimit();
         if (ToolUtil.isNotEmpty(timeLimit)) {
-            String[] split = timeLimit.split(" - ");
+            String[] split = timeLimit.split("至");
             twitterParam.setBeginTime(split[0]);
             twitterParam.setEndTime(split[1]);
         }

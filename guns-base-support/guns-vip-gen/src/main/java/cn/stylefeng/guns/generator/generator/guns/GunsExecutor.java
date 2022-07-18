@@ -91,13 +91,13 @@ public class GunsExecutor {
 
         ContextParam contextParam = new ContextParam();
 
-        contextParam.setJdbcDriver("com.mysql.jdbc.Driver");
+        contextParam.setJdbcDriver("com.mysql.cj.jdbc.Driver");
         contextParam.setJdbcUserName("root");
-        contextParam.setJdbcPassword("root");
-        contextParam.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/generator_platform?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=CTT");
+        contextParam.setJdbcPassword("7271009boe");
+        contextParam.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/law?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT");
         contextParam.setOutputPath("temp");
         contextParam.setAuthor("jinbo");
-        contextParam.setProPackage("cn.stylefeng.guns.modular.test");
+        contextParam.setProPackage("cn.stylefeng.guns.modular.law");
 
         MpParam mpContextParam = new MpParam();
         mpContextParam.setGeneratorInterface(true);

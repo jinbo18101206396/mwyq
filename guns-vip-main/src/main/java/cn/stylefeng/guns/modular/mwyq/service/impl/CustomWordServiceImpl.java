@@ -17,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -66,13 +69,13 @@ public class CustomWordServiceImpl extends ServiceImpl<CustomWordMapper, CustomW
     public LayuiPageInfo findPageBySpec(CustomWordParam customWordParam) {
 
         //若为少数语言主题词，则翻译成汉语
-        String lang = customWordParam.getLang();
-        if(ToolUtil.isNotEmpty(lang) && !lang.equals("cn")){
-            TranslationUtil translationUtil = new TranslationUtil();
-            String name = translationUtil.sendPost(customWordParam.getName(),lang,"paragraph");
-            customWordParam.setName(name);
-            customWordParam.setLang("cn");
-        }
+//        String lang = customWordParam.getLang();
+//        if(ToolUtil.isNotEmpty(lang) && !lang.equals("cn")){
+//            TranslationUtil translationUtil = new TranslationUtil();
+//            String name = translationUtil.sendPost(customWordParam.getName(),lang,"paragraph");
+//            customWordParam.setName(name);
+//            customWordParam.setLang("cn");
+//        }
         String timeLimit = customWordParam.getTimeLimit();
         if (ToolUtil.isNotEmpty(timeLimit)) {
             String[] split = timeLimit.split(" - ");
@@ -90,8 +93,16 @@ public class CustomWordServiceImpl extends ServiceImpl<CustomWordMapper, CustomW
     }
 
     @Override
-    public List<String> translateCnCustomwordName(String name, String lang) {
-        return null;
+    public List<String> translateCnCustomWordName(String customWordName, String lang) {
+        List<String> customWordNameList = new ArrayList<>();
+        TranslationUtil translate = new TranslationUtil();
+        String mengWord = translate.sendPost(customWordName,"meng","paragraph");
+        String zangWord = translate.sendPost(customWordName,"zang","paragraph");
+        String weiWord = translate.sendPost(customWordName,"wei","paragraph");
+        customWordNameList.add(mengWord);
+        customWordNameList.add(zangWord);
+        customWordNameList.add(weiWord);
+        return customWordNameList;
     }
 
     @Override
