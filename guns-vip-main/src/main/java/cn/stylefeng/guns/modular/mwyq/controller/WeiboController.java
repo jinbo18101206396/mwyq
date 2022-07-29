@@ -93,6 +93,25 @@ public class WeiboController extends BaseController {
         return sentimentTypeJson;
     }
 
+
+    /**
+     * 微博博主排行
+     *
+     * @param weiboParam
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/blogger/rank", method = RequestMethod.GET)
+    public JSONObject weiboBloggerRank(WeiboParam weiboParam) {
+        JSONObject bloggerRankJson = new JSONObject();
+        List<WeiboResult> bloggerRankList = weiboService.bloggerRankList(weiboParam);
+        List<String> authorNameList = bloggerRankList.stream().map(WeiboResult::getAuthorName).collect(Collectors.toList());
+        bloggerRankJson.put("authorName", JSONArray.parseArray(JSON.toJSONString(authorNameList)));
+        List<Integer> weiboCountList = bloggerRankList.stream().map(WeiboResult::getNum).collect(Collectors.toList());
+        bloggerRankJson.put("weiboCount", JSONArray.parseArray(JSON.toJSONString(weiboCountList)));
+        return bloggerRankJson;
+    }
+
     /**
      * 微博走势数据
      */

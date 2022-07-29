@@ -33,7 +33,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                         return "<p>中文</p>>";
                     }else if (d.lang == 'zang') {
                         return "<p'>藏文</p>";
-                    } else if(d.lang == 'wei'){we
+                    } else if(d.lang == 'wei'){
                         return "<p>维吾尔文</p>";
                     }else if(d.lang == 'meng'){
                         return "<p>蒙古文</p>";
@@ -50,7 +50,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                 } else if(d.sentiment === 2){
                     return "<p style='color:red;font-weight: bold'>负向</p>";
                 }else{
-                    return "<p style='font-weight: bold'>其他</p>";
+                    return "<p style='font-weight: bold'></p>";
                 }
             }},
             {field: 'commentCount', align: "center", sort: true, title: '评论量'},
@@ -175,6 +175,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
             })
         }, 'json');
     }
+
     //加载微博情感分布数据
     var sentimentCharts = echarts.init(document.getElementById('weiboSentiment'), myEchartsTheme);
     function loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,location){
@@ -209,78 +210,119 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
         }, 'json');
     }
 
-    //话题地图
-    var areaMapCharts = echarts.init(document.getElementById('areaMap'));
-    var areaMapOption = {
-        tooltip: {
-            formatter:function(params,ticket, callback){
-                return params.seriesName+'<br />'+params.name+'：'+params.value
-            }//数据格式化
-        },
-        visualMap: {
-            min: 0,
-            max: 1500,
-            left: 'left',
-            top: 'bottom',
-            text: ['高','低'],//取值范围的文字
-            inRange: {
-                color: ['#f3d647', '#dd6d0a']//取值范围的颜色
-            },
-            show:true//图注
-        },
-        geo: {
-            map: 'china',
-            roam: false,//不开启缩放和平移
-            zoom: 1.23,//视角缩放比例
-            label: {
-                normal: {
-                    show: true,
-                    fontSize:'10',
-                    color: 'rgba(0,0,0,0.7)'
-                }
-            },
-            itemStyle: {
-                normal:{
-                    borderColor: 'rgba(0, 0, 0, 0.2)'
+    //博主影响力分布
+    var bloggerCharts = echarts.init(document.getElementById('blogger'), myEchartsTheme);
+    function loadBloggerRankData(lang,sentiment,timeLimit,authorName,location){
+        $.get(Feng.ctxPath + '/weibo/blogger/rank?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+            bloggerCharts.setOption({
+                tooltip: {
+                    trigger: 'axis'
                 },
-                emphasis:{
-                    areaColor: '#F3B329',//鼠标选择区域颜色
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0,
-                    shadowBlur: 20,
-                    borderWidth: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-        },
-        series : [
-            {
-                name: '博主数量',
-                type: 'map',
-                geoIndex: 0,
-            }
-        ]
-    };
-    areaMapCharts.setOption(areaMapOption);//先渲染出空地图
-    areaMapCharts.hideLoading();
-    areaMapCharts.on('click', function (params) {
-        alert(params.name+":"+params.value);
-    });
-    //请求地图数据
-    $.ajax({
-        url: Feng.ctxPath + '/weibo/areaMap',
-        type: 'POST',
-        dataType: 'json',
-        success: function (data) {
-            var options = areaMapCharts.getOption();
-            console.log(options);
-            options.series[0].data = data.weiboAreaMapData;
-            areaMapCharts.hideLoading();
-            areaMapCharts.setOption(options);
-            $(window).resize(areaMapCharts.resize);
-            tableList(data);
-        }
-    })
+                legend: {
+                    data:[ '微博数量']
+                },
+                tooltip: {
+                    show: true,
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType:{show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: {
+                    type: 'category',
+                    data: data.authorName
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: '微博数量',
+                        type: 'bar',
+                        barWidth:50,
+                        barGap:'100%',
+                        data: data.weiboCount,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true, //开启显示
+                                    position: 'top', //在上方显示
+                                    textStyle: {
+                                        //数值样式
+                                        color: 'black',
+                                        fontSize: 12,
+                                    },
+                                },
+                            },
+                        },
+                    }
+                ]
+            })
+        }, 'json')
+    }
+
+    //博主地域分布
+    var areaMapCharts = echarts.init(document.getElementById('areaMap'), myEchartsTheme);
+    function loadAreaMapData(lang,sentiment,timeLimit,authorName,location){
+        $.get(Feng.ctxPath + '/weibo/areaMap?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+            areaMapCharts.setOption({
+                tooltip: {
+                    formatter:function(params,ticket, callback){
+                        return params.seriesName+'<br />'+params.name+'：'+params.value
+                    }
+                },
+                visualMap: {
+                    min: 0,
+                    max: 1500,
+                    left: 'left',
+                    top: 'bottom',
+                    text: ['高','低'],
+                    inRange: {
+                        color: ['#f3d647', '#dd6d0a']
+                    },
+                    show:true//图注
+                },
+                geo: {
+                    map: 'china',
+                    roam: false,//不开启缩放和平移
+                    zoom: 1.23,//视角缩放比例
+                    label: {
+                        normal: {
+                            show: true,
+                            fontSize:'10',
+                            color: 'rgba(0,0,0,0.7)'
+                        }
+                    },
+                    itemStyle: {
+                        normal:{
+                            borderColor: 'rgba(0, 0, 0, 0.2)'
+                        },
+                        emphasis:{
+                            areaColor: '#F3B329',//鼠标选择区域颜色
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowBlur: 20,
+                            borderWidth: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                },
+                series : [
+                    {
+                        name: '博主数量',
+                        type: 'map',
+                        geoIndex: 0,
+                        data: data.weiboAreaMapData
+                    }
+                ]
+            }),
+            $(window).resize(areaMapCharts.resize),
+            tableList(data)
+        }, 'json')
+    }
     //地图表格数据，按数量取Top10
     function tableList(data){
         var appendHTML = "";
@@ -294,57 +336,14 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
             $(".map-table tbody").append(appendHTML);
         }
     }
-
-    //博主影响力分布
-    var followersCharts = echarts.init(document.getElementById('followers'), myEchartsTheme);
-    function loadFollowersData(){
-        $.get(Feng.ctxPath + '/weibo/author', function (data) {
-            followersCharts.setOption({
-                tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:['粉丝数量', '微博数量', '关注数量']
-                },
-                tooltip: {
-                  show: true,
-                  feature: {
-                      dataView: {show: true, readOnly: false},
-                      magicType:{show: true, type: ['line', 'bar']},
-                      restore: {show: true},
-                      saveAsImage: {show: true}
-                  }
-                },
-                calculable: true,
-               xAxis: {
-                   type: 'category',
-                   data: data.authorName
-               },
-                yAxis: {
-                   type: 'value'
-                },
-                series: [
-                    {
-                        name: '粉丝数量',
-                        type: 'bar',
-                        data: data.followersCount,
-                    },
-                    {
-                        name: '微博数量',
-                        type: 'bar',
-                        data: data.weiboCount,
-                    }
-                ]
-            })
-
-        }, 'json')
-    }
-    //初始化加载粉丝分布数据
-    loadFollowersData();
     //初始化加载情感走势数据
     loadWeiboTrendData('','','','','');
     //初始化加载情感分析数据
     loadWeiboSentimentData('','','','','');
+    //初始化博主排行数据
+    loadBloggerRankData('','','','','');
+    //初始博主地域分布数据
+    loadAreaMapData('','','','','');
 
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
@@ -356,7 +355,9 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
 
         loadWeiboData(lang,sentiment,timeLimit,authorName,location);
         loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,location);
-        loadWeiboTrendData(lang,sentiment,timeLimit,authorName,location)
+        loadWeiboTrendData(lang,sentiment,timeLimit,authorName,location);
+        loadBloggerRankData(lang,sentiment,timeLimit,authorName,location);
+        loadAreaMapData(lang,sentiment,timeLimit,authorName,location);
     });
 
     // 窗口大小改变事件

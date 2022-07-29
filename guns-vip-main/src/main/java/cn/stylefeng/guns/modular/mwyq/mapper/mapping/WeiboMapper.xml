@@ -37,8 +37,7 @@
         from weibo order by createTime desc
     </select>
 
-    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
-            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
         FROM weibo WHERE 1=1
@@ -54,13 +53,10 @@
         <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
             and sentiment = #{paramCondition.sentiment}
         </if>
-        <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-            and create_time = #{paramCondition.createTime}
-        </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (weibo.create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        order by createTime desc
+        order by createTime desc,like_count desc,comment_count desc,transmit_count desc
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
@@ -70,7 +66,7 @@
 
     </select>
     <select id="sentimentTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
-        SELECT create_time,sentiment,COUNT(*) AS num FROM weibo WHERE 1=1
+        SELECT create_time,sentiment,COUNT(*) AS num FROM weibo WHERE sentiment is not null
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
@@ -94,8 +90,49 @@
         ORDER BY num desc
     </select>
 
+    <select id="bloggerRankList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+        SELECT author_name As authorName,COUNT(*) AS num FROM weibo where author_name is not null
+        <if test="paramCondition.lang != null and paramCondition.lang != ''">
+            and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+            and author_name = #{paramCondition.authorName}
+        </if>
+        <if test="paramCondition.location != null and paramCondition.location != ''">
+            and location = #{paramCondition.location}
+        </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
+        <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+            and create_time = #{paramCondition.createTime}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (weibo.create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY
+        authorName
+        ORDER BY num desc limit 10
+    </select>
+
     <select id="areaMapList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
-        select left(location, 2) as location,COUNT(*) as num from weibo t where t.location is NOT NULL GROUP BY  location order by num desc
+        select left(location, 2) as location,COUNT(*) as num from weibo t where t.location is NOT NULL
+        <if test="paramCondition.lang != null and paramCondition.lang != ''">
+            and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+            and author_name = #{paramCondition.authorName}
+        </if>
+        <if test="paramCondition.location != null and paramCondition.location != ''">
+            and location = #{paramCondition.location}
+        </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY  location order by num desc
     </select>
 
     <select id="sentimentTrendList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
