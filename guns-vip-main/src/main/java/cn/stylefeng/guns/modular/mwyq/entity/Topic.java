@@ -32,6 +32,9 @@ public class Topic implements Serializable {
     @TableField("topic_name")
     private String topicName;
 
+    @TableField("cluster_topic_name")
+    private String clusterTopicName;
+
     @TableField("topic_label")
     private String topicLabel;
 
@@ -61,6 +64,10 @@ public class Topic implements Serializable {
 
     @TableField("summarize")
     private String summarize;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getTopicId() {
         return topicId;
@@ -92,6 +99,14 @@ public class Topic implements Serializable {
 
     public void setTopicName(String topicName) {
         this.topicName = topicName;
+    }
+
+    public String getClusterTopicName() {
+        return clusterTopicName;
+    }
+
+    public void setClusterTopicName(String clusterTopicName) {
+        this.clusterTopicName = clusterTopicName;
     }
 
     public String getTopicLabel() {
@@ -177,20 +192,21 @@ public class Topic implements Serializable {
     @Override
     public String toString() {
         return "Topic{" +
-        "topicId=" + topicId +
-        ", topwords=" + topwords +
-        ", topicLabelCandidate=" + topicLabelCandidate +
-        ", topicName=" + topicName +
-        ", topicLabel=" + topicLabel +
-        ", producedtime=" + producedtime +
-        ", langType=" + langType +
-        ", keywords=" + keywords +
-        ", topicDir=" + topicDir +
-        ", topicIndex=" + topicIndex +
-        ", newsCount=" + newsCount +
-        ", newsTime=" + newsTime +
-        ", newsContent=" + newsContent +
-                ", summarize=" + summarize +
-        "}";
+                "topicId='" + topicId + '\'' +
+                ", topwords='" + topwords + '\'' +
+                ", topicLabelCandidate='" + topicLabelCandidate + '\'' +
+                ", topicName='" + topicName + '\'' +
+                ", clusterTopicName='" + clusterTopicName + '\'' +
+                ", topicLabel='" + topicLabel + '\'' +
+                ", producedtime=" + producedtime +
+                ", langType='" + langType + '\'' +
+                ", keywords='" + keywords + '\'' +
+                ", topicDir='" + topicDir + '\'' +
+                ", topicIndex=" + topicIndex +
+                ", newsCount=" + newsCount +
+                ", newsTime=" + newsTime +
+                ", newsContent='" + newsContent + '\'' +
+                ", summarize='" + summarize + '\'' +
+                '}';
     }
 }

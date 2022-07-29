@@ -32,7 +32,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             {field: 'topicId',align: "center", hide: true, title: '话题id'},
             {
                 field: 'topicName',align: "center", sort: true, title: '话题名称',minWidth: 400,templet:function (d) {
-                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + d.topicId +'&topicName='+d.topicName+'&langType=' + d.langType+'&topwords='+d.topwords+'&newsCount='+d.newsCount+'&newsTime='+d.newsTime+'&summarize='+d.summarize;
+                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + d.topicId +'&topicName='+d.topicName+'&clusterTopicName='+d.clusterTopicName+'&langType=' + d.langType+'&topwords='+d.topwords+'&newsCount='+d.newsCount+'&newsTime='+d.newsTime+'&summarize='+d.summarize;
                     return '<div style="text-align: left"><a style="color: #01AAED;" href="'+url+'">'+d.topicName+'</a></div>';
                 }
             },
@@ -677,7 +677,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             legend: {
-                data:['中文', '蒙古文', '藏文', '维吾尔文']
+                data:['中文', '蒙文', '藏文', '维文','外蒙']
             },
             toolbox: {
                 show : true,
@@ -712,7 +712,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     data: data.cnNum
                 },
                 {
-                    name: '蒙古文',
+                    name: '蒙文',
                     type: 'bar',
                     data: data.mengNum
                 },
@@ -722,10 +722,15 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     data: data.zangNum
                 },
                 {
-                    name: '维吾尔文',
+                    name: '维文',
                     type: 'bar',
                     data: data.weiNum
-                }
+                },
+                {
+                    name: '外蒙',
+                    type: 'bar',
+                    data: data.waimengNum
+                },
             ]
         })
     }, 'json');

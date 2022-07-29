@@ -27,6 +27,8 @@ public class NewsStaticResult implements Serializable {
 
     private String meng;
 
+    private String waimeng;
+
     private String zang;
 
 }

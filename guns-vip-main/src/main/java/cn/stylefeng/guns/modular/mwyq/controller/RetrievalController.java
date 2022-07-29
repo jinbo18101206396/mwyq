@@ -90,11 +90,6 @@ public class RetrievalController extends BaseController {
         String sensitive = wrParam.getSensitive();
 
         JSONObject weiboSearchJson = new JSONObject();
-        String cacheKey = "weibo_search_"+wrParam.getKeyword()+"_"+wrParam.getBlogger()+"_"+wrParam.getLang()+"_"+wrParam.getCycle()+"_"+wrParam.getScope()+"_"+wrParam.getSensitive();
-        JSONObject weiboSearchCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
-        if (weiboSearchCache != null) {
-            return weiboSearchCache;
-        }
         long positiveNum=0;
         long negativeNum=0;
         long allNum=0;
@@ -132,9 +127,6 @@ public class RetrievalController extends BaseController {
 
         List<SolrWeiboDocResEntity> hotWeiboList = docQuery.queryTopTen(lang,cycle);
         weiboSearchJson.put("hotWeiboList",hotWeiboList);
-
-        localCache.put(cacheKey,weiboSearchJson);
-
         return weiboSearchJson;
     }
 
@@ -152,12 +144,6 @@ public class RetrievalController extends BaseController {
         String lang = webParam.getLang();
         String sensitive = webParam.getSensitive();
         String cycle = webParam.getCycle();
-
-        String cacheKey = "search_news_"+keyword+"_"+lang+"_"+sensitive+"_"+cycle;
-        JSONObject newsListCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
-        if (newsListCache != null) {
-            return newsListCache;
-        }
         JSONObject websiteSearchJson = new JSONObject();
         if(lang.contains("-")){
             //双语检索
@@ -166,7 +152,6 @@ public class RetrievalController extends BaseController {
             //单语检索
             moSolrDoc.moQuery(keyword, lang, sensitive,cycle,true,websiteSearchJson);
         }
-        localCache.put(cacheKey,websiteSearchJson);
         return websiteSearchJson;
     }
 
@@ -205,12 +190,6 @@ public class RetrievalController extends BaseController {
         if(langType.contains("-")){
             langType = langType.split("-")[1];
         }
-
-        String cacheKey = "news_translate"+newsId+"_"+keyWords+"_"+langType;
-        SuccessResponseData responseDataCache = (SuccessResponseData)localCache.getIfPresent(cacheKey);
-        if (responseDataCache != null) {
-            return responseDataCache;
-        }
         String queryString = CrossLangQE.getMnFromZhInCrossVali(keyWords, 2);
         String newsTitle = biSolrDoc.getTitleById(newsId).replace(queryString, "<span style=\"color:red\">" + queryString + "</span>");
         String newsUrl = biSolrDoc.getUrlById(newsId);
@@ -237,7 +216,6 @@ public class RetrievalController extends BaseController {
             }
         }
         SuccessResponseData responseData = ResponseData.success(news);
-        localCache.put(cacheKey,responseData);
         return responseData;
     }
 }

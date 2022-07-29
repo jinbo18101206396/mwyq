@@ -30,24 +30,24 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
             {field: 'authorName', align: "center", sort: true, title: '博主姓名'},
             {field: 'lang', align: "center", sort: true, title: '语言类型', templet: function (d) {
                     if(d.lang == 'cn'){
-                        return "<p style='color:black;font-weight: bold'>中文</p>>";
+                        return "<p>中文</p>>";
                     }else if (d.lang == 'zang') {
-                        return "<p style='color:black;font-weight: bold'>藏文</p>";
-                    } else if(d.lang == 'wei'){
-                        return "<p style='color:black;font-weight: bold'>维吾尔文</p>";
+                        return "<p'>藏文</p>";
+                    } else if(d.lang == 'wei'){we
+                        return "<p>维吾尔文</p>";
                     }else if(d.lang == 'meng'){
-                        return "<p style='color:black;font-weight: bold'>蒙古文</p>";
+                        return "<p>蒙古文</p>";
                     }else{
-                        return "<p style='color:blue;font-weight: bold'></p>";
+                        return "<p></p>";
                     }
                 }},
 
             {field: 'sentiment', align: "center", sort: true, title: '情感类型', templet: function (d) {
                 if(d.sentiment == 3){
                     return "<p style='color:green;font-weight: bold'>正向</p>>";
-                }else if (d.sentiment === 2) {
+                }else if (d.sentiment === 1) {
                     return "<p style='color:blue;font-weight: bold'>中性</p>";
-                } else if(d.sentiment === 1){
+                } else if(d.sentiment === 2){
                     return "<p style='color:red;font-weight: bold'>负向</p>";
                 }else{
                     return "<p style='font-weight: bold'>其他</p>";
@@ -57,7 +57,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
             {field: 'likeCount', align: "center", sort: true, title: '点赞量'},
             {field: 'transmitCount', align: "center", sort: true, title: '转发量'},
             {field: 'createTime', align: "center", sort: true, title: '发布时间'},
-            {field: 'location', align: "center", sort: true, title: '发布位置'}
+            {field: 'location', align: "center", sort: true, title: '属地'}
         ]];
     };
 

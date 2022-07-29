@@ -8,6 +8,7 @@
         <result column="topwords" property="topwords" />
         <result column="topic_label_candidate" property="topicLabelCandidate" />
         <result column="topic_name" property="topicName" />
+        <result column="cluster_topic_name" property="clusterTopicName" />
         <result column="topic_label" property="topicLabel" />
         <result column="producedtime" property="producedtime" />
         <result column="lang_type" property="langType" />
@@ -21,11 +22,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        topic_id AS "topicId", topwords AS "topwords", topic_label_candidate AS "topicLabelCandidate", topic_name AS "topicName", topic_label AS "topicLabel", producedtime AS "producedtime", lang_type AS "langType", keywords AS "keywords", topic_dir AS "topicDir", topic_index AS "topicIndex", news_count AS "newsCount", news_time AS "newsTime", news_content AS "newsContent"
+        topic_id AS "topicId", topwords AS "topwords", topic_label_candidate AS "topicLabelCandidate", topic_name AS "topicName",cluster_topic_name AS "clusterTopicName", topic_label AS "topicLabel", producedtime AS "producedtime", lang_type AS "langType", keywords AS "keywords", topic_dir AS "topicDir", topic_index AS "topicIndex", news_count AS "newsCount", news_time AS "newsTime", news_content AS "newsContent"
     </sql>
 
     <sql id="topic_Column_List">
-        t1.topic_id AS "topicId", t1.topwords AS "topwords", t1.topic_name AS "topicName", t1.lang_type AS "langType", t1.keywords AS "keywords", t1.news_count AS "newsCount", t1.news_time AS "newsTime", t1.news_content AS "newsContent",t1.summarize AS "summarize"
+        t1.topic_id AS "topicId", t1.topwords AS "topwords", t1.topic_name AS "topicName",t1.cluster_topic_name AS "clusterTopicName", t1.lang_type AS "langType", t1.keywords AS "keywords", t1.news_count AS "newsCount", t1.news_time AS "newsTime", t1.news_content AS "newsContent",t1.summarize AS "summarize"
     </sql>
     <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
         select

@@ -26,6 +26,8 @@ public class TopicResult implements Serializable {
 
     private String topicName;
 
+    private String clusterTopicName;
+
     private String topicLabel;
 
     private Date producedtime;

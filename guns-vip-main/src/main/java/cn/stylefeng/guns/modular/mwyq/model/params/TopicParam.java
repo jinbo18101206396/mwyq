@@ -27,6 +27,8 @@ public class TopicParam implements Serializable, BaseValidatingParam {
 
     private String topicName;
 
+    private String clusterTopicName;
+
     private String topicLabel;
 
     private Date producedtime;

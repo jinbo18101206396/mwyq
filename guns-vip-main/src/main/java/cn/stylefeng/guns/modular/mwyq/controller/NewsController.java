@@ -456,6 +456,9 @@ public class NewsController extends BaseController {
         List<String> mengNumList = newsStaticList.stream().map(NewsStaticResult::getMeng).collect(Collectors.toList());
         newsStaticJson.put("mengNum", JSONArray.parseArray(JSON.toJSONString(mengNumList)));
 
+        List<String> waimengNumList = newsStaticList.stream().map(NewsStaticResult::getWaimeng).collect(Collectors.toList());
+        newsStaticJson.put("waimengNum", JSONArray.parseArray(JSON.toJSONString(waimengNumList)));
+
         List<String> weiNumList = newsStaticList.stream().map(NewsStaticResult::getWei).collect(Collectors.toList());
         newsStaticJson.put("weiNum", JSONArray.parseArray(JSON.toJSONString(weiNumList)));
 

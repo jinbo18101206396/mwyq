@@ -24,9 +24,7 @@ import java.util.*;
  */
 
 public class WebsiteDocQuery {
-    //单语检索地址
     private final String MO_SOLR_URL = "http://10.119.130.185:8983/solr/clir";
-    //双语检索地址
     private final String BI_SOLR_URL = "http://localhost:8966/solr/mn-zh";
 
     private Logger logger = LoggerFactory.getLogger(WeiboDocQuery.class);

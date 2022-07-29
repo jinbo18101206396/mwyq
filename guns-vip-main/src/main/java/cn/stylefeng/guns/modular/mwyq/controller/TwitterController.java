@@ -146,11 +146,6 @@ public class TwitterController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/author/rank", method = RequestMethod.GET)
     public JSONObject twitterAuthorRank(TwitterParam twitterParam) {
-        String cacheKey = "twitter_author_rank";
-        JSONObject twitterAuthorRankJsonCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
-        if (twitterAuthorRankJsonCache != null) {
-            return twitterAuthorRankJsonCache;
-        }
         JSONObject twitterAuthorRankJson = new JSONObject();
         JSONArray authorArray = new JSONArray();
         JSONArray twitterArray = new JSONArray();
@@ -163,7 +158,6 @@ public class TwitterController extends BaseController {
         }
         twitterAuthorRankJson.put("authors", authorArray);
         twitterAuthorRankJson.put("twitterCount", twitterArray);
-        localCache.put(cacheKey,twitterAuthorRankJson);
         return twitterAuthorRankJson;
     }
 
@@ -176,12 +170,6 @@ public class TwitterController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/sentiment", method = RequestMethod.GET)
     public JSONObject sentiment(TwitterParam twitterParam) {
-
-        String cacheKey = "twitter_sentiment";
-        JSONObject sentimentJsonCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
-        if (sentimentJsonCache != null) {
-            return sentimentJsonCache;
-        }
         JSONObject sentimentJson = new JSONObject();
         JSONArray senArray = new JSONArray();
         List<TwitterResult> twitterResults = twitterService.sentimentList(twitterParam);
@@ -192,7 +180,6 @@ public class TwitterController extends BaseController {
             senArray.add(json);
         }
         sentimentJson.put("sentimentData", senArray);
-        localCache.put(cacheKey,sentimentJson);
         return sentimentJson;
     }
 }

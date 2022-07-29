@@ -586,7 +586,8 @@
             COUNT(IF(lang_type="cn",1,NULL)) AS cn,
             COUNT(IF(lang_type="zang",1,NULL)) AS zang,
             COUNT(IF(lang_type="wei",1,NULL)) AS wei,
-            COUNT(IF(lang_type="meng",1,NULL)) AS meng
+            COUNT(IF(lang_type="meng",1,NULL)) AS meng,
+            COUNT(IF(lang_type="waimeng",1,NULL)) AS waimeng
         FROM
             news
         GROUP BY

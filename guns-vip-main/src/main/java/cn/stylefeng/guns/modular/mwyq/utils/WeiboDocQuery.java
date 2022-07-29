@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class WeiboDocQuery {
-    private final String SOLRURL = "http://localhost:8983/solr/mn-zh/";
+    private final String SOLRURL = "http://10.119.130.183:8983/solr/mn-zh/";
 
     private SolrQuery query = new SolrQuery();
     private QueryResponse response = null;

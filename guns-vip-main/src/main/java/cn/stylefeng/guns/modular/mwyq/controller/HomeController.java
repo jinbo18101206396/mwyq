@@ -68,11 +68,12 @@ public class HomeController extends BaseController {
      * @Date 2020-06-11
      */
     @RequestMapping("/topic/detail")
-    public String topicDetailPage(String topicId, String topicName, String langType, String topwords, int newsCount, String newsTime,String summarize,Model model) {
+    public String topicDetailPage(String topicId, String topicName,String clusterTopicName, String langType, String topwords, int newsCount, String newsTime,String summarize,Model model) {
 
         model.addAttribute("topicId", topicId);
         model.addAttribute("langType", langType);
         model.addAttribute("topicName", topicName);
+        model.addAttribute("clusterTopicName", clusterTopicName);
         model.addAttribute("topwords", topwords);
         model.addAttribute("newsCount", newsCount);
         model.addAttribute("summarize", summarize);

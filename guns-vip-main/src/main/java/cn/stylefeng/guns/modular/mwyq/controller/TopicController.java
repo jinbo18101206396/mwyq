@@ -320,16 +320,12 @@ public class TopicController extends BaseController {
         JSONObject entityStaticJson = new JSONObject();
         JSONArray keyWordsNameArray = new JSONArray();
         JSONArray keyWordsNumArray = new JSONArray();
-
         JSONArray personNameArray = new JSONArray();
         JSONArray personNumArray = new JSONArray();
-
         JSONArray locationNameArray = new JSONArray();
         JSONArray locationNumArray = new JSONArray();
-
         JSONArray organizeNameArray = new JSONArray();
         JSONArray organizeNumArray = new JSONArray();
-
         JSONArray wordcloudArray = new JSONArray();
 
         int personEntityCount = 0;
@@ -337,8 +333,7 @@ public class TopicController extends BaseController {
         int organizeEntityCount = 0;
 
         for (EntityTopicRelation entityTopicRelation : entityTopicRelationList) {
-            Double relation = entityTopicRelation.getRelation();
-            Entity entity = entityService.getById(entityTopicRelation.getEntityId());
+            Double relation = entityTopicRelation.getRelation();            Entity entity = entityService.getById(entityTopicRelation.getEntityId());
             String entityKey = entity.getEntityKey();
             String entityType = entity.getEntityType();
 
@@ -367,7 +362,6 @@ public class TopicController extends BaseController {
             wordcloudJson.put("name", entityKey);
             wordcloudJson.put("value", entity.getCount());
             wordcloudArray.add(wordcloudJson);
-
             //人物、地点、组织机构实体个数统计（话题概览）
             if(entityType.equals("PER")){
                 personEntityCount++;
@@ -379,21 +373,16 @@ public class TopicController extends BaseController {
         }
         entityStaticJson.put("keyWordsName", keyWordsNameArray);
         entityStaticJson.put("keyWordsNum", keyWordsNumArray);
-
         entityStaticJson.put("personName", personNameArray);
         entityStaticJson.put("personNum", personNumArray);
         entityStaticJson.put("personEntityCount",personEntityCount);
-
         entityStaticJson.put("locationName", locationNameArray);
         entityStaticJson.put("locationNum", locationNumArray);
         entityStaticJson.put("locationEntityCount",locationEntityCount);
-
         entityStaticJson.put("organizeName", organizeNameArray);
         entityStaticJson.put("organizeNum", organizeNumArray);
         entityStaticJson.put("organizeEntityCount",organizeEntityCount);
-
         entityStaticJson.put("wordcloud", wordcloudArray);
-
         localCache.put(cacheKey, entityStaticJson);
         return entityStaticJson;
     }

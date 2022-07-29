@@ -13,38 +13,36 @@
                 </div>
             </div>
         </div>
-        <div class="layui-col-xs12 layui-col-md8">
+        <div class="layui-col-xs12 layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">话题概览</div>
-                <div class="layui-card-body" style="height:190px;">
+                <div class="layui-card-body" style="height:250px;overflow: auto;">
                     <div style="margin-top: 1%;">
                         <span style="font-size:16px;font-weight:bold;">话题名称：</span><span style="color:#ff0000;font-weight:bold;font-size:16px;">${topicName}</span><br />
                     </div>
-                    <div style="margin-top: 2%;">
+                    <div style="margin-top: 1%;">
+                        <span style="font-size:16px;font-weight:bold;">聚类话题名称：</span><span style="color:#ff0000;font-weight:bold;font-size:16px;">${clusterTopicName}</span><br />
+                    </div>
+                    <div style="margin-top: 1%;">
+                        <span style="font-size:16px;font-weight:bold;">话题关键词：</span><span style="font-size:16px;">${topwords}</span><br />
+                    </div>
+                    <div style="margin-top: 1%;">
+                        <span style="font-size:16px;font-weight:bold;">话题摘要：</span><span style="font-size:16px;">${summarize}</span><br />
+                    </div>
+                    <div style="margin-top: 1%;">
                         <span style="font-size:16px;font-weight:bold;">话题包括：</span>
                         <span style="font-size:16px;">新闻数量</span><span style="color:#ff0000;font-weight:bold;font-size:16px;">${newsCount}</span>篇，
                         <span style="font-size:16px;">地点实体</span><span id="locationEntityCount" style="color:#ff0000;font-weight:bold;font-size:16px;"></span>个，
                         <span style="font-size:16px;">人物实体</span><span id="personEntityCount" style="color:#ff0000;font-weight:bold;font-size:16px;"></span>个，
                         <span style="font-size:16px;">组织机构实体</span><span id="organizeEntityCount" style="color:#ff0000;font-weight:bold;font-size:16px;"></span>个
                     </div>
-                    <div style="margin-top: 2%;">
-                        <span style="font-size:16px;font-weight:bold;">话题关键词：</span><span style="font-size:16px;">${topwords}</span><br />
-                    </div>
-                    <div style="margin-top: 2%;">
+                    <div style="margin-top: 1%;">
                         <span style="font-size:16px;font-weight:bold;">发布时间：</span><span style="font-size:16px;">${newsTime}</span>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="layui-col-xs12 layui-col-md4">
-            <div class="layui-card">
                 <input type="hidden" id="topicId" value="${topicId}"/>
                 <input type="hidden" id="topicName" value="${topicName}"/>
                 <input type="hidden" id="langType" value="${langType}"/>
-                <div class="layui-card-header">话题综述</div>
-                <div class="layui-card-body" style="height:190px;overflow: auto;">
-                    <div id="topicIntroduce" name="topicIntroduce">${summarize}</div>
-                </div>
             </div>
         </div>
         <div class="layui-col-xs10 layui-col-md8">
