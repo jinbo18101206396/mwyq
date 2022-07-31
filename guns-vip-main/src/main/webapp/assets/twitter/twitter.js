@@ -43,7 +43,7 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
                     } else if (d.sentiment === '1') {
                         return "<p style='color:blue;font-weight: bold'>中性</p>";
                     } else if (d.sentiment === '2') {
-                        return "<p style='color:red;font-weight: bold'>敏感</p>";
+                        return "<p style='color:red;font-weight: bold'>负向</p>";
                     } else {
                         return "<p style='font-weight: bold'></p>";
                     }
@@ -66,20 +66,14 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
                     type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                 }
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                height:230,
-                containLabel: true
-            },
             xAxis: [
                 {
                     name:'作者',
                     type: 'category',
                     data: data.authors,
-                    axisTick: {
-                        alignWithLabel: true
+                    axisLabel: { //X轴字体倾斜设置
+                        interval: 0,
+                        rotate: -10 //倾斜的程度
                     }
                 }
             ],
@@ -92,45 +86,45 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
             series: [
                 {
                     type: 'bar',
-                    barWidth: '50%',
+                    barWidth: 50,
                     data: data.twitterCount
                 }
             ]
         });
     });
 
-    var senTypeCharts = echarts.init(document.getElementById('senType'), myEchartsTheme);
-    senTypeCharts.showLoading();
-    $.get(Feng.ctxPath + '/twitter/sentiment', function (data) {
-        senTypeCharts.hideLoading();
-        senTypeCharts.setOption({
-            title : {
-                text: '',
-                x: 'center'
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            color:["green","blue","red"],
-            series : [
-                {
-                    name: '情感分析',
-                    type: 'pie',
-                    radius: '80%',
-                    center: ['50%', '50%'],
-                    data:data.sentimentData,
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            ]
-        })
-    }, 'json');
+    // var senTypeCharts = echarts.init(document.getElementById('senType'), myEchartsTheme);
+    // senTypeCharts.showLoading();
+    // $.get(Feng.ctxPath + '/twitter/sentiment', function (data) {
+    //     senTypeCharts.hideLoading();
+    //     senTypeCharts.setOption({
+    //         title : {
+    //             text: '',
+    //             x: 'center'
+    //         },
+    //         tooltip: {
+    //             trigger: 'item',
+    //             formatter: "{a} <br/>{b} : {c} ({d}%)"
+    //         },
+    //         color:["green","blue","red"],
+    //         series : [
+    //             {
+    //                 name: '情感分析',
+    //                 type: 'pie',
+    //                 radius: '80%',
+    //                 center: ['50%', '50%'],
+    //                 data:data.sentimentData,
+    //                 itemStyle: {
+    //                     emphasis: {
+    //                         shadowBlur: 10,
+    //                         shadowOffsetX: 0,
+    //                         shadowColor: 'rgba(0, 0, 0, 0.5)'
+    //                     }
+    //                 }
+    //             }
+    //         ]
+    //     })
+    // }, 'json');
 
         /**
      * 点击查询按钮

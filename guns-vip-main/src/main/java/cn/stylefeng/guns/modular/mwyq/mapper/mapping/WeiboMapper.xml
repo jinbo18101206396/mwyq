@@ -108,10 +108,10 @@
             and create_time = #{paramCondition.createTime}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (weibo.create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
-        authorName
+        author_name
         ORDER BY num desc limit 10
     </select>
 
@@ -132,12 +132,11 @@
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        GROUP BY
-        sentiment
+        GROUP BY sentiment
     </select>
 
     <select id="areaMapList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
-        select left(location, 2) as location,COUNT(*) as num from weibo t where t.location is NOT NULL
+        select left(location, 4) as location,COUNT(*) as num from weibo t where t.location is NOT NULL
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>

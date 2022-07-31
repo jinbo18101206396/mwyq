@@ -234,7 +234,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
         }, 'json');
     }
 
-    //博主影响力分布
+    //博主发文量排行
     var bloggerCharts = echarts.init(document.getElementById('blogger'), myEchartsTheme);
     function loadBloggerRankData(lang,sentiment,timeLimit,authorName,location){
         $.get(Feng.ctxPath + '/weibo/blogger/rank?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
@@ -291,7 +291,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                         }
                     },
                     {
-                        name: '敏感',
+                        name: '负向',
                         type: 'bar',
                         stack: 'Ad',
                         barWidth : 50,
@@ -377,7 +377,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                 },
                 series : [
                     {
-                        name: '博主数量',
+                        name: '博文数量',
                         type: 'map',
                         geoIndex: 0,
                         data: data.weiboAreaMapData

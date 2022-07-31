@@ -59,7 +59,23 @@
     </select>
 
     <select id="authorRankList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TwitterResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TwitterParam">
-        SELECT name,count(*) as twitterCount from twitter GROUP BY name ORDER BY twitterCount desc limit #{paramCondition.top}
+        SELECT name,count(*) as twitterCount from twitter where name is not null
+        <if test="paramCondition.lang != null and paramCondition.lang != ''">
+            and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.name != null and paramCondition.name != ''">
+            and name = #{paramCondition.name}
+        </if>
+        <if test="paramCondition.location != null and paramCondition.location != ''">
+            and location = #{paramCondition.location}
+        </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY name ORDER BY twitterCount desc limit #{paramCondition.top}
     </select>
 
     <select id="sentimentList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TwitterResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TwitterParam">

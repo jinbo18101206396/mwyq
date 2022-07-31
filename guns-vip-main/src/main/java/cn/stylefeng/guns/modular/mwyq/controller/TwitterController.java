@@ -14,6 +14,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -153,6 +154,9 @@ public class TwitterController extends BaseController {
         for(TwitterResult authorRank : authorRankList){
             String name = authorRank.getName();
             int twitterCount = authorRank.getTwitterCount();
+            if(ObjectUtils.isEmpty(name)){
+                continue;
+            }
             authorArray.add(name);
             twitterArray.add(twitterCount);
         }
