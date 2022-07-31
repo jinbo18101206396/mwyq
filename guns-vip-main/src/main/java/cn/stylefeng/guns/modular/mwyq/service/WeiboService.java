@@ -5,6 +5,7 @@ import cn.stylefeng.guns.modular.mwyq.entity.Weibo;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam;
 import cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult;
 import cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -86,4 +87,12 @@ public interface WeiboService extends IService<Weibo> {
     List<WeiboResult> areaMapList(WeiboParam weiboParam);
 
     List<WeiboTrendResult> sentimentTrendList(WeiboParam weiboParam);
+
+    /**
+     * 博主发文量的情感分布
+     *
+     * @author jinbo
+     * @Date 2022-07-29
+     */
+    JSONObject getAuthorSentiment(WeiboParam weiboParam);
 }

@@ -9,6 +9,8 @@ import cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult;
 import cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult;
 import cn.stylefeng.guns.modular.mwyq.service.WeiboService;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -136,5 +138,34 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
             weiboParam.setEndTime(split[1]);
         }
         return weiboMapper.sentimentTrendList(weiboParam);
+    }
+
+    @Override
+    public JSONObject getAuthorSentiment(WeiboParam weiboParam) {
+        JSONObject authorSentimentObject = new JSONObject();
+        JSONArray positiveArray = new JSONArray();
+        JSONArray neuralArray = new JSONArray();
+        JSONArray negativeArray = new JSONArray();
+        List<String> authorNameList = weiboParam.getAuthorNameList();
+        for(int i=0;i<authorNameList.size();i++){
+            String name = authorNameList.get(i);
+            weiboParam.setAuthorName(name);
+            List<WeiboResult> authorSentiments = weiboMapper.authorSentimentList(weiboParam);
+            for(WeiboResult authorSentiment:authorSentiments){
+                String sentiment = String.valueOf(authorSentiment.getSentiment());
+                Integer num = authorSentiment.getNum();
+                if("1".equals(sentiment)){
+                    neuralArray.add(num);
+                }else if("2".equals(sentiment)){
+                    negativeArray.add(num);
+                }else if("3".equals(sentiment)){
+                    positiveArray.add(num);
+                }
+            }
+        }
+        authorSentimentObject.put("positive",positiveArray);
+        authorSentimentObject.put("neural",neuralArray);
+        authorSentimentObject.put("negative",negativeArray);
+        return authorSentimentObject;
     }
 }

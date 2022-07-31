@@ -107,8 +107,16 @@ public class WeiboController extends BaseController {
         List<WeiboResult> bloggerRankList = weiboService.bloggerRankList(weiboParam);
         List<String> authorNameList = bloggerRankList.stream().map(WeiboResult::getAuthorName).collect(Collectors.toList());
         bloggerRankJson.put("authorName", JSONArray.parseArray(JSON.toJSONString(authorNameList)));
+        weiboParam.setAuthorNameList(authorNameList);
+
         List<Integer> weiboCountList = bloggerRankList.stream().map(WeiboResult::getNum).collect(Collectors.toList());
         bloggerRankJson.put("weiboCount", JSONArray.parseArray(JSON.toJSONString(weiboCountList)));
+
+        JSONObject authorSentiment = weiboService.getAuthorSentiment(weiboParam);
+
+        bloggerRankJson.put("positiveCount",authorSentiment.getJSONArray("positive"));
+        bloggerRankJson.put("neuralCount",authorSentiment.getJSONArray("neural"));
+        bloggerRankJson.put("negativeCount",authorSentiment.getJSONArray("negative"));
         return bloggerRankJson;
     }
 

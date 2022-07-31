@@ -159,17 +159,32 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                     {
                         name: '负向微博',
                         type: 'line',
-                        data: data.senNum
+                        data: data.senNum,
+                        itemStyle: {
+                            normal: {
+                                color: 'red'
+                            }
+                        }
                     },
                     {
                         name: '中性微博',
                         type: 'line',
-                        data: data.neuNum
+                        data: data.neuNum,
+                        itemStyle: {
+                            normal: {
+                                color: 'blue'
+                            }
+                        }
                     },
                     {
                         name: '正向微博',
                         type: 'line',
-                        data: data.forNum
+                        data: data.forNum,
+                        itemStyle: {
+                            normal: {
+                                color: 'green'
+                            }
+                        }
                     }
                 ]
             })
@@ -197,6 +212,15 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                         radius: '80%',
                         center: ['50%', '50%'],
                         data:data.sentimentTypeData,
+                        label:{
+                          normal: {
+                              formatter:'{b}({d}%)',
+                              textStyle: {
+                                  fontWeight:'normal',
+                                  fontSize:15
+                              }
+                          }
+                        },
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,
@@ -216,49 +240,90 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
         $.get(Feng.ctxPath + '/weibo/blogger/rank?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
             bloggerCharts.setOption({
                 tooltip: {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:[ '微博数量']
-                },
-                tooltip: {
-                    show: true,
-                    feature: {
-                        dataView: {show: true, readOnly: false},
-                        magicType:{show: true, type: ['line', 'bar']},
-                        restore: {show: true},
-                        saveAsImage: {show: true}
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
                     }
                 },
-                calculable: true,
-                xAxis: {
+                legend: {},
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [{
                     type: 'category',
                     data: data.authorName
-                },
-                yAxis: {
+                }],
+                yAxis: [{
                     type: 'value'
-                },
+                }],
                 series: [
                     {
-                        name: '微博数量',
+                        name: '正向',
                         type: 'bar',
-                        barWidth:50,
-                        barGap:'100%',
-                        data: data.weiboCount,
+                        stack: 'Ad',
+                        barWidth : 50,
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: data.positiveCount,
                         itemStyle: {
                             normal: {
-                                label: {
-                                    show: true, //开启显示
-                                    position: 'top', //在上方显示
-                                    textStyle: {
-                                        //数值样式
-                                        color: 'black',
-                                        fontSize: 12,
-                                    },
-                                },
-                            },
+                                color: 'green'
+                            }
+                        }
+                    },
+                    {
+                        name: '中性',
+                        type: 'bar',
+                        stack: 'Ad',
+                        barWidth : 50,
+                        emphasis: {
+                            focus: 'series'
                         },
-                    }
+                        data: data.neuralCount,
+                        itemStyle: {
+                            normal: {
+                                color: 'blue'
+                            }
+                        }
+                    },
+                    {
+                        name: '敏感',
+                        type: 'bar',
+                        stack: 'Ad',
+                        barWidth : 50,
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: data.negativeCount,
+                        itemStyle: {
+                            normal: {
+                                color: 'red'
+                            }
+                        }
+                    },
+                    // {
+                    //     type: 'bar',
+                    //     stack: 'Ad',
+                    //     label: {
+                    //         normal: {
+                    //             offset: ['50', '80'],
+                    //             show: true,
+                    //             position: 'insideBottom',
+                    //             formatter: '{c}',
+                    //             textStyle: { color: '#000' }
+                    //         }
+                    //     },
+                    //     itemStyle: {
+                    //         normal: {
+                    //             color: 'rgb(255, 255, 255, 0)'      // 柱状图颜色设为透明
+                    //         }
+                    //     },
+                    //     data: data.weiboCount
+                    // }
                 ]
             })
         }, 'json')

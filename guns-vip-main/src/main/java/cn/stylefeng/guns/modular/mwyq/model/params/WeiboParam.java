@@ -5,6 +5,7 @@ import cn.stylefeng.roses.kernel.model.validator.BaseValidatingParam;
 import java.util.Date;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * <p>
@@ -31,6 +32,8 @@ public class WeiboParam implements Serializable, BaseValidatingParam {
      * 博主姓名
      */
     private String authorName;
+
+    private List<String> authorNameList;
 
     /**
      * 微博内容

@@ -9,9 +9,9 @@ import lombok.Getter;
 @Getter
 public enum SentimentType {
 
-    NEUTRAL(1,"中性微博"),
-    SENSITIVE(2,"负向微博"),
-    FORWARD(3,"正向微博");
+    NEUTRAL(1,"中性"),
+    SENSITIVE(2,"负向"),
+    FORWARD(3,"正向");
 
     private Integer code;
     private String message;
