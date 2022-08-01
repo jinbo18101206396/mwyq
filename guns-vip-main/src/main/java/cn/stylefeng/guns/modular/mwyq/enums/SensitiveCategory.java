@@ -28,7 +28,8 @@ public enum SensitiveCategory {
     LIVELIHOOD(3,"民生"),
     PORNOGRAPHIC(4,"色情"),
     CORRUPTED(5,"贪腐"),
-    OTHER(6,"其他");
+    OTHER(6,"其他"),
+    POLITICS(7,"政治");
 
     private Integer code;
     private String message;

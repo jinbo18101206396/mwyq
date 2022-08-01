@@ -40,7 +40,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                     } else if(d.isSensitive === 24){
                         return "<p style='color:yellow;font-weight: bold'>敏感-禁用词</p>";
                     } else {
-                        return "<p style='font-weight: bold'>其他</p>";
+                        return "<p style='font-weight: bold'></p>";
                     }
                 }
             },
@@ -48,8 +48,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                 field: 'sensitiveCategory', align: "center", sort: true, title: '敏感类别',minWidth: 150, templet: function (d) {
                     if(d.sensitiveCategory === 1){
                         return "<p>国家安全</p>";
-                    }else if (d.sensitiveCategory === 7) {
-                        return "<p>政治</p>";
                     }else if (d.sensitiveCategory === 2) {
                         return "<p>暴恐</p>";
                     } else if(d.sensitiveCategory === 3){
@@ -58,8 +56,12 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                         return "<p>色情</p>";
                     } else if(d.sensitiveCategory === 5){
                         return "<p>贪腐</p>";
-                    }else{
+                    }else if(d.sensitiveCategory === 6){
                         return "<p>其他</p>";
+                    }else if (d.sensitiveCategory === 7) {
+                        return "<p>政治</p>";
+                    }else{
+                        return "<p></p>";
                     }
                 }
             },
@@ -119,6 +121,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
     loadSensitiveTrendData('','','','','','','');
     //初始化加载情感分布数据
     loadSensitiveTypeData('','','','','','','');
+    //初始化加载敏感类别数据
+    loadSensitiveCategoryData('','','','','','','');
 
     //加载情感走势数据
     var sensitiveTrendChart = echarts.init(document.getElementById('sensitiveTrend'));
@@ -146,7 +150,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                     show : true,
                     realtime : true,
                     start : 0,
-                    end : 5
+                    end : 6
                 },
                 xAxis : [
                     {
@@ -180,6 +184,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
             })
         }, 'json');
     }
+
     //加载情感分布数据
     var senTypeCharts = echarts.init(document.getElementById('senType'), myEchartsTheme);
     function loadSensitiveTypeData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit){
@@ -214,6 +219,67 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
         }, 'json');
     }
 
+    //加载敏感类别数据
+    var senCategoryCharts = echarts.init(document.getElementById('senCategory'), myEchartsTheme);
+    function loadSensitiveCategoryData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit){
+        $.get(Feng.ctxPath + '/news/sensitive/category?langType='+langType+'&websitename='+websitename+'&isSensitive='+isSensitive+'&sensitiveWords='+sensitiveWords+'&keyWords='+keyWords+'&sensitiveCategory='+sensitiveCategory+'&timeLimit='+timeLimit, function (data) {
+            senCategoryCharts.setOption({
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    trigger : 'item'
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: data.categoryName,
+                    axisLabel : {
+                        interval : 0,
+                        rotate : 0,
+                        margin : 5,
+                    }
+                }],
+                yAxis : [ {
+                    name : '数量',
+                    type : 'value',
+                    boundaryGap : [ 0, 0.01 ]
+                } ],
+                series: [{
+                    type: 'bar',
+                    barWidth: "50%",
+                    data: data.categoryNum,
+                    itemStyle: {
+                        normal: {
+                            //每根柱子颜色设置
+                            color: function(params) {
+                                var colorList = [
+                                    "red",
+                                    "orange",
+                                    "#da70d6",
+                                    "#FFD700",
+                                    "#2E8B57",
+                                    "#1E90FF",
+                                    "#00FFFF"
+                                ];
+                                return colorList[params.dataIndex];
+                            },
+                            label : {
+                                show : true,
+                                position:'top',
+                                textStyle : {
+                                    fontWeight : 'boler',
+                                    fontSize : '12',
+                                    fontFamily : '微软雅黑',
+                                    color : "#000000"
+                                }
+                            }
+                        }
+                    }
+                }]
+            })
+        }, 'json');
+    }
+
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
         var langType = $("#lang").val();
@@ -226,6 +292,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
         loadNewsData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit);
         loadSensitiveTrendData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit);
         loadSensitiveTypeData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit)
+        loadSensitiveCategoryData(langType,websitename,isSensitive,sensitiveWords,keyWords,sensitiveCategory,timeLimit)
     });
 
     /**
@@ -263,72 +330,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
             sensitive.openEditDlg(data);
         }
     });
-
-    //敏感类别
-    var senCategoryCharts = echarts.init(document.getElementById('senCategory'), myEchartsTheme);
-    senCategoryCharts.showLoading();
-    $.get(Feng.ctxPath + '/news/sensitive/category', function (data) {
-        senCategoryCharts.hideLoading();
-        senCategoryCharts.setOption({
-            title: {
-                text: ''
-            },
-            tooltip: {
-                trigger : 'item'
-            },
-            grid:{
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true,
-                height:210
-            },
-            xAxis: [{
-                type: 'category',
-                data: data.categoryName,
-                axisLabel : {
-                    interval : 0,
-                    rotate : 0,
-                    margin : 5,
-                }
-            }],
-            yAxis : [ {
-                name : '数量',
-                type : 'value',
-                boundaryGap : [ 0, 0.01 ]
-            } ],
-            series: [{
-                type: 'bar',
-                barWidth: "70%",
-                data: data.categoryNum,
-                itemStyle: {
-                    normal: {
-                        //每根柱子颜色设置
-                        color: function(params) {
-                            var colorList = [
-                                "red",
-                                "orange",
-                                "#da70d6",
-                                "#FFD700",
-                                "#2E8B57",
-                                "#1E90FF"
-                            ];
-                            return colorList[params.dataIndex];
-                        },
-                        label : {
-                            show : true,
-                            textStyle : {
-                                fontWeight : 'boler',
-                                fontSize : '12',
-                                fontFamily : '微软雅黑',
-                                color : "#000000"
-                            }
-                        }
-                    }
-                }
-            }]
-        })
-    }, 'json');
 
     // 窗口大小改变事件
     window.onresize = function () {

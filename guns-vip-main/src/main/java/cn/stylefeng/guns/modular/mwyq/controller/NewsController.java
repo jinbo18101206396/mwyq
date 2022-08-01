@@ -21,6 +21,7 @@ import com.google.common.cache.CacheBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -317,8 +318,12 @@ public class NewsController extends BaseController {
         List<NewsResult> newsSourceList = newsService.sensitiveTypeList(newsParam);
         for (NewsResult newsSource : newsSourceList) {
             JSONObject json = new JSONObject();
+            String description = SensitiveType.getDescription(newsSource.getIsSensitive());
+            if(ObjectUtils.isEmpty(description)){
+                continue;
+            }
             json.put("value", newsSource.getNum());
-            json.put("name", SensitiveType.getDescription(newsSource.getIsSensitive()));
+            json.put("name", description);
             jsonArray.add(json);
         }
         sensitiveTypeJson.put("sensitiveTypeData", jsonArray);
@@ -402,28 +407,29 @@ public class NewsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/sensitive/category", method = RequestMethod.GET)
     public JSONObject sensitiveCategory(NewsParam newsParam) {
-
         String cacheKey = "sensitive_category_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename();
         JSONObject sensitiveCategoryCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveCategoryCache != null) {
             return sensitiveCategoryCache;
         }
-
         JSONObject sensitiveCategoryJson = new JSONObject();
         JSONArray categoryNameArray = new JSONArray();
         JSONArray categoryNumArray = new JSONArray();
         List<NewsResult> sensitiveCategoryList = newsService.sensitiveCategoryList(newsParam);
         for (NewsResult sensitiveCategory : sensitiveCategoryList) {
-            String categoryName = SensitiveCategory.getDescription(sensitiveCategory.getSensitiveCategory());
-            categoryNameArray.add(categoryName);
-            categoryNumArray.add(sensitiveCategory.getNum());
+            Integer category = sensitiveCategory.getSensitiveCategory();
+            Integer num = sensitiveCategory.getNum();
+            if(ObjectUtils.isEmpty(category) || ObjectUtils.isEmpty(num)){
+                continue;
+            }
+            categoryNameArray.add(SensitiveCategory.getDescription(category));
+            categoryNumArray.add(num);
         }
         sensitiveCategoryJson.put("categoryName", categoryNameArray);
         sensitiveCategoryJson.put("categoryNum", categoryNumArray);
         localCache.put(cacheKey, sensitiveCategoryJson);
         return sensitiveCategoryJson;
     }
-
 
     /**
      * 新闻数量统计

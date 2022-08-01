@@ -447,7 +447,7 @@
         SELECT
         t1.is_sensitive,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
         WHERE
-        1=1 AND t1.news_id >= t2.news_id
+        1=1 AND t1.news_id >= t2.news_id and t1.is_sensitive is not null
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and lang_type = #{paramCondition.langType}
         </if>
@@ -520,6 +520,12 @@
         </if>
         <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
             and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
         </if>
         <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
             and websitename like CONCAT('%',#{paramCondition.websitename},'%')
