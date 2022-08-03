@@ -152,13 +152,12 @@ public class WeiboController extends BaseController {
     @RequestMapping(value = "/translate", method = RequestMethod.GET)
     @ResponseBody
     public String translate(WeiboParam weiboParam) {
-        Weibo weibo = this.weiboService.getById(weiboParam.getId());
-        String weiboContent = weibo.getContent();
-        String weiboLang = weibo.getLang();
+        String content = weiboParam.getContent();
+        String lang = weiboParam.getLang();
         String transContent = "";
-        if (ToolUtil.isNotEmpty(weiboLang) && !weiboLang.equals("zh")) {
+        if (ToolUtil.isNotEmpty(content) && !"zh".equals(lang)) {
             TranslationUtil trans = new TranslationUtil();
-            transContent = trans.sendPost(weiboContent, weiboLang, "paragraph");
+            transContent = trans.sendPost(content, lang, "paragraph");
         }
         return transContent;
     }

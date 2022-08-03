@@ -75,7 +75,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
             title: '翻译',
             closeBtn: 1,
             shade: 0,
-            content: Feng.ctxPath + '/weibo/translate?id=' + data.id + '&lang=' + data.lang,
+            content: Feng.ctxPath + '/weibo/translate?content=' + data.content + '&lang=' + data.lang,
             area: ['30%','30%'],
             offset: 'auto',
             fixed: false
