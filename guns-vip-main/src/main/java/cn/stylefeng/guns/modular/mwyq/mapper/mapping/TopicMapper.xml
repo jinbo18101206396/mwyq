@@ -6,15 +6,11 @@
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.Topic">
         <result column="topic_id" property="topicId" />
         <result column="topwords" property="topwords" />
-        <result column="topic_label_candidate" property="topicLabelCandidate" />
         <result column="topic_name" property="topicName" />
         <result column="cluster_topic_name" property="clusterTopicName" />
-        <result column="topic_label" property="topicLabel" />
         <result column="producedtime" property="producedtime" />
         <result column="lang_type" property="langType" />
         <result column="keywords" property="keywords" />
-        <result column="topic_dir" property="topicDir" />
-        <result column="topic_index" property="topicIndex" />
         <result column="news_count" property="newsCount" />
         <result column="news_time" property="newsTime" />
         <result column="news_content" property="newsContent" />
@@ -22,7 +18,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        topic_id AS "topicId", topwords AS "topwords", topic_label_candidate AS "topicLabelCandidate", topic_name AS "topicName",cluster_topic_name AS "clusterTopicName", topic_label AS "topicLabel", producedtime AS "producedtime", lang_type AS "langType", keywords AS "keywords", topic_dir AS "topicDir", topic_index AS "topicIndex", news_count AS "newsCount", news_time AS "newsTime", news_content AS "newsContent"
+        topic_id AS "topicId", topwords AS "topwords", topic_name AS "topicName",cluster_topic_name AS "clusterTopicName", producedtime AS "producedtime", lang_type AS "langType", keywords AS "keywords", news_count AS "newsCount", news_time AS "newsTime"
     </sql>
 
     <sql id="topic_Column_List">
@@ -74,20 +70,20 @@
     </select>
 
     <select id="topicCountList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
-        SELECT CONCAT(YEAR(news_time),'/',MONTH(news_time),'/',DAY(news_time)) AS "dataTime" , COUNT(*) AS "count"
-        FROM topic AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(topic_id) FROM topic)) AS topic_id) AS t2
-        WHERE 1=1 AND t1.topic_id >= t2.topic_id
+        SELECT CONCAT(YEAR(producedtime),'/',MONTH(producedtime),'/',DAY(producedtime)) AS "dataTime" , COUNT(*) AS "count"
+        FROM topic
+        WHERE 1=1 AND producedtime > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
-            and t1.lang_type = #{paramCondition.langType}
+            and lang_type = #{paramCondition.langType}
         </if>
         <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
             and topwords like CONCAT('%',#{paramCondition.topwords},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (producedtime between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        GROUP BY YEAR(t1.news_time),MONTH(t1.news_time),DAY(t1.news_time)
-        ORDER BY YEAR(t1.news_time) DESC,MONTH(t1.news_time) DESC,DAY(t1.news_time) DESC
+        GROUP BY YEAR(producedtime),MONTH(producedtime),DAY(producedtime)
+        ORDER BY YEAR(producedtime) DESC,MONTH(producedtime) DESC,DAY(producedtime) DESC
     </select>
 
     <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
@@ -137,31 +133,30 @@
 
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
         select
-        <include refid="topic_Column_List"/>
-        FROM topic AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(topic_id) FROM topic)) AS topic_id) AS t2
-        WHERE 1=1 AND t1.topic_id >= t2.topic_id
-            <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
-                and t1.topwords like CONCAT('%',#{paramCondition.topwords},'%')
-            </if>
-            <if test="paramCondition.topicName != null and paramCondition.topicName != ''">
-                and t1.topic_name like CONCAT('%',#{paramCondition.topicName},'%')
-            </if>
-            <if test="paramCondition.langType != null and paramCondition.langType != ''">
-                and t1.lang_type = #{paramCondition.langType}
-            </if>
-            <if test="paramCondition.keywords != null and paramCondition.keywords != ''">
-                and t1.keywords like CONCAT('%',#{paramCondition.keywords},'%')
-            </if>
-            <if test="paramCondition.newsCount != null and paramCondition.newsCount != ''">
-                and t1.news_count like CONCAT('%',#{paramCondition.newsCount},'%')
-            </if>
-            <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-                and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
-            </if>
-            <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
-                and t1.news_content like CONCAT('%',#{paramCondition.newsContent},'%')
-            </if>
-        ORDER BY t1.news_time DESC,t1.topic_id DESC
+        <include refid="Base_Column_List"/>
+        from topic t1 where 1=1 and t1.topic_name is not null and t1.producedtime > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+        <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
+            and t1.topwords like CONCAT('%',#{paramCondition.topwords},'%')
+        </if>
+        <if test="paramCondition.topicName != null and paramCondition.topicName != ''">
+            and t1.topic_name like CONCAT('%',#{paramCondition.topicName},'%')
+        </if>
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and t1.lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.keywords != null and paramCondition.keywords != ''">
+            and t1.keywords like CONCAT('%',#{paramCondition.keywords},'%')
+        </if>
+        <if test="paramCondition.newsCount != null and paramCondition.newsCount != ''">
+            and t1.news_count like CONCAT('%',#{paramCondition.newsCount},'%')
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (t1.producedtime between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        <if test="paramCondition.newsContent != null and paramCondition.newsContent != ''">
+            and t1.news_content like CONCAT('%',#{paramCondition.newsContent},'%')
+        </if>
+        ORDER BY t1.producedtime DESC
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">

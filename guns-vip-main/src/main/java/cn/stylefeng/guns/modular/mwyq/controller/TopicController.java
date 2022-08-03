@@ -159,7 +159,7 @@ public class TopicController extends BaseController {
     }
 
     /**
-     * 热门话题列表（时间倒序，取前10%）
+     * 热门话题列表（取最近一年）
      *
      * @author jinbo
      * @Date 2020-07-01
@@ -167,16 +167,7 @@ public class TopicController extends BaseController {
     @ResponseBody
     @RequestMapping("/hot/list")
     public LayuiPageInfo hotTopic(TopicParam topicParam) {
-        HttpServletRequest request = HttpContext.getRequest();
-        String page = request.getParameter("page");
-        String limit = request.getParameter("limit");
-        String cacheKey = "topic_hot_"+topicParam.getLangType()+"_"+topicParam.getTimeLimit()+"_"+topicParam.getTopwords()+"_"+page+"_"+limit;
-        LayuiPageInfo hotTopicCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
-        if(hotTopicCache != null){
-            return hotTopicCache;
-        }
         LayuiPageInfo hotTopicPage = this.topicService.findPageBySpec(topicParam);
-        localCache.put(cacheKey,hotTopicPage);
         return hotTopicPage;
     }
 
@@ -436,7 +427,7 @@ public class TopicController extends BaseController {
     }
 
     /**
-     * 话题数量(统计前10%)
+     * 话题数量(统计近一年)
      *
      * @author jinbo
      * @Date 2020-07-01
@@ -444,17 +435,14 @@ public class TopicController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public JSONObject topicCount(TopicParam topicParam) {
-
-        String cacheKey = "topic_count_"+ topicParam.getLangType()+"_"+topicParam.getTimeLimit()+"_"+topicParam.getTopwords();
-        JSONObject topicCountCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
-        if (topicCountCache != null) {
-            return topicCountCache;
-        }
-
+//        String cacheKey = "topic_count_"+ topicParam.getLangType()+"_"+topicParam.getTimeLimit()+"_"+topicParam.getTopwords();
+//        JSONObject topicCountCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+//        if (topicCountCache != null) {
+//            return topicCountCache;
+//        }
         JSONObject topicCountJson = new JSONObject();
         JSONArray dateArray = new JSONArray();
         JSONArray countArray = new JSONArray();
-
         List<TopicResult> topicList = topicService.topicCountList(topicParam);
         for(TopicResult topic:topicList){
             dateArray.add(topic.getDataTime());
@@ -462,8 +450,7 @@ public class TopicController extends BaseController {
         }
         topicCountJson.put("date",dateArray);
         topicCountJson.put("count",countArray);
-
-        localCache.put(cacheKey, topicCountJson);
+//        localCache.put(cacheKey, topicCountJson);
         return topicCountJson;
     }
 }

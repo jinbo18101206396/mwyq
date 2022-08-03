@@ -39,12 +39,28 @@ public interface NewsMapper extends BaseMapper<News> {
     List<NewsResult> newsSourceList(@Param("paramCondition") NewsParam paramCondition);
 
     /**
+     * 获取新闻来源数据(首页全局)
+     *
+     * @author jinbo
+     * @Date 2020-08-02
+     */
+    List<NewsResult> newsSourceGlobalList(@Param("paramCondition") NewsParam paramCondition);
+
+    /**
      * 获取新闻分布数据
      *
      * @author jinbo
      * @Date 2020-06-14
      */
     List<NewsResult> newsDistributionList(@Param("paramCondition") NewsParam paramCondition);
+
+    /**
+     * 获取敏感分布数据（全局）
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    List<NewsResult> senDistributionList(@Param("paramCondition") NewsParam paramCondition);
 
     /**
      * 获取主题相关新闻来源
@@ -55,7 +71,7 @@ public interface NewsMapper extends BaseMapper<News> {
     List<NewsResult> relateNewsSourceList(@Param("list")List<Integer> list,@Param("paramCondition") NewsParam paramCondition);
 
     /**
-     * 获取新闻类型数据
+     * 获取新闻类型数据(常规新闻页)
      *
      * @author jinbo
      * @Date 2020-06-14
@@ -71,7 +87,7 @@ public interface NewsMapper extends BaseMapper<News> {
     List<NewsResult> sensitiveTypeListByIds(@Param("list")List<Integer> list,@Param("paramCondition") NewsParam paramCondition);
 
     /**
-     * 获取新闻类型数据
+     * 获取新闻类别数据
      *
      * @author jinbo
      * @Date 2020-06-14
@@ -85,6 +101,21 @@ public interface NewsMapper extends BaseMapper<News> {
      * @Date 2020-06-14
      */
     List<NewsResult> sensitiveCategoryList(@Param("paramCondition") NewsParam paramCondition);
+
+    /**
+     * 获取新闻来源（常规新闻页）
+     * @author jinbo
+     * @Date 2020-08-02
+     */
+    List<NewsResult> sensitiveSourceList(@Param("paramCondition") NewsParam paramCondition);
+
+    /**
+     * 获取敏感类别数据(首页，敏感新闻)
+     *
+     * @author jinbo
+     * @Date 2020-06-14
+     */
+    List<NewsResult> homeSensitiveCategoryList(@Param("paramCondition") NewsParam paramCondition);
 
     /**
      * 获取敏感类别数据
@@ -135,6 +166,14 @@ public interface NewsMapper extends BaseMapper<News> {
      * @Date 2020-06-14
      */
     Page<NewsResult> customPageList(@Param("page") Page page, @Param("paramCondition") NewsParam paramCondition);
+
+    /**
+     * 获取敏感新闻列表
+     *
+     * @author jinbo
+     * @Date 2022-08-02
+     */
+    Page<NewsResult> homeSensitivePageList(@Param("page") Page page, @Param("paramCondition") NewsParam paramCondition);
 
     /**
      * 获取敏感新闻列表

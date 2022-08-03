@@ -25,9 +25,9 @@ public enum Lang {
 
     CN("cn","中文"),
     ZANG("zang","藏文"),
-    MENG("meng","蒙文"),
-    WEI("wei","维文"),
-    WAIMENG("waimeng","外蒙");
+    MENG("meng","蒙古文"),
+    WEI("wei","维吾尔文"),
+    WAIMENG("waimeng","外蒙古文");
 
     private String code;
     private String message;

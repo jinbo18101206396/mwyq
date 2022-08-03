@@ -212,8 +212,66 @@ public class NewsController extends BaseController {
         return this.newsService.findPageBySpec(newsParam);
     }
 
+
     /**
-     * 新闻来源（热门新闻、敏感新闻饼图）
+     * 新闻来源（首页全局）
+     *
+     * @author jinbo
+     * @Date 2020-08-02
+     */
+    @ResponseBody
+    @RequestMapping(value = "/source/global", method = RequestMethod.GET)
+    public JSONObject newsSourceGlobal(NewsParam newsParam) {
+        String cacheKey = "news_source_global";
+        JSONObject newsSourceGlobalCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+        if (newsSourceGlobalCache != null) {
+            return newsSourceGlobalCache;
+        }
+        JSONObject newsSourceGlobalJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        List<NewsResult> newsSourceGlobalList = newsService.newsSourceList(newsParam);
+        for (NewsResult newsSource : newsSourceGlobalList) {
+            JSONObject json = new JSONObject();
+            json.put("value", newsSource.getNum());
+            json.put("name", newsSource.getWebsitename());
+            jsonArray.add(json);
+        }
+        newsSourceGlobalJson.put("newsSourceGlobalData", jsonArray);
+        localCache.put(cacheKey, newsSourceGlobalJson);
+        return newsSourceGlobalJson;
+    }
+
+    /**
+     * 新闻来源（常规新闻页）
+     *
+     * @author jinbo
+     * @Date 2020-08-02
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sensitive/source", method = RequestMethod.GET)
+    public JSONObject newsSensitiveSource(NewsParam newsParam) {
+        String cacheKey = "sensitive_source_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getKeyWords()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename();
+        JSONObject sensitiveSourceCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+        if (sensitiveSourceCache != null) {
+            return sensitiveSourceCache;
+        }
+        JSONObject sensitiveSourceJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        List<NewsResult> senSourcelList = newsService.sensitiveSourceList(newsParam);
+        for (NewsResult newsSource : senSourcelList) {
+            JSONObject json = new JSONObject();
+            json.put("value", newsSource.getNum());
+            json.put("name", newsSource.getWebsitename());
+            jsonArray.add(json);
+        }
+        sensitiveSourceJson.put("senSourceData", jsonArray);
+        localCache.put(cacheKey, sensitiveSourceJson);
+        return sensitiveSourceJson;
+    }
+
+
+    /**
+     * 新闻来源（首页热门新闻和敏感新闻饼图）
      *
      * @author jinbo
      * @Date 2020-06-14
@@ -298,6 +356,38 @@ public class NewsController extends BaseController {
     }
 
     /**
+     * 敏感分布（全局）
+     *
+     * @author jinbo
+     * @Date 2022-08-02
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sensitive/distribution", method = RequestMethod.GET)
+    public JSONObject senDistribution(NewsParam newsParam) {
+        String cacheKey = "sen_distribution";
+        JSONObject senDistributionCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+        if (senDistributionCache != null) {
+            return senDistributionCache;
+        }
+        JSONObject senDistributionJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        List<NewsResult> senDistributionList = newsService.senDistributionList(newsParam);
+        for (NewsResult senDistribution : senDistributionList) {
+            JSONObject json = new JSONObject();
+            String sensitive = SensitiveType.getDescription(senDistribution.getIsSensitive());
+            if(ObjectUtils.isEmpty(sensitive)){
+                continue;
+            }
+            json.put("value", senDistribution.getNum());
+            json.put("name", sensitive);
+            jsonArray.add(json);
+        }
+        senDistributionJson.put("senDistributionData", jsonArray);
+        localCache.put(cacheKey, senDistributionJson);
+        return senDistributionJson;
+    }
+
+    /**
      * 新闻类型（热门新闻、敏感新闻饼图）
      *
      * @author jinbo
@@ -306,7 +396,6 @@ public class NewsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/sensitive/type", method = RequestMethod.GET)
     public JSONObject sensitiveType(NewsParam newsParam) {
-
         //新闻类型数据准备
         String cacheKey = "sensitive_type_" + newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getKeyWords()+"_"+newsParam.getWebsitename()+"_"+newsParam.getTimeLimit();
         JSONObject sensitiveTypeCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
@@ -340,7 +429,6 @@ public class NewsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/religion/sensitive", method = RequestMethod.GET)
     public JSONObject religionNewsSensitiveType(NewsParam newsParam) {
-
         String cacheKey = "religion_sensitive_type_" + newsParam.getLangType()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory();
         JSONObject sensitiveTypeCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveTypeCache != null) {
@@ -351,8 +439,12 @@ public class NewsController extends BaseController {
         JSONArray sensitiveTypeArray = new JSONArray();
         for (NewsResult news : sensitiveTypeList) {
             JSONObject sensitiveType = new JSONObject();
+            String sensitive = SensitiveType.getDescription(news.getIsSensitive());
+            if(ObjectUtils.isEmpty(sensitive)){
+                continue;
+            }
             sensitiveType.put("value", news.getNum());
-            sensitiveType.put("name", SensitiveType.getDescription(news.getIsSensitive()));
+            sensitiveType.put("name", sensitive);
             sensitiveTypeArray.add(sensitiveType);
         }
         sensitiveTypeJson.put("sensitiveTypeData", sensitiveTypeArray);
@@ -369,7 +461,6 @@ public class NewsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/category", method = RequestMethod.GET)
     public JSONObject newsCategory(NewsParam newsParam) {
-
         String lang = newsParam.getLangType();
         String cacheKey = "news_category_" +lang+"_"+newsParam.getTimeLimit();
         JSONObject newsCategoryCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
@@ -384,13 +475,13 @@ public class NewsController extends BaseController {
             JSONObject json = new JSONObject();
             String category = newscategory.getNewsCategory();
             Integer num = newscategory.getNum();
+            if(ObjectUtils.isEmpty(category)){
+                continue;
+            }
             json.put("value", num);
             json.put("name", category);
             categoryNameArray.add(category);
             newsCategoryArray.add(json);
-            if (newsCategoryArray.size() > 5) {
-                break;
-            }
         }
         newsCategoryJson.put("newsCategoryData", newsCategoryArray);
         newsCategoryJson.put("names", categoryNameArray);
@@ -407,7 +498,7 @@ public class NewsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/sensitive/category", method = RequestMethod.GET)
     public JSONObject sensitiveCategory(NewsParam newsParam) {
-        String cacheKey = "sensitive_category_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename();
+        String cacheKey = "sensitive_category_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getKeyWords()+"_"+newsParam.getSensitiveWords()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename();
         JSONObject sensitiveCategoryCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
         if (sensitiveCategoryCache != null) {
             return sensitiveCategoryCache;
@@ -417,18 +508,51 @@ public class NewsController extends BaseController {
         JSONArray categoryNumArray = new JSONArray();
         List<NewsResult> sensitiveCategoryList = newsService.sensitiveCategoryList(newsParam);
         for (NewsResult sensitiveCategory : sensitiveCategoryList) {
-            Integer category = sensitiveCategory.getSensitiveCategory();
             Integer num = sensitiveCategory.getNum();
-            if(ObjectUtils.isEmpty(category) || ObjectUtils.isEmpty(num)){
+            String category = SensitiveCategory.getDescription(sensitiveCategory.getSensitiveCategory());
+            if(ObjectUtils.isEmpty(category)){
                 continue;
             }
-            categoryNameArray.add(SensitiveCategory.getDescription(category));
+            categoryNameArray.add(category);
             categoryNumArray.add(num);
         }
         sensitiveCategoryJson.put("categoryName", categoryNameArray);
         sensitiveCategoryJson.put("categoryNum", categoryNumArray);
         localCache.put(cacheKey, sensitiveCategoryJson);
         return sensitiveCategoryJson;
+    }
+
+    /**
+     * 敏感类别（柱状图,首页，敏感新闻）
+     *
+     * @author jinbo
+     * @Date 2020-08-02
+     */
+    @ResponseBody
+    @RequestMapping(value = "/home/sensitive/category", method = RequestMethod.GET)
+    public JSONObject homeSensitiveCategory(NewsParam newsParam) {
+        String cacheKey = "home_sensitive_category_"+newsParam.getLangType()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename();
+        JSONObject homeSensitiveCategoryCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+        if (homeSensitiveCategoryCache != null) {
+            return homeSensitiveCategoryCache;
+        }
+        JSONObject homeSensitiveCategoryJson = new JSONObject();
+        JSONArray categoryNameArray = new JSONArray();
+        JSONArray categoryNumArray = new JSONArray();
+        List<NewsResult> sensitiveCategoryList = newsService.homeSensitiveCategoryList(newsParam);
+        for (NewsResult sensitiveCategory : sensitiveCategoryList) {
+            String category = SensitiveCategory.getDescription(sensitiveCategory.getSensitiveCategory());
+            Integer num = sensitiveCategory.getNum();
+            if(ObjectUtils.isEmpty(category)){
+                continue;
+            }
+            categoryNameArray.add(category);
+            categoryNumArray.add(num);
+        }
+        homeSensitiveCategoryJson.put("categoryName", categoryNameArray);
+        homeSensitiveCategoryJson.put("categoryNum", categoryNumArray);
+        localCache.put(cacheKey, homeSensitiveCategoryJson);
+        return homeSensitiveCategoryJson;
     }
 
     /**
@@ -446,7 +570,6 @@ public class NewsController extends BaseController {
         if (newsStaticCache != null) {
             return newsStaticCache;
         }
-
         List<NewsStaticResult> newsStaticList = newsService.newsStaticList();
         JSONObject newsStaticJson = new JSONObject();
 
@@ -547,7 +670,7 @@ public class NewsController extends BaseController {
     }
 
     /**
-     * 热门新闻列表(时间倒序 取10%)
+     * 热门新闻列表(取最近一个月)
      *
      * @author jinbo
      * @Date 2020-07-01
@@ -588,6 +711,28 @@ public class NewsController extends BaseController {
         LayuiPageInfo sensitiveNewsPage = this.newsService.sensitivePageList(newsParam);
         localCache.put(cacheKey,sensitiveNewsPage);
         return sensitiveNewsPage;
+    }
+
+    /**
+     * 敏感新闻列表(首页)
+     *
+     * @author jinbo
+     * @Date 2020-08-02
+     */
+    @ResponseBody
+    @RequestMapping("/home/sensitive/list")
+    public LayuiPageInfo homeSensitiveNews(NewsParam newsParam) {
+        HttpServletRequest request = HttpContext.getRequest();
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        String cacheKey = "home_sen_news_"+newsParam.getLangType()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getWebsitename()+"_"+page+"_"+limit;
+        LayuiPageInfo homeSensitiveNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
+        if(homeSensitiveNewsCache != null){
+            return homeSensitiveNewsCache;
+        }
+        LayuiPageInfo homeSensitiveNewsPage = this.newsService.homeSensitivePageList(newsParam);
+        localCache.put(cacheKey,homeSensitiveNewsPage);
+        return homeSensitiveNewsPage;
     }
 
     /**

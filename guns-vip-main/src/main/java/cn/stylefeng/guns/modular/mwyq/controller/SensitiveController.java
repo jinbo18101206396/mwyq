@@ -117,7 +117,6 @@ public class SensitiveController extends BaseController {
     @ResponseBody
     @RequestMapping("/list")
     public LayuiPageInfo list(NewsParam newsParam) {
-
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");

@@ -38,11 +38,11 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        news_id AS "newsId", news_token AS "newsToken", words_num AS "wordsNum", generated_keywords AS "generatedKeywords", news_category AS "newsCategory", news_source AS "newsSource", news_title AS "newsTitle", title_token AS "titleToken", title_lading AS "titleLading", inborn_keywords AS "inbornKeywords", news_time AS "newsTime", news_url AS "newsUrl", news_author AS "newsAuthor", news_content AS "newsContent",key_words AS "keyWords", content_lading AS "contentLading", lang_type AS "langType", crawl_source AS "crawlSource", crawl_time AS "crawlTime", news_pictures AS "newsPictures", news_video AS "newsVideo", news_encode AS "newsEncode", news_tendency AS "newsTendency", is_seged AS "isSeged", update_time AS "updateTime", has_video AS "hasVideo", is_sensitive AS "isSensitive", sensitive_words AS "sensitiveWords",sensitive_category AS "sensitiveCategory", websitename AS "websitename"
+        news_id AS "newsId",  words_num AS "wordsNum", generated_keywords AS "generatedKeywords", news_category AS "newsCategory", news_source AS "newsSource", news_title AS "newsTitle", news_time AS "newsTime", news_url AS "newsUrl", news_author AS "newsAuthor", news_content AS "newsContent",key_words AS "keyWords", lang_type AS "langType", crawl_source AS "crawlSource", crawl_time AS "crawlTime",  is_seged AS "isSeged", update_time AS "updateTime", is_sensitive AS "isSensitive", sensitive_words AS "sensitiveWords",sensitive_category AS "sensitiveCategory", websitename AS "websitename"
     </sql>
 
     <sql id="sensitive_Column_List">
-        t1.news_id AS "newsId", t1.news_token AS "newsToken", t1.words_num AS "wordsNum", t1.generated_keywords AS "generatedKeywords", t1.news_category AS "newsCategory", t1.news_source AS "newsSource", t1.news_title AS "newsTitle", t1.title_token AS "titleToken", t1.title_lading AS "titleLading", t1.inborn_keywords AS "inbornKeywords", t1.news_time AS "newsTime", t1.news_url AS "newsUrl", t1.news_author AS "newsAuthor", t1.news_content AS "newsContent", t1.key_words AS "keyWords", t1.content_lading AS "contentLading", t1.lang_type AS "langType", t1.crawl_source AS "crawlSource", t1.crawl_time AS "crawlTime", t1.news_pictures AS "newsPictures", t1.news_video AS "newsVideo", t1.news_encode AS "newsEncode", t1.news_tendency AS "newsTendency", t1.is_seged AS "isSeged", t1.update_time AS "updateTime", t1.has_video AS "hasVideo", t1.is_sensitive AS "isSensitive", t1.sensitive_words AS "sensitiveWords",t1.sensitive_category AS "sensitiveCategory", t1.websitename AS "websitename"
+        t1.news_id AS "newsId", t1.words_num AS "wordsNum", t1.generated_keywords AS "generatedKeywords", t1.news_category AS "newsCategory", t1.news_source AS "newsSource", t1.news_title AS "newsTitle", t1.news_time AS "newsTime", t1.news_url AS "newsUrl", t1.news_author AS "newsAuthor", t1.news_content AS "newsContent", t1.key_words AS "keyWords", t1.lang_type AS "langType", t1.crawl_source AS "crawlSource", t1.crawl_time AS "crawlTime", t1.news_pictures AS "newsPictures", t1.news_tendency AS "newsTendency",t1.update_time AS "updateTime", t1.is_sensitive AS "isSensitive", t1.sensitive_words AS "sensitiveWords",t1.sensitive_category AS "sensitiveCategory", t1.websitename AS "websitename"
     </sql>
 
     <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
@@ -336,42 +336,41 @@
 
     <select id="sensitivePageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         select
-        <include refid="sensitive_Column_List"/>
-        from news AS t1 where DATE_FORMAT(t1.news_time,'%Y-%m') > DATE_FORMAT(date_sub(curdate(), interval 3 month),'%Y-%m')
+        <include refid="Base_Column_List"/>
+        from news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
-            and t1.lang_type = #{paramCondition.langType}
+            and lang_type = #{paramCondition.langType}
         </if>
         <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
-            and t1.is_sensitive = #{paramCondition.isSensitive}
+            and is_sensitive = #{paramCondition.isSensitive}
         </if>
         <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
-            and t1.websitename like CONCAT('%',#{paramCondition.websitename},'%')
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
         </if>
         <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
-            and t1.sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
         </if>
         <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
-            and t1.key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
         </if>
         <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
-            and t1.sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        ORDER BY t1.news_id DESC ,t1.sensitive_category ASC
+        ORDER BY news_time DESC
     </select>
 
     <select id="hotPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         select
-        <include refid="sensitive_Column_List"/>
-        from news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
-        where 1=1 and t1.news_id >= t2.news_id and t1.is_sensitive is not null
+        <include refid="Base_Column_List"/>
+        from news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 MONTH )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
-            and t1.lang_type = #{paramCondition.langType}
+            and lang_type = #{paramCondition.langType}
         </if>
         <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
-            and t1.is_sensitive = #{paramCondition.isSensitive}
+            and is_sensitive = #{paramCondition.isSensitive}
         </if>
         <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
             and sensitive_category = #{paramCondition.sensitiveCategory}
@@ -379,16 +378,41 @@
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        ORDER BY t1.news_id DESC
+        ORDER BY news_time DESC
+    </select>
+
+    <select id="homeSensitivePageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        select
+        <include refid="Base_Column_List"/>
+        from news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 MONTH )
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category like CONCAT('%',#{paramCondition.sensitiveCategory},'%')
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        ORDER BY news_time desc
+    </select>
+
+    <select id="newsSourceGlobalList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT websitename,COUNT(*) AS num FROM news WHERE 1=1 AND websitename IS NOT NULL
+        GROUP BY websitename
+        ORDER BY num DESC limit 20;
     </select>
 
     <select id="newsSourceList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
-        SELECT
-        t1.websitename,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
-        WHERE
-        1=1 AND t1.news_id >= t2.news_id AND t1.websitename IS NOT NULL
+        SELECT websitename,COUNT(*) AS num FROM news WHERE 1=1 AND websitename IS NOT NULL and news_time > DATE_SUB(CURDATE(), INTERVAL 1 MONTH )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
-            and t1.lang_type = #{paramCondition.langType}
+            and lang_type = #{paramCondition.langType}
         </if>
         <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
             and is_sensitive = #{paramCondition.isSensitive}
@@ -397,20 +421,24 @@
             and sensitive_category = #{paramCondition.sensitiveCategory}
         </if>
         <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
-            and t1.websitename like CONCAT('%',#{paramCondition.websitename},'%')
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
-        t1.websitename
-        ORDER BY num DESC
-        LIMIT 5;
+        websitename
+        ORDER BY num DESC limit 20;
     </select>
 
     <select id="newsDistributionList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         SELECT t.lang_type,COUNT(*) AS num FROM news t GROUP BY t.lang_type ORDER BY num DESC
     </select>
+
+    <select id="senDistributionList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT t.is_sensitive,COUNT(*) AS num FROM news t where t.is_sensitive is not null GROUP BY t.is_sensitive ORDER BY num
+    </select>
+
     <select id="relateNewsSourceList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">        SELECT
         websitename,COUNT(*) AS num FROM news
         WHERE 1=1
@@ -444,10 +472,8 @@
     </select>
 
     <select id="sensitiveTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
-        SELECT
-        t1.is_sensitive,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
-        WHERE
-        1=1 AND t1.news_id >= t2.news_id and t1.is_sensitive is not null
+        SELECT is_sensitive,COUNT(*) AS num FROM news
+        WHERE 1=1 AND news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and lang_type = #{paramCondition.langType}
         </if>
@@ -467,10 +493,10 @@
             and websitename like CONCAT('%',#{paramCondition.websitename},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
-        t1.is_sensitive
+        is_sensitive
         ORDER BY num desc
     </select>
 
@@ -508,15 +534,13 @@
     </select>
 
     <select id="sensitiveCategoryList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
-        SELECT
-        t1.sensitive_category,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
-        WHERE
-        1=1 AND t1.news_id >= t2.news_id
+        SELECT sensitive_category,COUNT(*) AS num
+        FROM news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
-            and t1.lang_type = #{paramCondition.langType}
+            and lang_type = #{paramCondition.langType}
         </if>
         <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
-            and t1.is_sensitive = #{paramCondition.isSensitive}
+            and is_sensitive = #{paramCondition.isSensitive}
         </if>
         <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
             and sensitive_category = #{paramCondition.sensitiveCategory}
@@ -534,8 +558,58 @@
             and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
-        t1.sensitive_category
-        ORDER BY t1.sensitive_category
+        sensitive_category
+        ORDER BY sensitive_category
+    </select>
+
+    <select id="sensitiveSourceList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT websitename,COUNT(*) AS num
+        FROM news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR )
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+        <if test="paramCondition.sensitiveWords != null and paramCondition.sensitiveWords != ''">
+            and sensitive_words like CONCAT('%',#{paramCondition.sensitiveWords},'%')
+        </if>
+        <if test="paramCondition.keyWords != null and paramCondition.keyWords != ''">
+            and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
+        </if>
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY websitename
+        ORDER BY num DESC limit 20
+    </select>
+
+    <select id="homeSensitiveCategoryList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
+        SELECT sensitive_category,COUNT(*) AS num FROM news
+        WHERE 1=1 AND news_time > DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and  sensitive_category is not null
+        <if test="paramCondition.langType != null and paramCondition.langType != ''">
+            and lang_type = #{paramCondition.langType}
+        </if>
+        <if test="paramCondition.isSensitive != null and paramCondition.isSensitive != ''">
+            and is_sensitive = #{paramCondition.isSensitive}
+        </if>
+        <if test="paramCondition.sensitiveCategory != null and paramCondition.sensitiveCategory != ''">
+            and sensitive_category = #{paramCondition.sensitiveCategory}
+        </if>
+
+        <if test="paramCondition.websitename != null and paramCondition.websitename != ''">
+            and websitename like CONCAT('%',#{paramCondition.websitename},'%')
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY sensitive_category
     </select>
 
     <select id="sensitiveCategoryListByIds" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
@@ -572,17 +646,18 @@
     </select>
 
     <select id="newsCategoryList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
-        SELECT t1.news_category,COUNT(*) AS num FROM news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
-        WHERE 1=1 AND t1.news_id >= t2.news_id and t1.news_category is not null
+        SELECT news_category,COUNT(*) AS num FROM news
+        WHERE 1=1 and news_category is not null
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
-            and t1.lang_type =#{paramCondition.langType}
+            and lang_type =#{paramCondition.langType}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        GROUP BY t1.news_category
-        ORDER BY num DESC
+        GROUP BY news_category
+        ORDER BY num DESC limit 20
     </select>
+
 
     <select id="newsStaticList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsStaticResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         SELECT
@@ -628,9 +703,7 @@
             COUNT(IF(is_sensitive=1,1,NULL)) AS neuNum,
             COUNT(IF(is_sensitive=2,2,NULL)) AS senNum,
             COUNT(IF(is_sensitive=3,3,NULL)) AS forNum
-        FROM
-            news AS t1 JOIN (SELECT ROUND(0.9*(SELECT MAX(news_id) FROM `news`)) AS news_id) AS t2
-        where 1=1 and t1.news_id >= t2.news_id and t1.is_sensitive is not null
+        FROM news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and lang_type = #{paramCondition.langType}
         </if>
@@ -650,7 +723,7 @@
             and key_words like CONCAT('%',#{paramCondition.keyWords},'%')
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (t1.news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (news_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
             data_time

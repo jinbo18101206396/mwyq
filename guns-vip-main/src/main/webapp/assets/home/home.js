@@ -38,7 +38,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             },
             {field: 'newsCount',align: "center", sort: true, title: '新闻数量',width:100},
             {field: 'topwords',align: "center", sort: true, title: '关键词',minWidth: 300},
-            {field: 'newsTime',align: "center", sort: true, title: '发布时间'},
+            {field: 'producedtime',align: "center", sort: true, title: '发布时间'},
         ]];
     };
 
@@ -63,7 +63,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     } else if(d.isSensitive === 2){
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
                     }else{
-                        return "<p style='font-weight: bold'>其他</p>";
+                        return "<p style='font-weight: bold'></p>";
                     }
                 }
             },
@@ -81,6 +81,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                         return "<p>贪腐</p>";
                     }else if(d.sensitiveCategory === 6){
                         return "<p>其他</p>";
+                    }else if(d.sensitiveCategory === 7){
+                        return "<p>政治</p>";
                     }
                 }
             },
@@ -127,6 +129,8 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                         return "<p>贪腐</p>";
                     }else if(d.sensitiveCategory === 6){
                         return "<p>其他</p>";
+                    }else if(d.sensitiveCategory === 7){
+                        return "<p>政府</p>";
                     }
                 }
             },
@@ -205,7 +209,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     } else if(d.isSensitive === 2){
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
                     }else{
-                        return "<p style='font-weight: bold'>其他</p>";
+                        return "<p style='font-weight: bold'></p>";
                     }
                 }
             },
@@ -221,8 +225,10 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                         return "<p>色情</p>";
                     } else if(d.sensitiveCategory === 5){
                         return "<p>贪腐</p>";
-                    }else{
+                    }else if(d.sensitiveCategory === 6){
                         return "<p>其他</p>";
+                    }else if(d.sensitiveCategory === 7){
+                        return "<p>政府</p>";
                     }
                 }
             },
@@ -307,7 +313,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     function loadSensitiveNewsData(lang,timeLimit,sensitiveCategory,websitename){
         table.render({
             elem: '#' + Sensitive.tableId,
-            url: Feng.ctxPath + '/news/sensitive/list?isSensitive=2&timeLimit='+timeLimit+'&langType='+lang+'&sensitiveCategory='+sensitiveCategory+'&websitename='+websitename,
+            url: Feng.ctxPath + '/news/home/sensitive/list?isSensitive=2&timeLimit='+timeLimit+'&langType='+lang+'&sensitiveCategory='+sensitiveCategory+'&websitename='+websitename,
             title: '敏感新闻',
             page: true,
             height : 500,
@@ -358,7 +364,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     var customWordId = "";
     //主题标签事件
     element.on('tab(all)', function(data){
-
         index = data.index;
         var lang =  $("#lang_type option:selected").val();
         var timeLimit = $("#timeLimit").val();
@@ -429,7 +434,6 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory,websitename);
             loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory,websitename);
         }else if(index === 3){//“宗教新闻” 变更为 “新词术语”
-
             $("#topicTableDiv").hide();
             $("#newsTableDiv").hide();
             $("#sensitiveTableDiv").hide();
@@ -480,6 +484,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         var isSensitive = $("#sensitive_type").val();
         var sensitiveCategory = $("#sensitive_category").val();
         var topwords = $("#topwords").val();
+        var websitename = $("#websitename").val();
 
         if(index === 0){ //热门话题
             loadHotTopicData(lang,timeLimit,topwords);
@@ -490,9 +495,9 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             loadHotNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory);
             loadHotNewsSensitiveTypeData(lang,timeLimit,isSensitive,sensitiveCategory);
         }else if(index === 2){//敏感新闻
-            loadSensitiveNewsData(lang,timeLimit,sensitiveCategory);
-            loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory);
-            loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory);
+            loadSensitiveNewsData(lang,timeLimit,sensitiveCategory,websitename);
+            loadSensitiveNewsSourceData(lang,timeLimit,sensitiveCategory,websitename);
+            loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory,websitename);
         }else if(index === 3){//宗教新闻
             loadReligionNewsData(lang,timeLimit,isSensitive,sensitiveCategory);
             loadReligionNewsSourceData(lang,timeLimit,isSensitive,sensitiveCategory)
@@ -642,7 +647,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             legend: {
                 orient: 'horizontal',
                 top:'30px',
-                data:['中文','蒙文','藏文','维文','外蒙']
+                data:['中文','蒙古文','藏文','维吾尔文','外蒙古文']
             },
             calculable : true,
             series : [
@@ -652,6 +657,41 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     radius : '55%',
                     center: ['50%', '58%'],
                     data:data.newsDistributionData,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        },true)
+    }, 'json');
+
+    //敏感分布统计（全局）
+    var senDistributionCharts = echarts.init(document.getElementById('senDistribution'));
+    senDistributionCharts.showLoading();
+    $.get(Feng.ctxPath + '/news/sensitive/distribution', function (data) {
+        senDistributionCharts.hideLoading();
+        senDistributionCharts.setOption({
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'horizontal',
+                top:'30px',
+                data:['敏感新闻','中性新闻','正向新闻']
+            },
+            calculable : true,
+            series : [
+                {
+                    name: '敏感分布',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '58%'],
+                    data:data.senDistributionData,
                     itemStyle: {
                         emphasis: {
                             shadowBlur: 10,
@@ -677,7 +717,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             legend: {
-                data:['中文', '蒙文', '藏文', '维文','外蒙']
+                data:['中文', '蒙古文', '藏文', '维吾尔文','外蒙古文']
             },
             toolbox: {
                 show : true,
@@ -712,7 +752,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     data: data.cnNum
                 },
                 {
-                    name: '蒙文',
+                    name: '蒙古文',
                     type: 'bar',
                     data: data.mengNum
                 },
@@ -722,12 +762,12 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     data: data.zangNum
                 },
                 {
-                    name: '维文',
+                    name: '维吾尔文',
                     type: 'bar',
                     data: data.weiNum
                 },
                 {
-                    name: '外蒙',
+                    name: '外蒙古文',
                     type: 'bar',
                     data: data.waimengNum
                 },
@@ -735,10 +775,10 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         })
     }, 'json');
 
-    //热门网站
+    //新闻来源（全局）
     var newsWebCharts = echarts.init(document.getElementById('newWeb'));
     newsWebCharts.showLoading();
-    $.get(Feng.ctxPath + '/news/source', function (data) {
+    $.get(Feng.ctxPath + '/news/source/global', function (data) {
         newsWebCharts.hideLoading();
         newsWebCharts.setOption({
             tooltip: {
@@ -751,7 +791,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     type: 'pie',
                     radius: '55%',
                     center: ['50%', '50%'],
-                    data:data.newsSourceData,
+                    data:data.newsSourceGlobalData,
                     itemStyle: {
                         emphasis: {
                             shadowBlur: 10,
@@ -952,7 +992,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                     {
                         name: '新闻来源',
                         type: 'pie',
-                        radius: '75%',
+                        radius: '65%',
                         center: ['50%', '50%'],
                         data:data.newsSourceData,
                         itemStyle: {
@@ -1161,7 +1201,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
     var sensitiveCategoryCharts = echarts.init(document.getElementById('senCategory'));
     function loadSensitiveCategoryData(lang,timeLimit,sensitiveCategory,websitename){
         sensitiveCategoryCharts.showLoading();
-        $.get(Feng.ctxPath + '/news/sensitive/category?isSensitive=2&langType='+lang+'&timeLimit='+timeLimit+'&sensitiveCategory='+sensitiveCategory+'&websitename='+websitename, function (data) {
+        $.get(Feng.ctxPath + '/news/home/sensitive/category?isSensitive=2&langType='+lang+'&timeLimit='+timeLimit+'&sensitiveCategory='+sensitiveCategory+'&websitename='+websitename, function (data) {
             sensitiveCategoryCharts.hideLoading();
             sensitiveCategoryCharts.setOption({
                 title: {

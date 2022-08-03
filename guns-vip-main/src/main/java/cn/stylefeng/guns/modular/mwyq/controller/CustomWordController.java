@@ -242,7 +242,6 @@ public class CustomWordController extends BaseController {
     @ResponseBody
     @RequestMapping("/relate/list")
     public LayuiPageInfo relateList(CustomWordParam customWordParam) {
-
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
@@ -261,7 +260,6 @@ public class CustomWordController extends BaseController {
         List<String> customWordNames = Stream.of(customWord.getName()).collect(Collectors.toList());
         customWordParam.setNames(customWordNames);
         List<Integer> newsIdList = getNewsIdsByCustomWordNames(customWordNames);
-
         LayuiPageInfo customWordNewsPage = new LayuiPageInfo();
         if (newsIdList != null && newsIdList.size() > 0) {
             customWordNewsPage = newsService.selectPage(newsIdList, customWordParam);
@@ -287,7 +285,7 @@ public class CustomWordController extends BaseController {
         CustomWord customWord = customWordService.getById(customWordParam.getId());
         String modular = customWordParam.getModular();
         if (modular.equals("1")) {
-            customWordParam.setCreateTime(customWord.getCreateTime());
+//            customWordParam.setCreateTime(customWord.getCreateTime());
         }
         //将中文主题词翻译成少数民族语言
         //List<String> customWordNames = customWordService.translateCnCustomwordName(customWord.getName(),customWordParam.getLang());
@@ -328,7 +326,7 @@ public class CustomWordController extends BaseController {
         CustomWord customWord = customWordService.getById(customWordParam.getId());
         String modular = customWordParam.getModular();
         if (modular.equals("1")) {
-            customWordParam.setCreateTime(customWord.getCreateTime());
+//            customWordParam.setCreateTime(customWord.getCreateTime());
         }
         //将中文主题词翻译成少数民族语言
         //List<String> customWordNames = customWordService.translateCnCustomwordName(customWord.getName(),customWordParam.getLang());

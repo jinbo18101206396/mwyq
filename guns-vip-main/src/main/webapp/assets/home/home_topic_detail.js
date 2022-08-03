@@ -28,7 +28,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                     } else if(d.isSensitive === 2){
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
                     }else{
-                        return "<p style='font-weight: bold'>敏感</p>";
+                        return "<p style='font-weight: bold'></p>";
                     }
                 }
             },
@@ -44,8 +44,10 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                         return "<p>色情</p>";
                     } else if(d.sensitiveCategory === 5){
                         return "<p>贪腐</p>";
-                    }else{
+                    }else if(d.sensitiveCategory === 6){
                         return "<p>其他</p>";
+                    }else if(d.sensitiveCategory === 7){
+                        return "<p>政府</p>";
                     }
                 }
             },

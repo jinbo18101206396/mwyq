@@ -202,6 +202,11 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         return newsMapper.newsSourceList(newsParam);
     }
 
+    @Override
+    public List<NewsResult> newsSourceGlobalList(NewsParam newsParam) {
+        return newsMapper.newsSourceGlobalList(newsParam);
+    }
+
 
     @Override
     public List<NewsResult> religionNewsSourceList(NewsParam newsParam) {
@@ -241,6 +246,11 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     @Override
     public List<NewsResult> newsDistributionList(NewsParam newsParam) {
         return newsMapper.newsDistributionList(newsParam);
+    }
+
+    @Override
+    public List<NewsResult> senDistributionList(NewsParam newsParam) {
+        return newsMapper.senDistributionList(newsParam);
     }
 
     @Override
@@ -361,7 +371,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     public List<NewsResult> religionSensitiveTypeList(NewsParam newsParam) {
-
         String timeLimit = newsParam.getTimeLimit();
         if (ToolUtil.isNotEmpty(timeLimit)) {
             String[] split = timeLimit.split(" - ");
@@ -433,6 +442,28 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     }
 
     @Override
+    public List<NewsResult> sensitiveSourceList(NewsParam newsParam) {
+        String timeLimit = newsParam.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            newsParam.setBeginTime(split[0]);
+            newsParam.setEndTime(split[1]);
+        }
+        return newsMapper.sensitiveSourceList(newsParam);
+    }
+
+    @Override
+    public List<NewsResult> homeSensitiveCategoryList(NewsParam newsParam) {
+        String timeLimit = newsParam.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            newsParam.setBeginTime(split[0]);
+            newsParam.setEndTime(split[1]);
+        }
+        return newsMapper.homeSensitiveCategoryList(newsParam);
+    }
+
+    @Override
     public List<NewsStaticResult> newsStaticList() {
         return newsMapper.newsStaticList();
     }
@@ -455,7 +486,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     public LayuiPageInfo hotPageList(NewsParam newsParam) {
-
         String timeLimit = newsParam.getTimeLimit();
         if (ToolUtil.isNotEmpty(timeLimit)) {
             String[] split = timeLimit.split(" - ");
@@ -469,7 +499,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     public LayuiPageInfo sensitivePageList(NewsParam newsParam) {
-
         String timeLimit = newsParam.getTimeLimit();
         if (ToolUtil.isNotEmpty(timeLimit)) {
             String[] split = timeLimit.split(" - ");
@@ -478,6 +507,19 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
         Page pageContext = getPageContext();
         Page<NewsResult> page = newsMapper.sensitivePageList(pageContext, newsParam);
+        return LayuiPageFactory.createPageInfo(page);
+    }
+
+    @Override
+    public LayuiPageInfo homeSensitivePageList(NewsParam newsParam) {
+        String timeLimit = newsParam.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split(" - ");
+            newsParam.setBeginTime(split[0]);
+            newsParam.setEndTime(split[1]);
+        }
+        Page pageContext = getPageContext();
+        Page<NewsResult> page = newsMapper.homeSensitivePageList(pageContext, newsParam);
         return LayuiPageFactory.createPageInfo(page);
     }
 
@@ -541,7 +583,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     public LayuiPageInfo selectPage(NewsParam newsParam) {
-
         String timeLimit = newsParam.getTimeLimit();
         if (ToolUtil.isNotEmpty(timeLimit)) {
             String[] split = timeLimit.split(" - ");
