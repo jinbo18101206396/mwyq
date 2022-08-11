@@ -209,7 +209,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                     {
                         name: '情感分布',
                         type: 'pie',
-                        radius: '80%',
+                        radius: '70%',
                         center: ['50%', '50%'],
                         data:data.sentimentTypeData,
                         label:{
@@ -231,6 +231,46 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                     }
                 ]
             })
+        }, 'json');
+    }
+
+    //微博语言分布
+    var langTypeCharts = echarts.init(document.getElementById('langType'));
+    function loadLangTypeData(lang,sentiment,timeLimit,authorName,location){
+        $.get(Feng.ctxPath + '/weibo/lang/type?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+            langTypeCharts.setOption({
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                calculable : true,
+                color:["green","blue","red","black"],
+                series : [
+                    {
+                        name: '新闻分布',
+                        type: 'pie',
+                        radius: '70%',
+                        center: ['50%', '50%'],
+                        data:data.langTypeData,
+                        label:{
+                            normal: {
+                                formatter:'{b}({d}%)',
+                                textStyle: {
+                                    fontWeight:'normal',
+                                    fontSize:15
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            },true)
         }, 'json');
     }
 
@@ -304,26 +344,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                                 color: 'red'
                             }
                         }
-                    },
-                    // {
-                    //     type: 'bar',
-                    //     stack: 'Ad',
-                    //     label: {
-                    //         normal: {
-                    //             offset: ['50', '80'],
-                    //             show: true,
-                    //             position: 'insideBottom',
-                    //             formatter: '{c}',
-                    //             textStyle: { color: '#000' }
-                    //         }
-                    //     },
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: 'rgb(255, 255, 255, 0)'      // 柱状图颜色设为透明
-                    //         }
-                    //     },
-                    //     data: data.weiboCount
-                    // }
+                    }
                 ]
             })
         }, 'json')
@@ -409,6 +430,8 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
     loadBloggerRankData('','','','','');
     //初始博主地域分布数据
     loadAreaMapData('','','','','');
+    //初始化加载语言分布数据
+    loadLangTypeData('','','','','');
 
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
@@ -423,6 +446,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
         loadWeiboTrendData(lang,sentiment,timeLimit,authorName,location);
         loadBloggerRankData(lang,sentiment,timeLimit,authorName,location);
         loadAreaMapData(lang,sentiment,timeLimit,authorName,location);
+        loadLangTypeData(lang,sentiment,timeLimit,authorName,location);
     });
 
     // 窗口大小改变事件

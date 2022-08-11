@@ -587,7 +587,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         },
         geo: {
             map: 'china',
-            roam: false,//不开启缩放和平移
+            roam: true,//不开启缩放和平移
             zoom:1.23,//视角缩放比例
             label: {
                 normal: {
@@ -831,7 +831,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 show : true,
                 realtime : true,
                 start : 0,
-                end : 5
+                end : 8
             },
             xAxis : [
                 {

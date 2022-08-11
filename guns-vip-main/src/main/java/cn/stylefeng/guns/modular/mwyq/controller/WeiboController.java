@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.mwyq.controller;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.mwyq.entity.Weibo;
+import cn.stylefeng.guns.modular.mwyq.enums.Lang;
 import cn.stylefeng.guns.modular.mwyq.enums.SentimentType;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboUserParam;
@@ -19,6 +20,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import org.apache.http.util.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
@@ -72,7 +74,7 @@ public class WeiboController extends BaseController {
     }
 
     /**
-     * 微博图表（微博趋势、情感分析图）
+     * 微博情感分析图
      *
      * @param weiboParam
      * @return
@@ -93,6 +95,33 @@ public class WeiboController extends BaseController {
         return sentimentTypeJson;
     }
 
+    /**
+     * 微博语言分布图
+     *
+     * @param weiboParam
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/lang/type", method = RequestMethod.GET)
+    public JSONObject weiboLangType(WeiboParam weiboParam) {
+        JSONObject langJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        List<WeiboResult> langList = weiboService.langTypeList(weiboParam);
+        for (WeiboResult weiboResult : langList) {
+            JSONObject json = new JSONObject();
+            Integer num = weiboResult.getNum();
+            String lang = Lang.getDescription(weiboResult.getLang());
+            if(TextUtils.isEmpty(lang)){
+                continue;
+            }
+            json.put("value",num);
+            json.put("name", lang);
+            jsonArray.add(json);
+        }
+        langJson.put("langTypeData", jsonArray);
+        return langJson;
+    }
+
 
     /**
      * 微博博主排行
@@ -108,9 +137,6 @@ public class WeiboController extends BaseController {
         List<String> authorNameList = bloggerRankList.stream().map(WeiboResult::getAuthorName).collect(Collectors.toList());
         bloggerRankJson.put("authorName", JSONArray.parseArray(JSON.toJSONString(authorNameList)));
         weiboParam.setAuthorNameList(authorNameList);
-
-        List<Integer> weiboCountList = bloggerRankList.stream().map(WeiboResult::getNum).collect(Collectors.toList());
-        bloggerRankJson.put("weiboCount", JSONArray.parseArray(JSON.toJSONString(weiboCountList)));
 
         JSONObject authorSentiment = weiboService.getAuthorSentiment(weiboParam);
 

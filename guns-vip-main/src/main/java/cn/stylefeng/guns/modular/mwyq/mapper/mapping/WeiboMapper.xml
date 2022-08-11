@@ -44,17 +44,17 @@
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
         <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
             and author_name = #{paramCondition.authorName}
         </if>
         <if test="paramCondition.location != null and paramCondition.location != ''">
             and location = #{paramCondition.location}
         </if>
-        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
-            and sentiment = #{paramCondition.sentiment}
-        </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (weibo.create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         order by createTime desc,like_count desc,comment_count desc,transmit_count desc
     </select>
@@ -63,12 +63,15 @@
         select
         <include refid="Base_Column_List"/>
         from weibo order by createTime desc
-
     </select>
+
     <select id="sentimentTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT create_time,sentiment,COUNT(*) AS num FROM weibo WHERE sentiment is not null
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
         </if>
         <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
             and author_name = #{paramCondition.authorName}
@@ -76,17 +79,33 @@
         <if test="paramCondition.location != null and paramCondition.location != ''">
             and location = #{paramCondition.location}
         </if>
-        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
-            and sentiment = #{paramCondition.sentiment}
-        </if>
-        <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-            and create_time = #{paramCondition.createTime}
-        </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (weibo.create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
         sentiment
+        ORDER BY num desc
+    </select>
+
+    <select id="langTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+        SELECT lang,COUNT(*) AS num FROM weibo WHERE lang is not null
+        <if test="paramCondition.lang != null and paramCondition.lang != ''">
+            and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
+        <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+            and author_name = #{paramCondition.authorName}
+        </if>
+        <if test="paramCondition.location != null and paramCondition.location != ''">
+            and location = #{paramCondition.location}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        GROUP BY
+        lang
         ORDER BY num desc
     </select>
 
@@ -95,17 +114,14 @@
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
         <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
             and author_name = #{paramCondition.authorName}
         </if>
         <if test="paramCondition.location != null and paramCondition.location != ''">
             and location = #{paramCondition.location}
-        </if>
-        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
-            and sentiment = #{paramCondition.sentiment}
-        </if>
-        <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-            and create_time = #{paramCondition.createTime}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
             and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
@@ -178,11 +194,8 @@
         <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
             and sentiment = #{paramCondition.sentiment}
         </if>
-        <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
-            and create_time = #{paramCondition.createTime}
-        </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (weibo.create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
         data_time

@@ -60,6 +60,13 @@ public interface WeiboMapper extends BaseMapper<Weibo> {
      */
     List<WeiboResult> sentimentTypeList(@Param("paramCondition") WeiboParam paramCondition);
 
+    /**
+     * 微博语言分布
+     * @param paramCondition
+     * @return
+     */
+    List<WeiboResult> langTypeList(@Param("paramCondition") WeiboParam paramCondition);
+
 
     /**
      * 博主排行
@@ -69,7 +76,7 @@ public interface WeiboMapper extends BaseMapper<Weibo> {
     List<WeiboResult> bloggerRankList(@Param("paramCondition") WeiboParam paramCondition);
 
     /**
-     * 博主排行
+     *
      * @param paramCondition
      * @return
      */

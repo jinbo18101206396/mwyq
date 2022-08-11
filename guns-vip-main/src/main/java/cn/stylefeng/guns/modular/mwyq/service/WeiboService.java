@@ -68,7 +68,21 @@ public interface WeiboService extends IService<Weibo> {
      */
      LayuiPageInfo findPageBySpec(WeiboParam param);
 
+    /**
+     * 微博情感分布
+     *
+     * @author jinbo
+     * @Date 2022-07-29
+     */
     List<WeiboResult> sentimentTypeList(WeiboParam weiboParam);
+
+    /**
+     * 微博语言分布
+     *
+     * @author jinbo
+     * @Date 2022-08-02
+     */
+    List<WeiboResult> langTypeList(WeiboParam weiboParam);
 
     /**
      * 博主排行
@@ -86,6 +100,12 @@ public interface WeiboService extends IService<Weibo> {
      */
     List<WeiboResult> areaMapList(WeiboParam weiboParam);
 
+    /**
+     * 微博情感走势
+     *
+     * @author jinbo
+     * @Date 2022-07-29
+     */
     List<WeiboTrendResult> sentimentTrendList(WeiboParam weiboParam);
 
     /**

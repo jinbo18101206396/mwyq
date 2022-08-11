@@ -104,6 +104,17 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
         return weiboMapper.sentimentTypeList(weiboParam);
     }
 
+    @Override
+    public List<WeiboResult> langTypeList(WeiboParam weiboParam) {
+        String timeLimit = weiboParam.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split("至");
+            weiboParam.setBeginTime(split[0]);
+            weiboParam.setEndTime(split[1]);
+        }
+        return weiboMapper.langTypeList(weiboParam);
+    }
+
     /**
      * 博主排行
      * */
