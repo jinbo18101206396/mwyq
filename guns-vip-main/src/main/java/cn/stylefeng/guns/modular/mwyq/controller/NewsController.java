@@ -22,6 +22,7 @@ import com.google.common.cache.CacheBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -260,15 +261,19 @@ public class NewsController extends BaseController {
         List<NewsResult> senSourcelList = newsService.sensitiveSourceList(newsParam);
         for (NewsResult newsSource : senSourcelList) {
             JSONObject json = new JSONObject();
-            json.put("value", newsSource.getNum());
-            json.put("name", newsSource.getWebsitename());
+            Integer num = newsSource.getNum();
+            String websitename = newsSource.getWebsitename();
+            if(StringUtils.isEmpty(websitename)){
+                continue;
+            }
+            json.put("value", num);
+            json.put("name", websitename);
             jsonArray.add(json);
         }
         sensitiveSourceJson.put("senSourceData", jsonArray);
         localCache.put(cacheKey, sensitiveSourceJson);
         return sensitiveSourceJson;
     }
-
 
     /**
      * 新闻来源（首页热门新闻和敏感新闻饼图）
@@ -747,7 +752,7 @@ public class NewsController extends BaseController {
         HttpServletRequest request = HttpContext.getRequest();
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String cacheKey = "religion_news_list"+newsParam.getLangType()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getKeyWords()+"_"+newsParam.getSensitiveWords()+"_"+"_"+newsParam.getWebsitename()+"_"+page+"_"+limit;
+        String cacheKey = "religion_news_list_"+newsParam.getLangType()+"_"+newsParam.getTimeLimit()+"_"+newsParam.getSensitiveCategory()+"_"+newsParam.getIsSensitive()+"_"+newsParam.getKeyWords()+"_"+newsParam.getSensitiveWords()+"_"+"_"+newsParam.getWebsitename()+"_"+page+"_"+limit;
         LayuiPageInfo religionNewsCache = (LayuiPageInfo)localCache.getIfPresent(cacheKey);
         if(religionNewsCache != null){
             return religionNewsCache;

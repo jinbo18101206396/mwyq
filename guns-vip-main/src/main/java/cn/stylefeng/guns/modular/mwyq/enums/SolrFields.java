@@ -10,6 +10,8 @@ public enum SolrFields {
         NEWS_TIME("news_time"),
         NEWS_SOURCE("crawl_source"),
         NEWS_URL("news_url"),
+        LANG_TYPE("lang_type"),
+        SENSITIVE("is_sensitive"),
 
         WEIBO_ID("id"),
         WEIBO_CONTENT("weibo_content"),

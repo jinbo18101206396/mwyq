@@ -5,7 +5,10 @@ import cn.stylefeng.guns.modular.mwyq.entity.SolrWeiboDocResEntity;
 import cn.stylefeng.guns.modular.mwyq.model.params.NewsParam;
 import cn.stylefeng.guns.modular.mwyq.model.params.WebsiteRetrievalParam;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboRetrievalParam;
-import cn.stylefeng.guns.modular.mwyq.utils.*;
+import cn.stylefeng.guns.modular.mwyq.utils.CrossLangQE;
+import cn.stylefeng.guns.modular.mwyq.utils.TranslationUtil;
+import cn.stylefeng.guns.modular.mwyq.utils.WebsiteDocQuery;
+import cn.stylefeng.guns.modular.mwyq.utils.WeiboDocQuery;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.response.ResponseData;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -35,14 +39,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RetrievalController extends BaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(RetrievalController.class);
+    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.DAYS).recordStats().build();
+    private static final Logger logger = LoggerFactory.getLogger(RetrievalController.class);
+    private static final WebsiteDocQuery biSolrDoc = new WebsiteDocQuery();
+    private static final WebsiteDocQuery moSolrDoc = new WebsiteDocQuery();
 
-    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.HOURS).recordStats().build();
-
-    private static WebsiteDocQuery biSolrDoc = new WebsiteDocQuery();
-    private static WebsiteDocQuery moSolrDoc = new WebsiteDocQuery();
-
-    private String PREFIX = "/retrieval";
+    private final String PREFIX = "/retrieval";
 
     @RequestMapping("")
     public String index() {
@@ -61,13 +63,13 @@ public class RetrievalController extends BaseController {
      * @Date 2021/1/17
      */
     @RequestMapping("/website")
-    public String websiteRetrieval(NewsParam newsParam,Model model) {
+    public String websiteRetrieval(NewsParam newsParam, Model model) {
 
         String keyWords = newsParam.getKeyWords();
         String langType = newsParam.getLangType();
 
-        model.addAttribute("keyWords",keyWords);
-        model.addAttribute("langType",langType);
+        model.addAttribute("keyWords", keyWords);
+        model.addAttribute("langType", langType);
 
         return PREFIX + "/website_retrieval.html";
     }
@@ -81,7 +83,6 @@ public class RetrievalController extends BaseController {
     @RequestMapping("/search/weibo")
     @ResponseBody
     public JSONObject weiboSearch(WeiboRetrievalParam wrParam) {
-
         String keyword = wrParam.getKeyword();
         String blogger = wrParam.getBlogger();
         String lang = wrParam.getLang();
@@ -89,44 +90,50 @@ public class RetrievalController extends BaseController {
         String scope = wrParam.getScope();
         String sensitive = wrParam.getSensitive();
 
+//        String cacheKey = "weibo_search_" + keyword + "_" + blogger + "_" + lang + "_" + cycle + "_" + scope + "_" + sensitive;
+//        JSONObject weiboSearchJsonCache = (JSONObject) localCache.getIfPresent(cacheKey);
+//        if (weiboSearchJsonCache != null) {
+//            return weiboSearchJsonCache;
+//        }
         JSONObject weiboSearchJson = new JSONObject();
-        long positiveNum=0;
-        long negativeNum=0;
-        long allNum=0;
+        long positiveNum = 0;
+        long negativeNum = 0;
+        long allNum = 0;
         WeiboDocQuery docQuery = new WeiboDocQuery();
-        if(sensitive.equals("emotion-all")){
-            positiveNum = (long) docQuery.queryNum(keyword, blogger,lang, "emotion-positive", scope, cycle, 1, 100000, true);
-            negativeNum = (long) docQuery.queryNum(keyword, blogger,lang, "emotion-negative", scope, cycle, 1, 100000, true);
-            allNum = (long) docQuery.queryNum(keyword, blogger, lang, "emotion-all", scope, cycle, 1, 100000, true);
-        }else if(sensitive.equals("emotion-positive")){
-            positiveNum = (long) docQuery.queryNum(keyword, blogger,lang, sensitive, scope, cycle, 1, 100000, true);
+        if (sensitive.equals("emotion-all")) {
+            positiveNum = docQuery.queryNum(keyword, blogger, lang, "emotion-positive", scope, cycle, 1, 100000, true);
+            negativeNum = docQuery.queryNum(keyword, blogger, lang, "emotion-negative", scope, cycle, 1, 100000, true);
+            allNum = docQuery.queryNum(keyword, blogger, lang, "emotion-all", scope, cycle, 1, 100000, true);
+        } else if (sensitive.equals("emotion-positive")) {
+            positiveNum = docQuery.queryNum(keyword, blogger, lang, sensitive, scope, cycle, 1, 100000, true);
             allNum = positiveNum;
-        }else{
-            negativeNum = (long) docQuery.queryNum(keyword, blogger,lang, sensitive, scope, cycle, 1, 100000, true);
+        } else {
+            negativeNum = docQuery.queryNum(keyword, blogger, lang, sensitive, scope, cycle, 1, 100000, true);
             allNum = negativeNum;
         }
-        weiboSearchJson.put("positiveNum",positiveNum);
-        weiboSearchJson.put("negativeNum",negativeNum);
-        weiboSearchJson.put("neutralNum",allNum-positiveNum-negativeNum);
+        weiboSearchJson.put("positiveNum", positiveNum);
+        weiboSearchJson.put("negativeNum", negativeNum);
+        weiboSearchJson.put("neutralNum", allNum - positiveNum - negativeNum);
 
-        List<SolrWeiboDocResEntity> weiboList = docQuery.query(keyword, blogger,lang, sensitive, scope, cycle, 1, 1000, true);
-        weiboSearchJson.put("docResList",weiboList);
+        List<SolrWeiboDocResEntity> weiboList = docQuery.query(keyword, blogger, lang, sensitive, scope, cycle, 1, 1000, true);
+        weiboSearchJson.put("docResList", weiboList);
 
         String earlyTime = "-";
         String latestTime = "-";
-        if(weiboList.size()>0){
+        if (weiboList.size() > 0) {
             String time_span = docQuery.queryDate(keyword, lang, sensitive, scope, cycle, 1, 100000, true);
-            String []times = time_span.split(";");
+            String[] times = time_span.split(";");
             earlyTime = times[0];
             latestTime = times[1];
         }
-        weiboSearchJson.put("keyword",keyword);
-        weiboSearchJson.put("allNum",allNum);
-        weiboSearchJson.put("earlyTime",earlyTime);
-        weiboSearchJson.put("latestTime",latestTime);
+        weiboSearchJson.put("keyword", keyword);
+        weiboSearchJson.put("allNum", allNum);
+        weiboSearchJson.put("earlyTime", earlyTime);
+        weiboSearchJson.put("latestTime", latestTime);
 
-        List<SolrWeiboDocResEntity> hotWeiboList = docQuery.queryTopTen(lang,cycle);
-        weiboSearchJson.put("hotWeiboList",hotWeiboList);
+        List<SolrWeiboDocResEntity> hotWeiboList = docQuery.queryTopTen(lang, cycle);
+        weiboSearchJson.put("hotWeiboList", hotWeiboList);
+//        localCache.put(cacheKey, weiboSearchJson);
         return weiboSearchJson;
     }
 
@@ -139,19 +146,25 @@ public class RetrievalController extends BaseController {
     @RequestMapping("/search/news")
     @ResponseBody
     public JSONObject websiteSearch(WebsiteRetrievalParam webParam) {
-
         String keyword = webParam.getKeyword();
         String lang = webParam.getLang();
         String sensitive = webParam.getSensitive();
         String cycle = webParam.getCycle();
+
+//        String cacheKey = "news_search_" + keyword + "_" + lang + "_" + sensitive + "_" + cycle;
+//        JSONObject websiteSearchJsonCache = (JSONObject) localCache.getIfPresent(cacheKey);
+//        if (websiteSearchJsonCache != null) {
+//            return websiteSearchJsonCache;
+//        }
         JSONObject websiteSearchJson = new JSONObject();
-        if(lang.contains("-")){
+        if (lang.contains("-")) {
             //双语检索
-            biSolrDoc.biQuery(keyword,lang, sensitive,cycle,websiteSearchJson);
-        }else{
+            biSolrDoc.biQuery(keyword, lang, sensitive, cycle, websiteSearchJson);
+        } else {
             //单语检索
-            moSolrDoc.moQuery(keyword, lang, sensitive,cycle,true,websiteSearchJson);
+            moSolrDoc.moQuery(keyword, lang, sensitive, cycle, true, websiteSearchJson);
         }
+//        localCache.put(cacheKey, websiteSearchJson);
         return websiteSearchJson;
     }
 
@@ -162,15 +175,15 @@ public class RetrievalController extends BaseController {
      * @Date 2021/1/17
      */
     @RequestMapping("/news/detail/page")
-    public String websiteNews(NewsParam newsParam,Model model){
+    public String websiteNews(NewsParam newsParam, Model model) {
 
         Integer newsId = newsParam.getNewsId();
         String keyWords = newsParam.getKeyWords();
         String langType = newsParam.getLangType();
 
-        model.addAttribute("newsId",newsId);
-        model.addAttribute("keyWords",keyWords);
-        model.addAttribute("langType",langType);
+        model.addAttribute("newsId", newsId);
+        model.addAttribute("keyWords", keyWords);
+        model.addAttribute("langType", langType);
         return PREFIX + "/website_news_detail.html";
     }
 
@@ -182,12 +195,12 @@ public class RetrievalController extends BaseController {
      */
     @RequestMapping("/news/translate")
     @ResponseBody
-    public ResponseData newsDetail(NewsParam newsParam, Model model){
+    public ResponseData newsDetail(NewsParam newsParam, Model model) {
 
         Integer newsId = newsParam.getNewsId();
         String keyWords = newsParam.getKeyWords();
         String langType = newsParam.getLangType();
-        if(langType.contains("-")){
+        if (langType.contains("-")) {
             langType = langType.split("-")[1];
         }
         String queryString = CrossLangQE.getMnFromZhInCrossVali(keyWords, 2);
@@ -196,22 +209,22 @@ public class RetrievalController extends BaseController {
         String newsTime = biSolrDoc.getTimeById(newsId);
         String newsContent = biSolrDoc.getContentById(newsId).replace("\u1800", "\u202f").replace(queryString, "<span style=\"color:red\">" + queryString + "</span>");
         newsContent = "<span style='font-size:20px;font-weight:bold;text-align:center;display:block;padding-bottom:5px'>" + newsTitle + "</span>" +
-                "<span style='font-size:10px;text-align:center;display:block;'>"+newsTime+"</span>"+
-                "<span style='color:blue;font-size:12px;text-align:center;display:block;'>"+newsUrl+"</span>" + newsContent;
+                "<span style='font-size:10px;text-align:center;display:block;'>" + newsTime + "</span>" +
+                "<span style='color:blue;font-size:12px;text-align:center;display:block;'>" + newsUrl + "</span>" + newsContent;
 
         News news = new News();
         news.setNewsContent(newsContent);
 
         //翻译少数语言
-        if(!langType.equals("cn")){
+        if (!langType.equals("cn")) {
             TranslationUtil trans = new TranslationUtil();
-            String sourceTitleAndContent = newsTitle.replace("\n", "")+"\n"+newsContent;
-            String transTitleAndContent = trans.sendPost(sourceTitleAndContent,langType,"article");
-            if(ToolUtil.isNotEmpty(transTitleAndContent)) {
+            String sourceTitleAndContent = newsTitle.replace("\n", "") + "\n" + newsContent;
+            String transTitleAndContent = trans.sendPost(sourceTitleAndContent, langType, "article");
+            if (ToolUtil.isNotEmpty(transTitleAndContent)) {
                 String transTitle = transTitleAndContent.split("\n")[0];
-                String transContent = transTitleAndContent.replace("\n", "\n<br>").replace("\r","\n<br>").replace(transTitle, "");
+                String transContent = transTitleAndContent.replace("\n", "\n<br>").replace("\r", "\n<br>").replace(transTitle, "");
                 transContent = "<span style='font-size:17px;font-weight:bold;text-align:center;display:block;padding-bottom:5px'>" + transTitle + "</span>" +
-                        "<span style='font-size:10px;text-align:center;display:block;'>"+newsTime+"</span>"+transContent;
+                        "<span style='font-size:10px;text-align:center;display:block;'>" + newsTime + "</span>" + transContent;
                 news.setTranslateContent(transContent);
             }
         }

@@ -8,8 +8,10 @@ public class SolrDocRes {
 	private String newsTime;
 	private String newsId;
 	private String crawlSource;
+	private String isSensitive;
 	private String newsUrl;
-	private String langTypeString;
+	private String langType;
+
 
 	public String getTitleLading() {
 		return titleLading;
@@ -76,13 +78,19 @@ public class SolrDocRes {
 		this.newsUrl = newsUrl;
 	}
 
-//  语言类型
 	public String getLangType() {
-		return langTypeString;
+		return langType;
 	}
 
-	public void setLangType(String langTypeString) {
-		this.langTypeString = langTypeString;
+	public void setLangType(String langType) {
+		this.langType = langType;
 	}
 
+	public String getIsSensitive() {
+		return isSensitive;
+	}
+
+	public void setIsSensitive(String isSensitive) {
+		this.isSensitive = isSensitive;
+	}
 }

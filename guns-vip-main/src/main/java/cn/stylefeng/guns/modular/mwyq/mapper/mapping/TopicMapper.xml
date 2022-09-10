@@ -18,7 +18,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        topic_id AS "topicId", topwords AS "topwords", topic_name AS "topicName",cluster_topic_name AS "clusterTopicName", producedtime AS "producedtime", lang_type AS "langType", keywords AS "keywords", news_count AS "newsCount", news_time AS "newsTime"
+        topic_id AS "topicId", topwords AS "topwords", topic_name AS "topicName",cluster_topic_name AS "clusterTopicName", producedtime AS "producedtime", lang_type AS "langType", keywords AS "keywords",summarize AS "summarize", news_count AS "newsCount", news_time AS "newsTime"
     </sql>
 
     <sql id="topic_Column_List">

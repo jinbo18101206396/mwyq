@@ -42,6 +42,17 @@ layui.use(['table', 'admin', 'ax','laydate','form', 'func','upload'], function (
                     }
                 }
             },
+            {field: 'lang',align: "center",sort: true, title: '语言',templet: function (d) {
+                    if(d.lang === 'cn'){
+                        return "<p>中文</p>";
+                    }else if (d.lang === 'zang') {
+                        return "<p>藏文</p>";
+                    } else if(d.lang === 'wei'){
+                        return "<p>维吾尔文</p>";
+                    } else if(d.lang === 'meng'){
+                        return "<p>蒙古文</p>";
+                    }
+                }},
             {field: 'userName',align: "center",sort: true, title: '创建人'},
             {field: 'createTime',align: "center", sort: true, title: '创建时间'},
             {field: 'updateTime',align: "center", sort: true, title: '更新时间'},

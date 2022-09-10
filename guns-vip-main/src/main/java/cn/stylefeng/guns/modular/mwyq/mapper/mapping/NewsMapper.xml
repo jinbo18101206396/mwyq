@@ -337,7 +337,7 @@
     <select id="sensitivePageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         select
         <include refid="Base_Column_List"/>
-        from news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR )
+        from news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 3 YEAR )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and lang_type = #{paramCondition.langType}
         </if>
@@ -473,7 +473,7 @@
 
     <select id="sensitiveTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         SELECT is_sensitive,COUNT(*) AS num FROM news
-        WHERE 1=1 AND news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+        WHERE 1=1 AND news_time > DATE_SUB(CURDATE(), INTERVAL 3 YEAR)
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and lang_type = #{paramCondition.langType}
         </if>
@@ -535,7 +535,7 @@
 
     <select id="sensitiveCategoryList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         SELECT sensitive_category,COUNT(*) AS num
-        FROM news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR )
+        FROM news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 3 YEAR )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and lang_type = #{paramCondition.langType}
         </if>
@@ -564,7 +564,7 @@
 
     <select id="sensitiveSourceList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.NewsResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.NewsParam">
         SELECT websitename,COUNT(*) AS num
-        FROM news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 1 YEAR )
+        FROM news where 1=1 and news_time > DATE_SUB(CURDATE(), INTERVAL 3 YEAR )
         <if test="paramCondition.langType != null and paramCondition.langType != ''">
             and lang_type = #{paramCondition.langType}
         </if>

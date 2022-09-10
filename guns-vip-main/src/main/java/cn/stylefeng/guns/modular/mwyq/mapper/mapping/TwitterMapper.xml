@@ -9,13 +9,16 @@
         <result column="name" property="name" />
         <result column="time" property="time" />
         <result column="sentiment" property="sentiment" />
+        <result column="reply_count" property="replyCount" />
+        <result column="retweet_count" property="retweetCount" />
+        <result column="like_count" property="likeCount" />
         <result column="lang" property="lang" />
         <result column="location" property="location" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", content AS "content", name AS "name", time AS "time", sentiment AS "sentiment",lang AS "lang",location AS "location"
+        id AS "id", content AS "content", name AS "name", time AS "time", sentiment AS "sentiment",reply_count AS "replyCount",retweet_count AS "retweetCount",like_count AS "likeCount",lang AS "lang",location AS "location"
     </sql>
 
     <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TwitterResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TwitterParam">

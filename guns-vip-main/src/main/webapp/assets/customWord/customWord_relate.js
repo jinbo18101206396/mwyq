@@ -58,7 +58,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                     return '<div style="text-align: left">'+d.sensitiveWords+'</div>';
                 }},
             {
-                field: 'keyWords',align: "center", sort: true, title: '关键词',minWidth: 170,templet:function (d) {
+                field: 'cu',align: "center", sort: true, title: '关键词',minWidth: 170,templet:function (d) {
                     return '<div style="text-align: left">'+d.keyWords+'</div>';
                 }},
             {field: 'newsCategory', align: "center", sort: true, title: '新闻类别',minWidth: 120},
@@ -74,6 +74,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
         elem: '#' + customWordRelate.tableId,
         url: Feng.ctxPath + '/customWord/relate/list?modular=2&id='+customWordId,
         page: true,
+        limit:90,
         height: "full-158",
         cellMinWidth: 100,
         cols: customWordRelate.initColumn(),

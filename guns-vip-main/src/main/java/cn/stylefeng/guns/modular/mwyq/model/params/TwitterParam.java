@@ -34,6 +34,22 @@ public class TwitterParam implements Serializable, BaseValidatingParam {
 
     private String sentiment;
 
+    /**
+     * 评论量
+     */
+    private Integer retweetCount;
+
+    /**
+     * 点赞量
+     */
+    private Integer likeCount;
+
+    /**
+     * 转发量
+     */
+    private Integer replyCount;
+
+
     private String timeLimit;
     private String beginTime;
     private String endTime;

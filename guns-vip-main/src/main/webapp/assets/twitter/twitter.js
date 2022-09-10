@@ -37,7 +37,7 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
                         return "<p></p>";
                     }
                 }},
-            {field: 'sentiment', align: "center", sort: true, title: '情感倾向', templet: function (d) {
+            {field: 'sentiment', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if (d.sentiment === '3') {
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     } else if (d.sentiment === '1') {
@@ -49,6 +49,9 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
                     }
                 }
             },
+            {field: 'retweetCount',  align: "center",sort: true, title: '评论量'},
+            {field: 'likeCount',  align: "center",sort: true, title: '点赞量'},
+            {field: 'replyCount',  align: "center",sort: true, title: '转发量'},
             {field: 'time',  align: "center",sort: true, title: '发布时间'},
             {field: 'location',  align: "center",sort: true, title: '发布位置'}
         ]];
@@ -158,6 +161,7 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
         elem: '#' + Twitter.tableId,
         url: Feng.ctxPath + '/twitter/list',
         page: true,
+        limit:90,
         height: "full-158",
         cellMinWidth: 100,
         cols: Twitter.initColumn()

@@ -33,7 +33,7 @@ public class SensitiveController extends BaseController {
     @Autowired
     private NewsService newsService;
 
-    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.HOURS).recordStats().build();
+    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(3, TimeUnit.HOURS).recordStats().build();
 
     /**
      * 跳转到主页面

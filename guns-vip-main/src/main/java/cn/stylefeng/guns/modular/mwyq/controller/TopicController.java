@@ -297,11 +297,11 @@ public class TopicController extends BaseController {
     @RequestMapping(value = "/entity/static", method = RequestMethod.GET)
     public JSONObject topicEntityStatic(TopicParam topicParam) {
 
-        String cacheKey = "entity_static_" + topicParam.getTopicId();
-        JSONObject entityStaticCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
-        if (entityStaticCache != null) {
-            return entityStaticCache;
-        }
+//        String cacheKey = "entity_static_" + topicParam.getTopicId();
+//        JSONObject entityStaticCache = ( JSONObject ) localCache.getIfPresent(cacheKey);
+//        if (entityStaticCache != null) {
+//            return entityStaticCache;
+//        }
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("topic_id", topicParam.getTopicId());
@@ -374,7 +374,7 @@ public class TopicController extends BaseController {
         entityStaticJson.put("organizeNum", organizeNumArray);
         entityStaticJson.put("organizeEntityCount",organizeEntityCount);
         entityStaticJson.put("wordcloud", wordcloudArray);
-        localCache.put(cacheKey, entityStaticJson);
+//        localCache.put(cacheKey, entityStaticJson);
         return entityStaticJson;
     }
 

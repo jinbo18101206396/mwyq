@@ -87,6 +87,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
         elem: '#' + Weibo.tableId,
         url: Feng.ctxPath + '/weibo/list',
         page: true,
+        limit:90,
         height: "full-158",
         cellMinWidth: 100,
         cols: Weibo.initColumn(),

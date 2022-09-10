@@ -32,6 +32,12 @@ public class TwitterResult implements Serializable {
 
     private String sentiment;
 
+    private Integer retweetCount;
+
+    private Integer likeCount;
+
+    private Integer replyCount;
+
     private int twitterCount;
 
     private int sentimentCount;

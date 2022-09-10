@@ -18,12 +18,13 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
     loadWebsiteNews(keyWords,langType,'','');
 
     //加载微博概览数据
-    function loadBasicData(keyword,newsNum){
+    function loadBasicData(keyword,queryString,newsNum){
         $("#basicDataDiv").append(
-            "<span style=\"font-size:15px;font-weight:bold;\">关键词：</span><span style=\"font-size:18px;color: red;\">"+keyword+"</span>"+
-            "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">新闻总数：</span><span style=\"font-size:18px;color: red;\">"+newsNum+"</span>\n" +
-            "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">敏感类型：</span><span style=\"font-size:18px;color: red;\"></span>\n" +
-            "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">检索周期：</span><span style=\"font-size:18px;color: red;\"></span>\n"
+            "<span style=\"font-size:15px;font-weight:bold;\">中文关键词：</span><span style=\"font-size:18px;color: red;\">"+keyword+"</span>"+
+            "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">民文关键词：</span><span style=\"font-size:18px;color: red;\">"+queryString+"</span>\n"+
+            "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">新闻总数：</span><span style=\"font-size:18px;color: red;\">"+newsNum+"</span>\n"
+            // "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">敏感类型：</span><span style=\"font-size:18px;color: red;\"></span>\n" +
+            // "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">检索周期：</span><span style=\"font-size:18px;color: red;\"></span>\n"
         );
     }
 
@@ -47,6 +48,59 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
             }
         }
         $("#newsListDiv").append(addhtml);
+    }
+
+    //加载倾向性分析数据
+    var sensitiveChart = echarts.init(document.getElementById('senChartDiv'));
+    function loadWeiboEmotion(positive,negative,neutral) {
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            icon: "circle",
+            legend: {
+                orient: 'vertical',
+                left: '5%',  //图例距离左的距离
+                y: '5%',  //图例上下居中
+                textStyle: { //图例文字的样式
+                    fontSize: 17
+                },
+                data: ['正向','中性','负向']
+            },
+            color:["green","blue","red"],
+            series: [
+                {
+                    name:'倾向性',
+                    type:'pie',
+                    radius:'80%',
+                    center: ['55%', '55%'], //图的位置，距离左跟上的位置
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'inside',
+                            formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
+
+                            textStyle : {
+                                align : 'center',
+                                baseline : 'middle',
+                                fontFamily : '-webkit-pictograph',
+                                color: '#3cefe6',
+                                fontSize : 12,
+                                fontWeight : 'bolder'
+                            }
+                        }
+                    },
+                    data:[
+                        {value:positive, name:'正向'},
+                        {value:neutral, name:'中性'},
+                        {value:negative, name:'负向'}
+                    ]
+                }
+            ]
+        };
+        sensitiveChart.setOption(option);
     }
 
     //加载热门新闻列表
@@ -73,16 +127,19 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
             var newsList = data.newsList;
             var hotNewsList = data.hotNewsList;
             var newsNum = data.newsNum;
+            var queryString = data.queryString;
             $("#newsListDiv").html("");
             $("#hotNewsDiv").html("");
             $("#basicDataDiv").html("");
 
             //加载新闻概览
-            loadBasicData(keyword,newsNum);
+            loadBasicData(keyword,queryString,newsNum);
             //加载新闻列表数据
             loadNewsList(keyword,newsList);
             //加载热门新闻列表
             loadHotNews(keyword,hotNewsList);
+            //情感分析饼图
+            loadWeiboEmotion(data.positiveNum,data.negativeNum,data.neutralNum);
         }, 'json');
     }
 

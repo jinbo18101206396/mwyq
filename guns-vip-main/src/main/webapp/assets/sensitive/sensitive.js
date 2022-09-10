@@ -26,7 +26,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                     return '<div style="text-align: left"><a href="'+d.newsUrl+'" class="layui-table-link" target="_blank">'+d.newsTitle+'</a></div>';
                 }},
             {
-                field: 'sensitive', align: "center", sort: true, title: '敏感类型',minWidth: 120, templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型',minWidth: 120, templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -74,6 +74,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
                     return '<div style="text-align: left">'+d.keyWords+'</div>';
                 }},
             {field: 'websitename', align: "center", sort: true, title: '新闻来源',minWidth: 120},
+            {field: 'newsCategory', align: "center", sort: true, title: '新闻类别'},
             {field: 'newsTime', align: "center", sort: true, title: '发布时间'},
             {fixed: 'right',align: "center",toolbar: '#tableBar', title: '操作', width:150}
         ]];
@@ -86,6 +87,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
         elem: '#' + sensitive.tableId,
         url: Feng.ctxPath + '/sensitive/list',
         page: true,
+        limit:90,
         height: "full-158",
         cellMinWidth: 100,
         cols: sensitive.initColumn(),

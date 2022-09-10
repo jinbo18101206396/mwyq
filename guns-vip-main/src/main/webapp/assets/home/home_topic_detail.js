@@ -210,7 +210,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 {
                     name: '人物统计',
                     type: 'bar',
-                    barWidth: '50%',
+                    barWidth: 35,
                     data: data.personNum
                 }
             ]
@@ -251,7 +251,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 {
                     name: '地点统计',
                     type: 'bar',
-                    barWidth: '50%',
+                    barWidth: 35,
                     data: data.locationNum
                 }
             ]
@@ -292,7 +292,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 {
                     name: '组织机构统计',
                     type: 'bar',
-                    barWidth: '50%',
+                    barWidth: 35,
                     data: data.organizeNum
                 }
             ]

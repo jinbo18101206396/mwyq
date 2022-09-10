@@ -55,7 +55,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -105,7 +105,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -153,7 +153,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
@@ -201,15 +201,13 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 }
             },
             {
-                field: 'sensitive', align: "center", sort: true, title: '敏感类型', templet: function (d) {
+                field: 'sensitive', align: "center", sort: true, title: '情感类型', templet: function (d) {
                     if(d.isSensitive === 3){
                         return "<p style='color:green;font-weight: bold'>正向</p>";
                     }else if (d.isSensitive === 1) {
                         return "<p style='color:blue;font-weight: bold'>中性</p>";
                     } else if(d.isSensitive === 2){
                         return "<p style='color:red;font-weight: bold'>敏感</p>";
-                    }else{
-                        return "<p style='font-weight: bold'></p>";
                     }
                 }
             },
@@ -687,7 +685,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             calculable : true,
             series : [
                 {
-                    name: '敏感分布',
+                    name: '情感分布',
                     type: 'pie',
                     radius : '55%',
                     center: ['50%', '58%'],
@@ -1115,7 +1113,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '敏感类型',
+                        name: '情感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
@@ -1147,7 +1145,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '敏感类型',
+                        name: '情感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
@@ -1179,7 +1177,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 color:["green","blue","red"],
                 series : [
                     {
-                        name: '敏感类型',
+                        name: '情感类型',
                         type: 'pie',
                         radius: '75%',
                         center: ['50%', '50%'],
@@ -1233,7 +1231,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
                 } ],
                 series: [{
                     type: 'bar',
-                    barWidth: "70%",
+                    barWidth : 50,
                     data: data.categoryNum,
                     itemStyle: {
                         normal: {

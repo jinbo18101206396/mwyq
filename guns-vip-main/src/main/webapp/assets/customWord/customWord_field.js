@@ -75,6 +75,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
         elem: '#' + customWordField.tableId,
         url: Feng.ctxPath + '/customWord/field/list?type='+type,
         page: true,
+        limit:90,
         height: "full-158",
         cellMinWidth: 100,
         cols: customWordField.initColumn(),
