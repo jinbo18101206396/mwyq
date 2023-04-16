@@ -58,7 +58,6 @@ public class WebsiteDocQuery {
         }
         String query1 = "news_title:".concat(queryString).concat(" AND news_content:").concat(queryString);
         query.setQuery(query1);
-//        query.setQuery("\"" + queryString + "\" or " + queryString);
         query.setStart(0);
         query.setRows(500);
         query.setSort("news_time", SolrQuery.ORDER.desc);

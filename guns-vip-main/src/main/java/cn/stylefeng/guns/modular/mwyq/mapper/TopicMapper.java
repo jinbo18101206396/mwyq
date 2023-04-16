@@ -53,7 +53,7 @@ public interface TopicMapper extends BaseMapper<Topic> {
     Page<TopicResult> customPageList(@Param("page") Page page, @Param("paramCondition") TopicParam paramCondition);
 
     /**
-     * 获取分页map列表
+     * 获取分页map列表T
      *
      * @author jinbo
      * @Date 2020-07-01

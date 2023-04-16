@@ -62,7 +62,7 @@
             and generated_keywords like CONCAT('%',#{paramCondition.generatedKeywords},'%')
         </if>
         <if test="paramCondition.newsCategory != null and paramCondition.newsCategory != ''">
-            and news_category like CONCAT('%',#{paramCondition.newsCategory},'%')
+            and news_category like CONCAT('%',#{paramCondition.newsCategory},'%')sen
         </if>
         <if test="paramCondition.newsSource != null and paramCondition.newsSource != ''">
             and news_source like CONCAT('%',#{paramCondition.newsSource},'%')
