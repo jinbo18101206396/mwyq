@@ -1,7 +1,6 @@
 package cn.stylefeng.guns.modular.mwyq.controller;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
-import cn.stylefeng.guns.modular.mwyq.entity.Weibo;
 import cn.stylefeng.guns.modular.mwyq.enums.Lang;
 import cn.stylefeng.guns.modular.mwyq.enums.SentimentType;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam;
@@ -111,10 +110,10 @@ public class WeiboController extends BaseController {
             JSONObject json = new JSONObject();
             Integer num = weiboResult.getNum();
             String lang = Lang.getDescription(weiboResult.getLang());
-            if(TextUtils.isEmpty(lang)){
+            if (TextUtils.isEmpty(lang)) {
                 continue;
             }
-            json.put("value",num);
+            json.put("value", num);
             json.put("name", lang);
             jsonArray.add(json);
         }
@@ -132,17 +131,21 @@ public class WeiboController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/blogger/rank", method = RequestMethod.GET)
     public JSONObject weiboBloggerRank(WeiboParam weiboParam) {
+        String cacheKey = "blogger_rank_" + weiboParam.getLang() + "_" + weiboParam.getSentiment() + "_" + weiboParam.getAuthorName() + "_" + weiboParam.getLocation() + "_" + weiboParam.getTimeLimit();
+        JSONObject weiboBloggerRankCache = (JSONObject) localCache.getIfPresent(cacheKey);
+        if (weiboBloggerRankCache != null) {
+            return weiboBloggerRankCache;
+        }
         JSONObject bloggerRankJson = new JSONObject();
         List<WeiboResult> bloggerRankList = weiboService.bloggerRankList(weiboParam);
         List<String> authorNameList = bloggerRankList.stream().map(WeiboResult::getAuthorName).collect(Collectors.toList());
         bloggerRankJson.put("authorName", JSONArray.parseArray(JSON.toJSONString(authorNameList)));
         weiboParam.setAuthorNameList(authorNameList);
-
         JSONObject authorSentiment = weiboService.getAuthorSentiment(weiboParam);
-
-        bloggerRankJson.put("positiveCount",authorSentiment.getJSONArray("positive"));
-        bloggerRankJson.put("neuralCount",authorSentiment.getJSONArray("neural"));
-        bloggerRankJson.put("negativeCount",authorSentiment.getJSONArray("negative"));
+        bloggerRankJson.put("positiveCount", authorSentiment.getJSONArray("positive"));
+        bloggerRankJson.put("neuralCount", authorSentiment.getJSONArray("neural"));
+        bloggerRankJson.put("negativeCount", authorSentiment.getJSONArray("negative"));
+        localCache.put(cacheKey, bloggerRankJson);
         return bloggerRankJson;
     }
 
@@ -288,7 +291,7 @@ public class WeiboController extends BaseController {
         for (WeiboResult areaMap : weiboAreaMapList) {
             String location = areaMap.getLocation();
             Integer num = areaMap.getNum();
-            if(ObjectUtils.isEmpty(location)){
+            if (ObjectUtils.isEmpty(location)) {
                 continue;
             }
             JSONObject json = new JSONObject();

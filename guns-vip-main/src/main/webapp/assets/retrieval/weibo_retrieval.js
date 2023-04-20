@@ -1,42 +1,49 @@
-layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], function () {
+layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], function () {
     var $ = layui.$;
     var func = layui.func;
 
     //初始化加载数据
-    loadWeiboData("中国","author-all","cn","emotion-all","time-all");
+    loadWeiboData("中国", "", "all", "all", "month");
 
     //加载微博概览数据
-    function loadBasicData(keyword,allNum,earlyTime,latestTime){
-        $("#basicDataDiv").append("<span style=\"font-size:15px;font-weight:bold;\">关键词：</span><span style=\"font-size:15px;color: red;\">"+keyword+"</span>\n" +
-            "                        <span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">微博总数：</span><span style=\"font-size:15px;color: red;\">"+allNum+"</span>\n" +
-            "                        <span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">起始时间：</span><span style=\"font-size:15px;color: red;\">"+earlyTime+"</span>\n" +
-            "                        <span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">终止时间：</span><span style=\"font-size:15px;color: red;\">"+latestTime+"</span>\n"+
-            "                        <span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">更新时间：</span><span style=\"font-size:15px;color: red;\">"+latestTime+"</span>");
+    function loadBasicData(cnWord, minWord, weibosNum) {
+        $("#basicDataDiv").append("<span style=\"font-size:15px;font-weight:bold;\">中文关键词：</span><span style=\"font-size:15px;color: red;\">" + cnWord + "</span>\n" +
+            "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">民文关键词：</span><span style=\"font-size:15px;color: red;\">" + minWord + "</span>\n" +
+            "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">微博总数：</span><span style=\"font-size:15px;color: red;\">" + weibosNum + "</span>\n");
     }
 
     //加载微博列表数据
-    function loadWeiboList(docResList){
-        var addhtml="";
-        if(docResList != null && docResList != "undefined"){
-            for(var j=0;j<docResList.length;j++){
-                var docres = docResList[j];
-                var emotion = docres.weibo_emotion;
-                if(emotion == "positive"){
-                    emotion = "正向";
-                }else if(emotion == 'negative'){
-                    emotion = "负向";
-                }else{
-                    emotion = "中性";
+    function loadWeiboList(weiboList) {
+        var addhtml = "";
+        if (weiboList != null && weiboList != "undefined") {
+            for (var j = 0; j < weiboList.length; j++) {
+                var weibo = weiboList[j];
+                var sentiment = weibo.sentiment;
+                var content = weibo.content;
+                var authorName = weibo.author_name;
+                var url = weibo.article_url;
+                var location = weibo.location;
+                var time = weibo.create_time;
+                var likeCount = weibo.like_count;
+                var commentCount = weibo.comment_count;
+                var transmitCount = weibo.transmit_count;
+
+                if (sentiment == "3") {
+                    sentiment = "正向";
+                } else if (sentiment == '2') {
+                    sentiment = "负向";
+                } else {
+                    sentiment = "中性";
                 }
-                addhtml+="<div style=\"width: 100%;margin-bottom: 50px;text-align: left;vertical-align: middle;\">\n" +
-                    "                            <div  style=\"width: 100%;font:15px '微软雅黑';margin-bottom: 15px;\">"+docres.weibo_content+"</div>\n" +
-                    "                            <div  style=\"width: 25%;float:left;font:11px '微软雅黑';color: #00a0e9;\">"+docres.weibo_author+"</div>\n" +
-                    "                            <div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">"+emotion+"</div>\n" +
-                    "                            <div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">"+docres.weibo_time+"</div>\n" +
-                    "                            <div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">点赞量："+docres.weibo_likes+"</div>\n" +
-                    "                            <div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">评论量："+docres.weibo_comments+"</div>\n" +
-                    "                            <div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">转发量："+docres.weibo_forwards+"</div>\n" +
-                    "                        </div><hr />";
+                addhtml += "<div style=\"width: 100%;margin-bottom: 50px;text-align: left;vertical-align: middle;\">\n" +
+                    "<a href=" + url + " className=\"layui-table-link\" target=\"_blank\"><div  style=\"width: 100%;font:15px '微软雅黑';margin-bottom: 15px;\">" + content + "</div>\n" +
+                    "<div  style=\"width: 25%;float:left;font:11px '微软雅黑';color: #00a0e9;\">" + authorName + "</div>\n" +
+                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">" + sentiment + "</div>\n" +
+                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">" + time + "</div>\n" +
+                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">点赞量：" + likeCount + "</div>\n" +
+                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">评论量：" + commentCount + "</div>\n" +
+                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">转发量：" + transmitCount + "</div>\n" +
+                    "</div><hr />";
             }
         }
         $("#weiboListDiv").append(addhtml);
@@ -44,7 +51,8 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
 
     //加载倾向性分析数据
     var sensitiveChart = echarts.init(document.getElementById('senChartDiv'));
-    function loadWeiboEmotion(positive,negative,neutral) {
+
+    function loadWeiboEmotion(positive, negative, neutral) {
         var option = {
             tooltip: {
                 trigger: 'item',
@@ -58,14 +66,14 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
                 textStyle: { //图例文字的样式
                     fontSize: 17
                 },
-                data: ['正向','中性','负向']
+                data: ['正向', '中性', '负向']
             },
-            color:["green","blue","red"],
+            color: ["green", "blue", "red"],
             series: [
                 {
-                    name:'倾向性',
-                    type:'pie',
-                    radius:'80%',
+                    name: '倾向性',
+                    type: 'pie',
+                    radius: '80%',
                     center: ['55%', '55%'], //图的位置，距离左跟上的位置
                     avoidLabelOverlap: false,
                     label: {
@@ -74,20 +82,20 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
                             position: 'inside',
                             formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
 
-                            textStyle : {
-                                align : 'center',
-                                baseline : 'middle',
-                                fontFamily : '-webkit-pictograph',
+                            textStyle: {
+                                align: 'center',
+                                baseline: 'middle',
+                                fontFamily: '-webkit-pictograph',
                                 color: '#3cefe6',
-                                fontSize : 12,
-                                fontWeight : 'bolder'
+                                fontSize: 12,
+                                fontWeight: 'bolder'
                             }
                         }
                     },
-                    data:[
-                        {value:positive, name:'正向'},
-                        {value:neutral, name:'中性'},
-                        {value:negative, name:'负向'}
+                    data: [
+                        {value: positive, name: '正向'},
+                        {value: neutral, name: '中性'},
+                        {value: negative, name: '负向'}
                     ]
                 }
             ]
@@ -97,42 +105,60 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
 
     //加载热门微博数据
     function loadHotWeibo(hotWeiboList) {
-        if(hotWeiboList != null && hotWeiboList != "undefined"){
+        if (hotWeiboList != null && hotWeiboList != "undefined") {
             var hotWeiboDiv = "";
-            for(var k=0;k<hotWeiboList.length;k++){
+            for (var k = 0; k < hotWeiboList.length; k++) {
                 var hotWeibo = hotWeiboList[k];
-                var emotion = hotWeibo.weibo_emotion;
-                var time = hotWeibo.weibo_time;
-                if(emotion == "positive"){
-                    emotion = "正向";
-                }else if(emotion == 'negative'){
-                    emotion = "负向";
-                }else{
-                    emotion = "中性";
+                var sentiment = hotWeibo.sentiment;
+                var content = hotWeibo.content;
+                var authorName = hotWeibo.author_name;
+                var url = hotWeibo.article_url;
+                var location = hotWeibo.location;
+                var likeCount = hotWeibo.like_count;
+                var commentCount = hotWeibo.comment_count;
+                var transmitCount = hotWeibo.transmit_count;
+
+                if (sentiment == "3") {
+                    sentiment = "正向";
+                } else if (sentiment == '2') {
+                    sentiment = "负向";
+                } else {
+                    sentiment = "中性";
                 }
+
                 hotWeiboDiv += "<div style='margin-bottom: 50px;'>" +
-                    "<div  style=\"width: 100%;float:left;font:13px '微软雅黑';color: #61B2FC;text-align: left;margin-bottom: 10px;\">"+hotWeibo.weibo_content+"</div>\n"+
-                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">"+hotWeibo.weibo_author+"</div>"+
-                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">"+emotion+"</div>"+
-                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">点赞量："+hotWeibo.weibo_likes+"</div>"+
-                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">评论量："+hotWeibo.weibo_comments+"</div>"+
-                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">转发量："+hotWeibo.weibo_forwards+"</div>"+
+                    "<a href=" + url + " className=\"layui-table-link\" target=\"_blank\"><div  style=\"width: 100%;float:left;font:13px '微软雅黑';color: #61B2FC;text-align: left;margin-bottom: 10px;\">" + content + "</div>\n" +
+                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">" + authorName + "</div>" +
+                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">" + sentiment + "</div>" +
+                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">点赞量：" + likeCount + "</div>" +
+                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">评论量：" + commentCount + "</div>" +
+                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">转发量：" + transmitCount + "</div>" +
                     "</div> <hr />"
             }
             $("#hotWeiboDiv").append(hotWeiboDiv);
         }
     }
 
-    function loadWeiboData(keyword,blogger,scope,lang,sensitive,cycle){
-        $.get(Feng.ctxPath + '/retrieval/search/weibo?keyword=' + keyword+'&blogger='+blogger+'&scope='+scope+'&lang='+lang+'&sensitive='+sensitive+'&cycle='+cycle, function (data) {
+    function loadWeiboData(keyword, blogger, lang, sensitive, cycle) {
+        $.get(Feng.ctxPath + '/retrieval/search/weibo/es?keyword=' + keyword + '&blogger=' + blogger + '&lang=' + lang + '&sensitive=' + sensitive + '&cycle=' + cycle, function (data) {
+            console.log(data)
+            var cnWord = data.cnWord;
+            var minWord = data.minWord;
+            var weiboList = data.weiboList;
+            var hotWeiboList = data.hotWeiboList;
+            var positiveNum = data.positiveNum;
+            var negativeNum = data.negativeNum;
+            var neutralNum = data.neutralNum;
+            var weibosNum = data.weibosNum;
+
             //基本数据展示
-            loadBasicData(keyword,data.allNum,data.earlyTime,data.latestTime);
+            loadBasicData(cnWord, minWord, weibosNum);
             //微博列表展示
-            loadWeiboList(data.docResList);
+            loadWeiboList(weiboList);
             //情感分析饼图
-            loadWeiboEmotion(data.positiveNum,data.negativeNum,data.neutralNum);
+            loadWeiboEmotion(positiveNum, negativeNum, neutralNum);
             //热门微博列表
-            loadHotWeibo(data.hotWeiboList);
+            loadHotWeibo(hotWeiboList);
         }, 'json');
     }
 
@@ -140,12 +166,11 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
     $('#btnSearch').click(function () {
         var keyword = $("#weibo_key_words").val();
         var blogger = $("#blogger").val();
-        var scope = $("#weibo_scope").val();
         var lang = $("#weibo_lang").val();
         var sensitive = $("#weibo_sensitive").val();
         var cycle = $("#weibo_cycle").val();
-        if($.trim(keyword) == "" || $.trim(scope) == "" || $.trim(lang) == "" || $.trim(sensitive) == "" || $.trim(cycle) == ""){
-            alert("请输入必要的检索条件！");
+        if ($.trim(keyword) == "") {
+            alert("微博关键词不能为空！");
             return;
         }
         //清空div
@@ -153,6 +178,6 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
         $("#weiboListDiv").html("");
         $("#hotWeiboDiv").html("");
 
-        loadWeiboData(keyword,blogger,scope,lang,sensitive,cycle);
+        loadWeiboData(keyword, blogger, lang, sensitive, cycle);
     });
 });

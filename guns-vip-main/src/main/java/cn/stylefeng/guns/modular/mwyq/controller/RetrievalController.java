@@ -1,6 +1,5 @@
 package cn.stylefeng.guns.modular.mwyq.controller;
 
-import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.mwyq.entity.News;
 import cn.stylefeng.guns.modular.mwyq.entity.SolrWeiboDocResEntity;
 import cn.stylefeng.guns.modular.mwyq.model.params.NewsParam;
@@ -132,6 +131,70 @@ public class RetrievalController extends BaseController {
         return weiboSearchJson;
     }
 
+
+    /**
+     * 从ES中获取微博数据（单语、双语）
+     *
+     * @author jinbo
+     * @Date 2023/4/20
+     */
+    @RequestMapping("/search/weibo/es")
+    @ResponseBody
+    public JSONObject weiboSearchEs(WeiboRetrievalParam wrParam) {
+        String keyword = wrParam.getKeyword();
+        String blogger = wrParam.getBlogger();
+        String lang = wrParam.getLang();
+        String cycle = wrParam.getCycle();
+        String sensitive = wrParam.getSensitive();
+
+        String url = "http://10.119.130.183:9202/inquiry_weibo";
+        JSONObject params = new JSONObject();
+        params.put("key_word", keyword);
+        params.put("author_name", blogger);
+        params.put("lang", lang);
+        params.put("sensitive", sensitive);
+        params.put("time_limit", cycle);
+
+        JSONArray weiboArray = new JSONArray();
+        JSONArray hotWeiboArray = new JSONArray();
+        String cnWord = "";
+        String minWord = "";
+
+        String result = SendHttpRequest.sendEsPost(url, params);
+        if (!result.isEmpty() && !result.contains("Internal Server Error")) {
+            JSONObject jsonObject = JSON.parseObject(result);
+            weiboArray = jsonObject.getJSONArray("weibos");
+            hotWeiboArray = jsonObject.getJSONArray("hot_weibos");
+            cnWord = jsonObject.getString("cn_word");
+            minWord = jsonObject.getString("min_word");
+        }
+
+        int positiveNum = 0;
+        int negativeNum = 0;
+        int neutralNum = 0;
+        for (int i = 0; i < weiboArray.size(); i++) {
+            JSONObject newsObject = weiboArray.getJSONObject(i);
+            String sent = newsObject.getString("sentiment");
+            if ("3".equals(sent)) {
+                positiveNum += 1;
+            } else if ("2".equals(sent)) {
+                negativeNum += 1;
+            } else {
+                neutralNum += 1;
+            }
+        }
+        JSONObject weiboSearchJson = new JSONObject();
+        weiboSearchJson.put("cnWord", cnWord);
+        weiboSearchJson.put("minWord", minWord);
+        weiboSearchJson.put("weiboList", weiboArray);
+        weiboSearchJson.put("hotWeiboList", hotWeiboArray);
+        weiboSearchJson.put("positiveNum", positiveNum);
+        weiboSearchJson.put("negativeNum", negativeNum);
+        weiboSearchJson.put("neutralNum", neutralNum);
+        weiboSearchJson.put("weibosNum", weiboArray.size());
+        return weiboSearchJson;
+    }
+
     /**
      * 根据检索条件查询网页新闻(单语、双语)
      *
@@ -145,9 +208,7 @@ public class RetrievalController extends BaseController {
         String lang = webParam.getLang();
         String sensitive = webParam.getSensitive();
         String cycle = webParam.getCycle();
-
         JSONObject websiteSearchJson = new JSONObject();
-
         if (lang.contains("-")) {
             //双语检索
             biSolrDoc.biQuery(keyword, lang, sensitive, cycle, websiteSearchJson);
@@ -173,9 +234,9 @@ public class RetrievalController extends BaseController {
         String sensitive = webParam.getSensitive();
         String cycle = webParam.getCycle();
 
-        String cacheKey = "search_news_es_"+keyword+"_"+lang+"_"+sensitive+"_"+cycle;
-        JSONObject websiteEsCache = (JSONObject)localCache.getIfPresent(cacheKey);
-        if(websiteEsCache != null){
+        String cacheKey = "search_news_es_" + keyword + "_" + lang + "_" + sensitive + "_" + cycle;
+        JSONObject websiteEsCache = (JSONObject) localCache.getIfPresent(cacheKey);
+        if (websiteEsCache != null) {
             return websiteEsCache;
         }
 
@@ -224,7 +285,7 @@ public class RetrievalController extends BaseController {
         websiteJson.put("negativeNum", negativeNum);
         websiteJson.put("neutralNum", neutralNum);
 
-        localCache.put(cacheKey,websiteJson);
+//        localCache.put(cacheKey,websiteJson);
 
         return websiteJson;
     }

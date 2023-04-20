@@ -31,9 +31,9 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     //加载新闻列表数据
     function loadNewsList(keyWords, minWord, newsArray) {
         let minWords = []
-        if(minWord.includes(",")){
+        if (minWord.includes(",")) {
             minWords = minWord.split(",")
-        }else{
+        } else {
             minWords.push(minWord)
         }
         var addhtml = "";
@@ -48,18 +48,18 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
                 }
                 var newsUrl = newsObject.news_url
                 var newsTime = newsObject.news_time;
-                newsTime = newsTime.substr(0,10)
+                newsTime = newsTime.substr(0, 10)
                 var sensitive = newsObject.is_sensitive
 
-                if(sensitive=="1"){
+                if (sensitive == "1") {
                     sensitive = "<span style=\"color:blue\">中性</span>";
-                }else if(sensitive=="2"){
+                } else if (sensitive == "2") {
                     sensitive = "<span style=\"color:red\">负向</span>";
-                }else{
+                } else {
                     sensitive = "<span style=\"color:green\">正向</span>";
                 }
                 addhtml += "<div style=\"width:100%;height:4%;text-align:left;vertical-align: center;\">" +
-                    "<a href="+newsUrl+" className=\"layui-table-link\" target=\"_blank\">" +
+                    "<a href=" + newsUrl + " className=\"layui-table-link\" target=\"_blank\">" +
                     // "<a href=\"/retrieval/news/detail/page?newsId=" + newsId + "&langType=" +langType+"&newsTitle="+newsTitle+"&newsUrl="+newsUrl+"&keyWords="+keyWords+ " \">" +
                     "<div style=\"width:80%;float:left;font:40px;color: #00a0e9;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">" + newsTitle + "</div>" +
                     "<div style=\"width:10%;float:left;font:20px;\">" + sensitive + "</div>" +
@@ -133,10 +133,10 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
                 var hotNewsObject = hotNewsArray[k];
                 var title = hotNewsObject.news_title;
                 var newsTime = hotNewsObject.news_time;
-                newsTime = newsTime.substr(0,10)
+                newsTime = newsTime.substr(0, 10)
                 var newsUrl = hotNewsObject.news_url;
                 hotNewsDiv += "<div style=\"width:100%;margin-bottom:5px;text-align:left;vertical-align:middle;\">" +
-                    "<a href="+newsUrl+" className=\"layui-table-link\" target=\"_blank\">" +
+                    "<a href=" + newsUrl + " className=\"layui-table-link\" target=\"_blank\">" +
                     // "<a href=\"/retrieval/news/detail/page?newsId=" + newsId + "&keyWords=" + keyWords + "&langType=" + langType + "\">" +
                     "<div style=\"width:80%;float:left;font:20px;color:#1E90FF;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">" + title + "</div>" +
                     "<div style=\"width:20%;float:right;font:10px;\">" + newsTime + "</div>" +
@@ -165,7 +165,7 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
             //加载新闻概览
             loadBasicData(cnWord, minWord, newsNum, cycle);
             //加载新闻列表数据
-            loadNewsList(cnWord,minWord,newsArray);
+            loadNewsList(cnWord, minWord, newsArray);
             //加载热门新闻列表
             loadHotNews(cnWord, hotNewsArray);
             //情感分析饼图

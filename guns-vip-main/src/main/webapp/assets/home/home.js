@@ -555,7 +555,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
         if($(".map-table tbody tr").length>0){
             $(".map-table tbody tr").remove();
         }
-        for(var i=0; i<7; i++){
+        for(var i=0; i<8; i++){
             appendHTML = "<tr><td>"+
                 dataList[i].name+"</td><td>"+
                 dataList[i].value+"</td></tr>";

@@ -188,7 +188,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '8%',
                 height:230,
                 containLabel: true
             },
@@ -198,6 +198,15 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                     data: data.personName,
                     axisTick: {
                         alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0, // X 轴刻度标签全部显示
+                        rotate: -30, // X 轴刻度标签旋转 -30 度
+                        textStyle: {
+                            fontStyle: 'italic', // 字体倾斜
+                            align: 'center', // 文字居中显示
+                            margin: 5 // 调整 X 轴刻度标签与图表之间的距离
+                        }
                     }
                 }
             ],
@@ -210,7 +219,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 {
                     name: '人物统计',
                     type: 'bar',
-                    barWidth: 35,
+                    barWidth: 20,
                     data: data.personNum
                 }
             ]
@@ -229,7 +238,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '8%',
                 height:230,
                 containLabel: true
             },
@@ -239,6 +248,15 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                     data: data.locationName,
                     axisTick: {
                         alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0, // X 轴刻度标签全部显示
+                        rotate: -30, // X 轴刻度标签旋转 -30 度
+                        textStyle: {
+                            fontStyle: 'italic', // 字体倾斜
+                            align: 'center', // 文字居中显示
+                            margin: 5 // 调整 X 轴刻度标签与图表之间的距离
+                        }
                     }
                 }
             ],
@@ -251,7 +269,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 {
                     name: '地点统计',
                     type: 'bar',
-                    barWidth: 35,
+                    barWidth: 20,
                     data: data.locationNum
                 }
             ]
@@ -270,7 +288,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '8%',
                 height:230,
                 containLabel: true
             },
@@ -280,6 +298,15 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                     data: data.organizeName,
                     axisTick: {
                         alignWithLabel: true
+                    },
+                    axisLabel: {
+                        interval: 0, // X 轴刻度标签全部显示
+                        rotate: -30, // X 轴刻度标签旋转 -30 度
+                        textStyle: {
+                            fontStyle: 'italic', // 字体倾斜
+                            align: 'center', // 文字居中显示
+                            margin: 5 // 调整 X 轴刻度标签与图表之间的距离
+                        }
                     }
                 }
             ],
@@ -292,7 +319,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func'], function () {
                 {
                     name: '组织机构统计',
                     type: 'bar',
-                    barWidth: 35,
+                    barWidth: 20,
                     data: data.organizeNum
                 }
             ]
