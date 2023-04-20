@@ -9,7 +9,7 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     var laydate = layui.laydate;
 
     //初始化加载数据
-    loadWebsiteNews("中国", "cn-meng", '', '');
+    loadWebsiteNews("教育", "all", "all", "month");
 
     //页面返回时加载数据
     var keyWords = $("#keyWords").val();
@@ -18,31 +18,52 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     loadWebsiteNews(keyWords, langType, '', '');
 
     //加载微博概览数据
-    function loadBasicData(keyword, queryString, newsNum) {
+    function loadBasicData(keyword, queryString, newsNum, cycle) {
         $("#basicDataDiv").append(
             "<span style=\"font-size:15px;font-weight:bold;\">中文关键词：</span><span style=\"font-size:18px;color: red;\">" + keyword + "</span>" +
             "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">民文关键词：</span><span style=\"font-size:18px;color: red;\">" + queryString + "</span>\n" +
             "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">新闻总数：</span><span style=\"font-size:18px;color: red;\">" + newsNum + "</span>\n"
-            // "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">敏感类型：</span><span style=\"font-size:18px;color: red;\"></span>\n" +
-            // "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">检索周期：</span><span style=\"font-size:18px;color: red;\"></span>\n"
+            // "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">检索周期：</span><span style=\"font-size:18px;color: red;\">" + cycle + "</span>\n"
+            // "<span style=\"font-size:15px;font-weight:bold;margin-left: 40px;\">敏感类型：</span><span style=\"font-size:18px;color: red;\">全部</span>\n"
         );
     }
 
     //加载新闻列表数据
-    function loadNewsList(keyWords, newsList) {
-        var langType = $("#website_lang").val();
+    function loadNewsList(keyWords, minWord, newsArray) {
+        let minWords = []
+        if(minWord.includes(",")){
+            minWords = minWord.split(",")
+        }else{
+            minWords.push(minWord)
+        }
         var addhtml = "";
-        if (newsList != null && newsList != "undefined") {
-            for (var j = 0; j < newsList.length; j++) {
-                var news = newsList[j];
-                var content = news.newsContent;
-                var title = news.newsTitle;
-                var newsId = news.newsId;
-                var newsTime = news.newsTime;
+        if (newsArray.length > 0) {
+            for (let j = 0; j < newsArray.length; j++) {
+                var newsObject = newsArray[j];
+                var newsTitle = newsObject.news_title;
+                newsTitle = newsTitle.replace(keyWords, '<span style="color:red">' + keyWords + '</span>')
+                for (let i = 0; i < minWords.length; i++) {
+                    min = minWords[i];
+                    newsTitle = newsTitle.replace(min, '<span style="color:red">' + min + '</span>')
+                }
+                var newsUrl = newsObject.news_url
+                var newsTime = newsObject.news_time;
+                newsTime = newsTime.substr(0,10)
+                var sensitive = newsObject.is_sensitive
+
+                if(sensitive=="1"){
+                    sensitive = "<span style=\"color:blue\">中性</span>";
+                }else if(sensitive=="2"){
+                    sensitive = "<span style=\"color:red\">负向</span>";
+                }else{
+                    sensitive = "<span style=\"color:green\">正向</span>";
+                }
                 addhtml += "<div style=\"width:100%;height:4%;text-align:left;vertical-align: center;\">" +
-                    "<a href=\"/retrieval/news/detail/page?newsId=" + newsId + "&keyWords=" + keyWords + "&langType=" + langType + "\">" +
-                    "<div style=\"width:80%;float:left;font:40px;color: #00a0e9;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">" + title + "</div>" +
-                    "<div style=\"width:20%;float:left;font:20px;\">" + newsTime + "</div>" +
+                    "<a href="+newsUrl+" className=\"layui-table-link\" target=\"_blank\">" +
+                    // "<a href=\"/retrieval/news/detail/page?newsId=" + newsId + "&langType=" +langType+"&newsTitle="+newsTitle+"&newsUrl="+newsUrl+"&keyWords="+keyWords+ " \">" +
+                    "<div style=\"width:80%;float:left;font:40px;color: #00a0e9;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">" + newsTitle + "</div>" +
+                    "<div style=\"width:10%;float:left;font:20px;\">" + sensitive + "</div>" +
+                    "<div style=\"width:10%;float:left;font:20px;\">" + newsTime + "</div>" +
                     "</a>" +
                     "</div><hr/>";
             }
@@ -52,6 +73,7 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
 
     //加载倾向性分析数据
     var sensitiveChart = echarts.init(document.getElementById('senChartDiv'));
+
     function loadWeiboEmotion(positive, negative, neutral) {
         var option = {
             tooltip: {
@@ -104,53 +126,61 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     }
 
     //加载热门新闻列表
-    function loadHotNews(keyWords, hotNewsList) {
-        var langType = $("#website_lang").val();
+    function loadHotNews(keyWords, hotNewsArray) {
         var hotNewsDiv = "";
-        for (var k = 0; k < hotNewsList.length; k++) {
-            var hotNews = hotNewsList[k];
-            var title = hotNews.newsTitle;
-            var newsId = hotNews.newsId;
-            var newsTime = hotNews.newsTime;
-            hotNewsDiv += "<div style=\"width:100%;margin-bottom:5px;text-align:left;vertical-align:middle;\">" +
-                "<a href=\"/retrieval/news/detail/page?newsId=" + newsId + "&keyWords=" + keyWords + "&langType=" + langType + "\">" +
-                "<div style=\"width:70%;float:left;font:20px;color:#1E90FF;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">" + title + "</div>" +
-                "<div style=\"width:30%;float:right;font:5px;\">" + newsTime + "</div>" +
-                "</a>" +
-                "</div><hr/>";
+        if (hotNewsArray.length > 0) {
+            for (let k = 0; k < hotNewsArray.length; k++) {
+                var hotNewsObject = hotNewsArray[k];
+                var title = hotNewsObject.news_title;
+                var newsTime = hotNewsObject.news_time;
+                newsTime = newsTime.substr(0,10)
+                var newsUrl = hotNewsObject.news_url;
+                hotNewsDiv += "<div style=\"width:100%;margin-bottom:5px;text-align:left;vertical-align:middle;\">" +
+                    "<a href="+newsUrl+" className=\"layui-table-link\" target=\"_blank\">" +
+                    // "<a href=\"/retrieval/news/detail/page?newsId=" + newsId + "&keyWords=" + keyWords + "&langType=" + langType + "\">" +
+                    "<div style=\"width:80%;float:left;font:20px;color:#1E90FF;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">" + title + "</div>" +
+                    "<div style=\"width:20%;float:right;font:10px;\">" + newsTime + "</div>" +
+                    "</a>" +
+                    "</div><hr/>";
+            }
         }
         $("#hotNewsDiv").append(hotNewsDiv);
     }
 
     function loadWebsiteNews(keyword, lang, sensitive, cycle) {
-        $.get(Feng.ctxPath + '/retrieval/search/news?keyword=' + keyword + '&lang=' + lang + '&sensitive=' + sensitive + '&cycle=' + cycle, function (data) {
-            var newsList = data.newsList;
-            var hotNewsList = data.hotNewsList;
+        $.get(Feng.ctxPath + '/retrieval/search/news/es?keyword=' + keyword + '&lang=' + lang + '&sensitive=' + sensitive + '&cycle=' + cycle, function (data) {
+            var newsArray = data.newsArray;
+            var hotNewsArray = data.hotNewsArray;
             var newsNum = data.newsNum;
-            var queryString = data.queryString;
+            var cnWord = data.cnWord;
+            var minWord = data.minWord;
+            var positiveNum = data.positiveNum;
+            var negativeNum = data.negativeNum;
+            var neutralNum = data.neutralNum;
+
             $("#newsListDiv").html("");
             $("#hotNewsDiv").html("");
             $("#basicDataDiv").html("");
 
             //加载新闻概览
-            loadBasicData(keyword, queryString, newsNum);
+            loadBasicData(cnWord, minWord, newsNum, cycle);
             //加载新闻列表数据
-            loadNewsList(keyword, newsList);
+            loadNewsList(cnWord,minWord,newsArray);
             //加载热门新闻列表
-            loadHotNews(keyword, hotNewsList);
+            loadHotNews(cnWord, hotNewsArray);
             //情感分析饼图
-            loadWeiboEmotion(data.positiveNum, data.negativeNum, data.neutralNum);
+            loadWeiboEmotion(positiveNum, negativeNum, neutralNum);
         }, 'json');
     }
 
     $('#btnSearch').click(function () {
-        var keyword = $("#weibo_key_words").val();
+        var keyword = $("#key_words").val();
         var lang = $("#website_lang").val();
-        var sensitive = $("#weibo_sensitive").val();
-        var cycle = $("#weibo_cycle").val();
+        var sensitive = $("#sensitive").val();
+        var cycle = $("#website_cycle").val();
 
-        if ($.trim(keyword) == "" || $.trim(lang) == "" || $.trim(sensitive) == "" || $.trim(cycle) == "") {
-            alert("请输入必要的检索条件！");
+        if ($.trim(keyword) == "" || $.trim(lang) == "") {
+            alert("关键词和检索语言不能为空！");
             return;
         }
         loadWebsiteNews(keyword, lang, sensitive, cycle);

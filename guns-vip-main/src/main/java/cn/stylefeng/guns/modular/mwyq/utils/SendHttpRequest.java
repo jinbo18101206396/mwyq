@@ -12,46 +12,75 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author jinbo
+ */
 public class SendHttpRequest {
-    public static String sendJsonPost(String url, JSONObject params) throws UnsupportedEncodingException {
+
+    public static String sendJsonPost(String url, JSONObject params) {
         CloseableHttpClient client = HttpClients.createDefault();
-
-        StringEntity entity = new StringEntity(params.toString(), "UTF-8");
-        entity.setContentType("application/json");
-        entity.setContentEncoding("utf-8");
-
         HttpPost httpPost = new HttpPost(url);
+        StringEntity entity = new StringEntity(params.toString(), StandardCharsets.UTF_8);
+        entity.setContentEncoding("UTF-8");
+        entity.setContentType("application/json");
         httpPost.setEntity(entity);
-
-        CloseableHttpResponse response = null;
-        String res = null;
+        String responseBody = null;
         try {
-            response = client.execute(httpPost);
+            CloseableHttpResponse response = client.execute(httpPost);
             HttpEntity responseEntity = response.getEntity();
-
-            res = EntityUtils.toString(responseEntity);
-        }catch (IOException e){
+            responseBody = EntityUtils.toString(responseEntity, StandardCharsets.UTF_8);
+            response.close();
+            client.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return res;
-
+        return responseBody;
     }
-    public static void sendGet(String url,Map<String, String> paramsMap){
-        CloseableHttpClient client = HttpClients.createDefault();
 
+
+    // POST 请求Es接口
+    public static String sendEsPost(String url, JSONObject params) {
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+        StringEntity entity = new StringEntity(params.toString(), StandardCharsets.UTF_8);
+        entity.setContentEncoding("UTF-8");
+        entity.setContentType("application/json");
+        httpPost.setEntity(entity);
+
+        StringBuilder result = new StringBuilder();
+        try {
+            CloseableHttpResponse response = client.execute(httpPost);
+            HttpEntity responseEntity = response.getEntity();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(responseEntity.getContent(), StandardCharsets.UTF_8));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+
+    public static void sendGet(String url, Map<String, String> paramsMap) {
+        CloseableHttpClient client = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(url);
         List<NameValuePair> params = new ArrayList<>();
-        for (Map.Entry<String, String> entry:paramsMap.entrySet()
-             ) {
-            params.add(new BasicNameValuePair(entry.getKey(),entry.getValue()));
+        for (Map.Entry<String, String> entry : paramsMap.entrySet()
+        ) {
+            params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
         try {
             String str = EntityUtils.toString(new UrlEncodedFormEntity(params,
@@ -67,9 +96,8 @@ public class SendHttpRequest {
             System.out.println(res);
         } catch (IOException e) {
             e.printStackTrace();
-        }catch (URISyntaxException e) {
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
     }
 }

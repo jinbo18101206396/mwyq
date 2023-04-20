@@ -7,37 +7,37 @@
                     <div class="layui-form">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <input id="weibo_key_words" style="width: 500px;" class="layui-input" type="text" value="${keyWords}" placeholder="请输入新闻关键词"/>
+                                <input id="key_words" style="width: 500px;" class="layui-input" type="text" value="${keyWords}" placeholder="请输入新闻关键词"/>
                             </div>
                             <input id="keyWords" type="hidden" value="${keyWords}">
                             <input id="langType" type="hidden" value="${langType}">
                             <div class="layui-inline">
                                 <select id="website_lang" name="website_lang">
-                                    <option value="">单/跨语言检索</option>
+                                    <option value="all">单/跨语言检索</option>
+                                    <option value="all">全部</option>
                                     <option value="cn">汉语</option>
-                                    <option value="ti">藏语</option>
+                                    <option value="zang">藏语</option>
                                     <option value="meng">蒙古语</option>
-                                    <option value="uy">维吾尔语</option>
-                                    <option value="cn-zang">汉语 >> 藏语</option>
-                                    <option value="cn-meng">汉语 >> 蒙古语</option>
-                                    <option value="cn-wei">汉语 >> 维吾尔语</option>
+                                    <option value="wei">维吾尔语</option>
                                 </select>
                             </div>
                             <div class="layui-inline">
-                                <select id="weibo_sensitive">
-                                    <option value="emotion-all">敏感类型</option>
-                                    <option value="emotion-all">全部</option>
-                                    <option value="emotion-positive">正面</option>
-                                    <option value="emotion-negative">负面</option>
+                                <select id="sensitive">
+                                    <option value="all">敏感类型</option>
+                                    <option value="all">全部</option>
+                                    <option value="3">正向</option>
+                                    <option value="1">中性</option>
+                                    <option value="2">负向</option>
                                 </select>
                             </div>
                             <div class="layui-inline">
-                                <select id="weibo_cycle">
-                                    <option value="time-all">检索周期</option>
-                                    <option value="time-all">全部</option>
-                                    <option value="time-week">一周内</option>
-                                    <option value="time-month">一月内</option>
-                                    <option value="time-year">一年内</option>
+                                <select id="website_cycle">
+                                    <option value="all">检索周期</option>
+                                    <option value="all">全部</option>
+                                    <option value="week">一天内</option>
+                                    <option value="week">一周内</option>
+                                    <option value="month">一月内</option>
+                                    <option value="year">一年内</option>
                                 </select>
                             </div>
                             <div class="layui-inline">
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div class="layui-col-xs12 layui-col-md7">
+        <div class="layui-col-xs12 layui-col-md8">
             <div class="layui-card" style="">
                 <div class="layui-card-header">新闻列表</div>
                 <div class="layui-card-body" style="height: 630px;">
@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div class="layui-col-xs12 layui-col-md5">
+        <div class="layui-col-xs12 layui-col-md4">
             <div class="layui-card">
                 <div class="layui-card-header">倾向性分析</div>
                 <div class="layui-card-body" style="height: 200px;">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <div class="layui-col-xs12 layui-col-md5">
+        <div class="layui-col-xs12 layui-col-md4">
             <div class="layui-card">
                 <div class="layui-card-header">热门新闻</div>
                 <div class="layui-card-body" style="height: 353px;">
@@ -82,6 +82,7 @@
         </div>
     </div>
 </div>
+
 
 <script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js?v=${constants.getReleaseVersion()}"></script>
 <script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js?v=${constants.getReleaseVersion()}"></script>

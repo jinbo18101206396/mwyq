@@ -1,18 +1,18 @@
 package cn.stylefeng.guns.modular.mwyq.controller;
 
+import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.mwyq.entity.News;
 import cn.stylefeng.guns.modular.mwyq.entity.SolrWeiboDocResEntity;
 import cn.stylefeng.guns.modular.mwyq.model.params.NewsParam;
 import cn.stylefeng.guns.modular.mwyq.model.params.WebsiteRetrievalParam;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboRetrievalParam;
-import cn.stylefeng.guns.modular.mwyq.utils.CrossLangQE;
-import cn.stylefeng.guns.modular.mwyq.utils.TranslationUtil;
-import cn.stylefeng.guns.modular.mwyq.utils.WebsiteDocQuery;
-import cn.stylefeng.guns.modular.mwyq.utils.WeiboDocQuery;
+import cn.stylefeng.guns.modular.mwyq.utils.*;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.response.ResponseData;
 import cn.stylefeng.roses.kernel.model.response.SuccessResponseData;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -24,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RetrievalController extends BaseController {
 
-    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.DAYS).recordStats().build();
+    private static final Cache<String, Object> localCache = CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.HOURS).recordStats().build();
     private static final Logger logger = LoggerFactory.getLogger(RetrievalController.class);
     private static final WebsiteDocQuery biSolrDoc = new WebsiteDocQuery();
     private static final WebsiteDocQuery moSolrDoc = new WebsiteDocQuery();
@@ -90,11 +91,6 @@ public class RetrievalController extends BaseController {
         String scope = wrParam.getScope();
         String sensitive = wrParam.getSensitive();
 
-//        String cacheKey = "weibo_search_" + keyword + "_" + blogger + "_" + lang + "_" + cycle + "_" + scope + "_" + sensitive;
-//        JSONObject weiboSearchJsonCache = (JSONObject) localCache.getIfPresent(cacheKey);
-//        if (weiboSearchJsonCache != null) {
-//            return weiboSearchJsonCache;
-//        }
         JSONObject weiboSearchJson = new JSONObject();
         long positiveNum = 0;
         long negativeNum = 0;
@@ -133,7 +129,6 @@ public class RetrievalController extends BaseController {
 
         List<SolrWeiboDocResEntity> hotWeiboList = docQuery.queryTopTen(lang, cycle);
         weiboSearchJson.put("hotWeiboList", hotWeiboList);
-//        localCache.put(cacheKey, weiboSearchJson);
         return weiboSearchJson;
     }
 
@@ -151,12 +146,8 @@ public class RetrievalController extends BaseController {
         String sensitive = webParam.getSensitive();
         String cycle = webParam.getCycle();
 
-//        String cacheKey = "news_search_" + keyword + "_" + lang + "_" + sensitive + "_" + cycle;
-//        JSONObject websiteSearchJsonCache = (JSONObject) localCache.getIfPresent(cacheKey);
-//        if (websiteSearchJsonCache != null) {
-//            return websiteSearchJsonCache;
-//        }
         JSONObject websiteSearchJson = new JSONObject();
+
         if (lang.contains("-")) {
             //双语检索
             biSolrDoc.biQuery(keyword, lang, sensitive, cycle, websiteSearchJson);
@@ -164,9 +155,80 @@ public class RetrievalController extends BaseController {
             //单语检索
             moSolrDoc.moQuery(keyword, lang, sensitive, cycle, true, websiteSearchJson);
         }
-//        localCache.put(cacheKey, websiteSearchJson);
         return websiteSearchJson;
     }
+
+
+    /**
+     * 从ES中查询网页新闻(单语、双语)
+     *
+     * @author jinbo
+     * @Date 2023/4/18
+     */
+    @RequestMapping("/search/news/es")
+    @ResponseBody
+    public JSONObject websiteSearchEs(WebsiteRetrievalParam webParam) {
+        String keyword = webParam.getKeyword();
+        String lang = webParam.getLang();
+        String sensitive = webParam.getSensitive();
+        String cycle = webParam.getCycle();
+
+        String cacheKey = "search_news_es_"+keyword+"_"+lang+"_"+sensitive+"_"+cycle;
+        JSONObject websiteEsCache = (JSONObject)localCache.getIfPresent(cacheKey);
+        if(websiteEsCache != null){
+            return websiteEsCache;
+        }
+
+        String url = "http://10.119.130.183:9201/inquiry_by_cn";
+        JSONObject params = new JSONObject();
+        params.put("key_word", keyword);
+        params.put("lang", lang);
+        params.put("sensitive", sensitive);
+        params.put("time_limit", cycle);
+
+        JSONArray newsArray = new JSONArray();
+        JSONArray hotNewsArray = new JSONArray();
+        String cnWord = "";
+        String minWord = "";
+
+        String result = SendHttpRequest.sendEsPost(url, params);
+        if (!result.isEmpty() && !result.contains("Internal Server Error")) {
+            JSONObject jsonObject = JSON.parseObject(result);
+            newsArray = jsonObject.getJSONArray("news");
+            hotNewsArray = jsonObject.getJSONArray("hot_news");
+            cnWord = jsonObject.getString("cn_word");
+            minWord = jsonObject.getString("min_word");
+        }
+
+        int positiveNum = 0;
+        int negativeNum = 0;
+        int neutralNum = 0;
+        for (int i = 0; i < newsArray.size(); i++) {
+            JSONObject newsObject = newsArray.getJSONObject(i);
+            String sens = newsObject.getString("is_sensitive");
+            if ("3".equals(sens)) {
+                positiveNum += 1;
+            } else if ("2".equals(sens)) {
+                negativeNum += 1;
+            } else {
+                neutralNum += 1;
+            }
+        }
+        JSONObject websiteJson = new JSONObject();
+        websiteJson.put("cnWord", cnWord);
+        websiteJson.put("minWord", minWord);
+        websiteJson.put("newsArray", newsArray);
+        websiteJson.put("hotNewsArray", hotNewsArray);
+        websiteJson.put("newsNum", newsArray.size());
+        websiteJson.put("positiveNum", positiveNum);
+        websiteJson.put("negativeNum", negativeNum);
+        websiteJson.put("neutralNum", neutralNum);
+
+        localCache.put(cacheKey,websiteJson);
+
+        return websiteJson;
+    }
+
 
     /**
      * 跳转到新闻详情页（翻译页面）
@@ -180,10 +242,18 @@ public class RetrievalController extends BaseController {
         Integer newsId = newsParam.getNewsId();
         String keyWords = newsParam.getKeyWords();
         String langType = newsParam.getLangType();
+        Date newsTime = newsParam.getNewsTime();
+        String newsUrl = newsParam.getNewsUrl();
+        String newsTitle = newsParam.getNewsTitle();
+        String newsContent = newsParam.getNewsContent();
 
         model.addAttribute("newsId", newsId);
         model.addAttribute("keyWords", keyWords);
         model.addAttribute("langType", langType);
+        model.addAttribute("newsTime", newsTime);
+        model.addAttribute("newsUrl", newsUrl);
+        model.addAttribute("newsTitle", newsTitle);
+        model.addAttribute("newsContent", newsContent);
         return PREFIX + "/website_news_detail.html";
     }
 
@@ -208,6 +278,51 @@ public class RetrievalController extends BaseController {
         String newsUrl = biSolrDoc.getUrlById(newsId);
         String newsTime = biSolrDoc.getTimeById(newsId);
         String newsContent = biSolrDoc.getContentById(newsId).replace("\u1800", "\u202f").replace(queryString, "<span style=\"color:red\">" + queryString + "</span>");
+        newsContent = "<span style='font-size:20px;font-weight:bold;text-align:center;display:block;padding-bottom:5px'>" + newsTitle + "</span>" +
+                "<span style='font-size:10px;text-align:center;display:block;'>" + newsTime + "</span>" +
+                "<span style='color:blue;font-size:12px;text-align:center;display:block;'>" + newsUrl + "</span>" + newsContent;
+
+        News news = new News();
+        news.setNewsContent(newsContent);
+
+        //翻译少数语言
+        if (!langType.equals("cn")) {
+            TranslationUtil trans = new TranslationUtil();
+            String sourceTitleAndContent = newsTitle.replace("\n", "") + "\n" + newsContent;
+            String transTitleAndContent = trans.sendPost(sourceTitleAndContent, langType, "article");
+            if (ToolUtil.isNotEmpty(transTitleAndContent)) {
+                String transTitle = transTitleAndContent.split("\n")[0];
+                String transContent = transTitleAndContent.replace("\n", "\n<br>").replace("\r", "\n<br>").replace(transTitle, "");
+                transContent = "<span style='font-size:17px;font-weight:bold;text-align:center;display:block;padding-bottom:5px'>" + transTitle + "</span>" +
+                        "<span style='font-size:10px;text-align:center;display:block;'>" + newsTime + "</span>" + transContent;
+                news.setTranslateContent(transContent);
+            }
+        }
+        SuccessResponseData responseData = ResponseData.success(news);
+        return responseData;
+    }
+
+
+    /**
+     * 翻译新闻（跨语言检索模块）
+     *
+     * @author jinbo
+     * @Date 2023/4/19
+     */
+    @RequestMapping("/news/translate/es")
+    @ResponseBody
+    public ResponseData retrieveDetail(NewsParam newsParam) {
+
+        String keyWords = newsParam.getKeyWords();
+        String langType = newsParam.getLangType();
+        Date newsTime = newsParam.getNewsTime();
+        String newsUrl = newsParam.getNewsUrl();
+        String newsTitle = newsParam.getNewsTitle();
+        String newsContent = newsParam.getNewsContent();
+
+        String queryString = CrossLangQE.getMnFromZhInCrossVali(keyWords, 2);
+        newsTitle = newsTitle.replace(queryString, "<span style=\"color:red\">" + queryString + "</span>");
+        newsContent = newsContent.replace("\u1800", "\u202f").replace(queryString, "<span style=\"color:red\">" + queryString + "</span>");
         newsContent = "<span style='font-size:20px;font-weight:bold;text-align:center;display:block;padding-bottom:5px'>" + newsTitle + "</span>" +
                 "<span style='font-size:10px;text-align:center;display:block;'>" + newsTime + "</span>" +
                 "<span style='color:blue;font-size:12px;text-align:center;display:block;'>" + newsUrl + "</span>" + newsContent;
