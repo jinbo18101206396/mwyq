@@ -40,11 +40,11 @@ public class TranslateController extends BaseController {
         TranslationUtil trans = new TranslationUtil();
         if(!StringUtils.isEmpty(sourceLang) && !StringUtils.isEmpty(sourceContent) && !StringUtils.isEmpty(targetLang) && !StringUtils.isEmpty(transModel)){
             sourceContent = trans.processContent(sourceContent,sourceLang);
-            if("nmt".equals(transModel)){
+            if("opennmt".equals(transModel)){
                 targetContent = trans.sendPost(sourceContent, sourceLang,"paragraph");
                 targetContent = targetContent.replace("\n", "\n<br>").replace("\r","\n<br>");
-            }else if("smt".equals(transModel)){
-
+            }else if("multinmt".equals(transModel)){
+                targetContent = trans.sendMultiPost(sourceContent,sourceLang,targetLang);
             }
             targetContent.replace(" ","");
         }

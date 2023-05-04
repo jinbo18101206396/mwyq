@@ -13,37 +13,54 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     }
 
     //加载微博列表数据
-    function loadWeiboList(weiboList) {
+    function loadWeiboList(weiboList,cnWord,minWord) {
+        let minWords = []
+        if (minWord.includes(",")) {
+            minWords = minWord.split(",")
+        } else {
+            minWords.push(minWord)
+        }
         var addhtml = "";
         if (weiboList != null && weiboList != "undefined") {
             for (var j = 0; j < weiboList.length; j++) {
                 var weibo = weiboList[j];
                 var sentiment = weibo.sentiment;
                 var content = weibo.content;
+                content = content.replace(cnWord, '<span style="color:red">' + cnWord + '</span>')
+                for (let i = 0; i < minWords.length; i++) {
+                    min = minWords[i];
+                    content = content.replace(min, '<span style="color:red">' + min + '</span>')
+                }
                 var authorName = weibo.author_name;
                 var url = weibo.article_url;
                 var location = weibo.location;
+                if(location == "" || location == null){
+                    location = "未知";
+                }
                 var time = weibo.create_time;
+                time = time.substr(0, 10)
                 var likeCount = weibo.like_count;
                 var commentCount = weibo.comment_count;
                 var transmitCount = weibo.transmit_count;
 
                 if (sentiment == "3") {
-                    sentiment = "正向";
+                    sentiment = "<span style=\"color:green\">正向</span>";
                 } else if (sentiment == '2') {
-                    sentiment = "负向";
+                    sentiment = "<span style=\"color:red\">负向</span>";
                 } else {
-                    sentiment = "中性";
+                    sentiment = "<span style=\"color:green\">中性</span>";
                 }
-                addhtml += "<div style=\"width: 100%;margin-bottom: 50px;text-align: left;vertical-align: middle;\">\n" +
-                    "<a href=" + url + " className=\"layui-table-link\" target=\"_blank\"><div  style=\"width: 100%;font:15px '微软雅黑';margin-bottom: 15px;\">" + content + "</div>\n" +
-                    "<div  style=\"width: 25%;float:left;font:11px '微软雅黑';color: #00a0e9;\">" + authorName + "</div>\n" +
-                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">" + sentiment + "</div>\n" +
-                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">" + time + "</div>\n" +
-                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">点赞量：" + likeCount + "</div>\n" +
-                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">评论量：" + commentCount + "</div>\n" +
-                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';color: #00a0e9;\">转发量：" + transmitCount + "</div>\n" +
-                    "</div><hr />";
+
+                addhtml += "<div style='width: 100%;margin-bottom: 60px;text-align: left;vertical-align: middle;'>" +
+                    "<a href=" + url + " className=\"layui-table-link\" target=\"_blank\"><div  style=\"width: 100%;float:left;font:13px '微软雅黑';color: #61B2FC;text-align: left;margin-bottom: 20px;\">" + content + "</div>\n" +
+                    "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">" + authorName + "</div>" +
+                    "<div  style=\"width: 10%;float:left;font:12px '微软雅黑';text-align: center;\">" + location + "</div>" +
+                    "<div  style=\"width: 10%;float:left;font:12px '微软雅黑';text-align: center;\">" + sentiment + "</div>" +
+                    "<div  style=\"width: 15%;float:left;font:11px '微软雅黑';text-align: center;\">" + time + "</div>\n" +
+                    "<div  style=\"width: 15%;float:left;font:12px '微软雅黑';text-align: center;\">点赞量：" + likeCount + "</div>" +
+                    "<div  style=\"width: 15%;float:left;font:12px '微软雅黑';text-align: center;\">评论量：" + commentCount + "</div>" +
+                    "<div  style=\"width: 15%;float:left;font:12px '微软雅黑';text-align: center;\">转发量：" + transmitCount + "</div>" +
+                    "</div> <hr />"
             }
         }
         $("#weiboListDiv").append(addhtml);
@@ -154,7 +171,7 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
             //基本数据展示
             loadBasicData(cnWord, minWord, weibosNum);
             //微博列表展示
-            loadWeiboList(weiboList);
+            loadWeiboList(weiboList,cnWord,minWord);
             //情感分析饼图
             loadWeiboEmotion(positiveNum, negativeNum, neutralNum);
             //热门微博列表

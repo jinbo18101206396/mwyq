@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
-
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,20 +17,40 @@ public class TranslationUtil {
     public static String WEI_URL = "http://10.119.130.188:5000/translator/translate_uy2zh_";
     public static String MENG_URL = "http://10.119.130.188:5000/translator/translate_mn2zh_";
     public static String WEIBO_URL = "http://10.119.130.188:5000/translator/translate_ti2zh_";
+    public static String MULTI_TRANSLATE_URL = "http://10.119.130.187:8517/multi_translate";
 
     private static Logger logger = LoggerFactory.getLogger(TranslationUtil.class);
 
     public static void main(String []args){
         TranslationUtil t = new TranslationUtil();
-        String s = t.sendPost("མཚེས་21ཉིན། རྒྱལ་སྲིད་སྤྱི་ཁྱབ་ཁང་གསར་འགྱུར་གཞུང་དོན་ཁང་གིས《བོད་ཞི་བས་བཅིངས་འགྲོལ་དང་དར་རྒྱས་གོང་འཕེལ》གྱི་རྒྱབ་ཤ་དཀར་པོའི་དེབ་བཏོན་ནས་རྒྱལ་ཁབ་ཀྱིས་བྱེད་ཕྱོགས་སྲིད་ཇུས་རབ་དང་རིམ་པ་བཟོས་པ་དང་། ཕྱོགས་ཡོངས་ནས་མི་རིགས་ས་ཁོངས་རང་སྐྱོང་ལམ་ལུགས་དོན་འཁྱོལ་བྱས་ཏེ་རྒྱུན་གཏན་གྱི་ཆོས་ལུགས་བྱེད་སྒོར་ཁྲིམས་ལྟར་སྲུང་སྐྱོང་བྱས་ནས་མི་རིགས་ཁག་ཐུན་མོང་ཐོག་མཐུན་སྒྲིལ་འབད་འཐབ་དང་ཐུན་མོང་ཐོག་དར་རྒྱས་གོང་འཕེལ་ཡོང་བར་སྐུལ་འདེད་བཏང་ཡོད་ཅེས་ངོ་སྤྲོད་བྱས་པ་རེད།","http://10.119.130.188:5000/translator/translate_ti2zh_article");
-        //String s = t.sendPost("ى جىنپىڭ يەر شارىۋى ساغلاملىق باشلىقلار يىغىنىغا قاتناشتى ھەم م..","http://10.119.130.188:5000/translator/translate_uy2zh_article");
-        //String s = t.sendPost( "\uE2CE\uE26C\uE30B\uE291\uE2B5 \uE2E4\uE289\uE289\uE2F9 \uE289\uE2B5 \uE2CE\uE26C\uE301\uE27E\uE2FA\uE2E9\uE26A \uE30F\uE289\uE30B\uE289\uE325\uE26A \uE267\uE317\uE268 48 \uE2A2\uE2DD\uE2AC\uE2EF\uE301\uE276\uE2B5 ","http://10.119.130.188:5000/translator/translate_mn2zh_article");
-        //String s = t.sendPost("བོད་ཡིག","http://10.119.130.188:5000/translator/translate");
+        // String s = t.sendPost("མཚེས་21ཉིན། རྒྱལ་སྲིད་སྤྱི་ཁྱབ་ཁང་གསར་འགྱུར་གཞུང་དོན་ཁང་གིས《བོད་ཞི་བས་བཅིངས་འགྲོལ་དང་དར་རྒྱས་གོང་འཕེལ》གྱི་རྒྱབ་ཤ་དཀར་པོའི་དེབ་བཏོན་ནས་རྒྱལ་ཁབ་ཀྱིས་བྱེད་ཕྱོགས་སྲིད་ཇུས་རབ་དང་རིམ་པ་བཟོས་པ་དང་། ཕྱོགས་ཡོངས་ནས་མི་རིགས་ས་ཁོངས་རང་སྐྱོང་ལམ་ལུགས་དོན་འཁྱོལ་བྱས་ཏེ་རྒྱུན་གཏན་གྱི་ཆོས་ལུགས་བྱེད་སྒོར་ཁྲིམས་ལྟར་སྲུང་སྐྱོང་བྱས་ནས་མི་རིགས་ཁག་ཐུན་མོང་ཐོག་མཐུན་སྒྲིལ་འབད་འཐབ་དང་ཐུན་མོང་ཐོག་དར་རྒྱས་གོང་འཕེལ་ཡོང་བར་སྐུལ་འདེད་བཏང་ཡོད་ཅེས་ངོ་སྤྲོད་བྱས་པ་རེད།","http://10.119.130.188:5000/translator/translate_ti2zh_article");
+        // String s = t.sendPost("ى جىنپىڭ يەر شارىۋى ساغلاملىق باشلىقلار يىغىنىغا قاتناشتى ھەم م..","http://10.119.130.188:5000/translator/translate_uy2zh_article");
+        // String s = t.sendPost( "\uE2CE\uE26C\uE30B\uE291\uE2B5 \uE2E4\uE289\uE289\uE2F9 \uE289\uE2B5 \uE2CE\uE26C\uE301\uE27E\uE2FA\uE2E9\uE26A \uE30F\uE289\uE30B\uE289\uE325\uE26A \uE267\uE317\uE268 48 \uE2A2\uE2DD\uE2AC\uE2EF\uE301\uE276\uE2B5 ","http://10.119.130.188:5000/translator/translate_mn2zh_article");
+        // String s = t.sendPost("བོད་ཡིག","http://10.119.130.188:5000/translator/translate");
+
+        String s = t.sendMultiPost("མཚེས་21ཉིན། རྒྱལ་སྲིད་སྤྱི་ཁྱབ་ཁང་གསར་འགྱུར་གཞུ", "zang", "ch");
         System.out.println(s);
     }
-    
 
-    //type表示翻译类型(article/paragraph),
+    /**
+     * 请求多语言翻译接口
+     *
+     * */
+    public String sendMultiPost(String content, String srcLang, String tgtLang) {
+        JSONObject params = new JSONObject();
+        params.put("src_lang", srcLang);
+        if("cn".equals(tgtLang)){
+            tgtLang = "ch";
+        }
+        params.put("tgt_lang", tgtLang);
+        params.put("src_content", content);
+        return SendHttpRequest.sendJsonPost(MULTI_TRANSLATE_URL, params);
+    }
+
+    /**
+     * type表示翻译类型(article/paragraph)
+     *
+     * */
     public String sendPost(String content, String lang, String type) {
         String url = null;
 

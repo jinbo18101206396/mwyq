@@ -49,6 +49,12 @@ public class SendHttpRequest {
     }
 
 
+    // POST 请求多语言翻译接口
+    public static String sendTranslatePost(String url, JSONObject params) {
+        return SendHttpRequest.sendEsPost(url,params);
+    }
+
+
     // POST 请求Es接口
     public static String sendEsPost(String url, JSONObject params) {
         CloseableHttpClient client = HttpClients.createDefault();

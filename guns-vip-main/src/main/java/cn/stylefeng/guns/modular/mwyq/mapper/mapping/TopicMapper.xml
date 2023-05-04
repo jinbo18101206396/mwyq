@@ -134,7 +134,7 @@
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TopicResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TopicParam">
         select
         <include refid="Base_Column_List"/>
-        from topic t1 where 1=1 and t1.topic_name is not null and t1.producedtime > DATE_SUB(CURDATE(), INTERVAL 1 MONTH )
+        from topic t1 where 1=1 and t1.topic_name is not null and t1.producedtime > DATE_SUB(CURDATE(), INTERVAL 2 MONTH )
         <if test="paramCondition.topwords != null and paramCondition.topwords != ''">
             and t1.topwords like CONCAT('%',#{paramCondition.topwords},'%')
         </if>
