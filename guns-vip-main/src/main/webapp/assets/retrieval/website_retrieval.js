@@ -9,13 +9,13 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     var laydate = layui.laydate;
 
     //初始化加载数据
-    loadWebsiteNews("教育", "all", "all", "month");
+    loadWebsiteNews("教育", "cn", "all", "all", "month");
 
     //页面返回时加载数据
     var keyWords = $("#keyWords").val();
-    var langType = $("#langType").val();
-    $("#website_lang").find("option[value='" + langType + "']").prop("selected", true);
-    loadWebsiteNews(keyWords, langType, '', '');
+    var tgtLang = $("#tgtLang").val();
+    $("#website_tgt_lang").find("option[value='" + tgtLang + "']").prop("selected", true);
+    loadWebsiteNews(keyWords, "cn", tgtLang, '', '');
 
     //加载微博概览数据
     function loadBasicData(keyword, queryString, newsNum, cycle) {
@@ -147,8 +147,8 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
         $("#hotNewsDiv").append(hotNewsDiv);
     }
 
-    function loadWebsiteNews(keyword, lang, sensitive, cycle) {
-        $.get(Feng.ctxPath + '/retrieval/search/news/es?keyword=' + keyword + '&lang=' + lang + '&sensitive=' + sensitive + '&cycle=' + cycle, function (data) {
+    function loadWebsiteNews(keyword, srclang, tgtlang, sensitive, cycle) {
+        $.get(Feng.ctxPath + '/retrieval/search/news/es?keyword=' + keyword + '&srclang=' + srclang + '&tgtlang=' + tgtlang + '&sensitive=' + sensitive + '&cycle=' + cycle, function (data) {
             var newsArray = data.newsArray;
             var hotNewsArray = data.hotNewsArray;
             var newsNum = data.newsNum;
@@ -175,14 +175,15 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
 
     $('#btnSearch').click(function () {
         var keyword = $("#key_words").val();
-        var lang = $("#website_lang").val();
+        var srclang = $("#website_src_lang").val();
+        var tgtlang = $("#website_tgt_lang").val();
         var sensitive = $("#sensitive").val();
         var cycle = $("#website_cycle").val();
 
-        if ($.trim(keyword) == "" || $.trim(lang) == "") {
-            alert("关键词和检索语言不能为空！");
+        if ($.trim(keyword) == "") {
+            alert("关键词不能为空！");
             return;
         }
-        loadWebsiteNews(keyword, lang, sensitive, cycle);
+        loadWebsiteNews(keyword, srclang, tgtlang, sensitive, cycle);
     });
 });

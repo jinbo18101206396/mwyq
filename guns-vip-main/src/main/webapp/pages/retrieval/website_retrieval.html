@@ -7,14 +7,23 @@
                     <div class="layui-form">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <input id="key_words" style="width: 500px;" class="layui-input" type="text" value="${keyWords}" placeholder="请输入新闻关键词"/>
+                                <input id="key_words" style="width: 200px;" class="layui-input" type="text" value="${keyWords}" placeholder="请输入新闻关键词"/>
                             </div>
                             <input id="keyWords" type="hidden" value="${keyWords}">
-                            <input id="langType" type="hidden" value="${langType}">
+                            <input id="srcLang" type="hidden" value="${srcLang}">
+                            <input id="tgtLang" type="hidden" value="${tgtLang}">
                             <div class="layui-inline">
-                                <select id="website_lang" name="website_lang">
-                                    <option value="all">单/跨语言检索</option>
-                                    <option value="all">全部</option>
+                                <select id="website_src_lang" name="website_src_lang">
+                                    <option value="cn">源语言</option>
+                                    <option value="cn">汉语</option>
+                                    <option value="zang">藏语</option>
+                                    <option value="meng">蒙古语</option>
+                                    <option value="wei">维吾尔语</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="website_tgt_lang" name="website_tgt_lang">
+                                    <option value="all">目标语言</option>
                                     <option value="cn">汉语</option>
                                     <option value="zang">藏语</option>
                                     <option value="meng">蒙古语</option>

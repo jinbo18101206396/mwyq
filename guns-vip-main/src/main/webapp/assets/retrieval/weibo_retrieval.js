@@ -3,7 +3,7 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     var func = layui.func;
 
     //初始化加载数据
-    loadWeiboData("中国", "", "all", "all", "month");
+    loadWeiboData("中国", "", "cn","all", "all", "month");
 
     //加载微博概览数据
     function loadBasicData(cnWord, minWord, weibosNum) {
@@ -156,8 +156,8 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
         }
     }
 
-    function loadWeiboData(keyword, blogger, lang, sensitive, cycle) {
-        $.get(Feng.ctxPath + '/retrieval/search/weibo/es?keyword=' + keyword + '&blogger=' + blogger + '&lang=' + lang + '&sensitive=' + sensitive + '&cycle=' + cycle, function (data) {
+    function loadWeiboData(keyword, blogger, srclang,tgtlang, sensitive, cycle) {
+        $.get(Feng.ctxPath + '/retrieval/search/weibo/es?keyword=' + keyword + '&blogger=' + blogger + '&srclang=' + srclang + '&tgtlang=' + tgtlang+ '&sensitive=' + sensitive + '&cycle=' + cycle, function (data) {
             console.log(data)
             var cnWord = data.cnWord;
             var minWord = data.minWord;
@@ -183,7 +183,8 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
     $('#btnSearch').click(function () {
         var keyword = $("#weibo_key_words").val();
         var blogger = $("#blogger").val();
-        var lang = $("#weibo_lang").val();
+        var srclang = $("#weibo_src_lang").val();
+        var tgtlang = $("#weibo_tgt_lang").val();
         var sensitive = $("#weibo_sensitive").val();
         var cycle = $("#weibo_cycle").val();
         if ($.trim(keyword) == "") {
@@ -195,6 +196,6 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
         $("#weiboListDiv").html("");
         $("#hotWeiboDiv").html("");
 
-        loadWeiboData(keyword, blogger, lang, sensitive, cycle);
+        loadWeiboData(keyword, blogger, srclang,tgtlang, sensitive, cycle);
     });
 });

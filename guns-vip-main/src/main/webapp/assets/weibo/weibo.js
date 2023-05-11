@@ -105,12 +105,13 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
     });
 
     //加载微博数据
-    function loadWeiboData(lang,sentiment,timeLimit,authorName,location) {
+    function loadWeiboData(lang,sentiment,timeLimit,authorName,keyword,location) {
         var queryData = {};
         queryData['lang'] = lang;
         queryData['sentiment'] = sentiment;
         queryData['timeLimit'] = timeLimit;
         queryData['authorName'] = authorName;
+        queryData['keyword'] = keyword;
         queryData['location'] = location;
         table.reload(Weibo.tableId, {
             where: queryData, page: {curr: 1}
@@ -194,8 +195,8 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
 
     //加载微博情感分布数据
     var sentimentCharts = echarts.init(document.getElementById('weiboSentiment'), myEchartsTheme);
-    function loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,location){
-        $.get(Feng.ctxPath + '/weibo/sentiment/type?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+    function loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,keyword,location){
+        $.get(Feng.ctxPath + '/weibo/sentiment/type?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&keyword='+keyword+'&location='+location, function (data) {
             sentimentCharts.setOption({
                 title : {
                     text: '',
@@ -426,7 +427,7 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
     //初始化加载情感走势数据
     loadWeiboTrendData('','','','','');
     //初始化加载情感分析数据
-    loadWeiboSentimentData('','','','','');
+    loadWeiboSentimentData('','','','','','');
     //初始化博主排行数据
     loadBloggerRankData('','','','','');
     //初始博主地域分布数据
@@ -440,10 +441,11 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
         var sentiment = $("#sentiment").val();
         var timeLimit = $("#timeLimit").val();
         var authorName = $("#authorName").val();
+        var keyword = $("#keyword").val();
         var location = $("#location").val();
 
-        loadWeiboData(lang,sentiment,timeLimit,authorName,location);
-        loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,location);
+        loadWeiboData(lang,sentiment,timeLimit,authorName,keyword,location);
+        loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,keyword,location);
         loadWeiboTrendData(lang,sentiment,timeLimit,authorName,location);
         loadBloggerRankData(lang,sentiment,timeLimit,authorName,location);
         loadAreaMapData(lang,sentiment,timeLimit,authorName,location);

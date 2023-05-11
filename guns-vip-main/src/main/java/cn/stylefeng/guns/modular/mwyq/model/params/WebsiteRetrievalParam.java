@@ -12,6 +12,8 @@ public class WebsiteRetrievalParam implements Serializable, BaseValidatingParam 
 
     private String keyword;
     private String lang;
+    private String srclang;
+    private String tgtlang;
     private String sensitive;
     private String cycle;
     private String type;

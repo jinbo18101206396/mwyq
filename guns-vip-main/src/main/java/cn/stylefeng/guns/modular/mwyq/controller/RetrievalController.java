@@ -69,7 +69,8 @@ public class RetrievalController extends BaseController {
         String langType = newsParam.getLangType();
 
         model.addAttribute("keyWords", keyWords);
-        model.addAttribute("langType", langType);
+        model.addAttribute("srcLang", langType);
+        model.addAttribute("tgtLang", langType);
 
         return PREFIX + "/website_retrieval.html";
     }
@@ -143,7 +144,8 @@ public class RetrievalController extends BaseController {
     public JSONObject weiboSearchEs(WeiboRetrievalParam wrParam) {
         String keyword = wrParam.getKeyword();
         String blogger = wrParam.getBlogger();
-        String lang = wrParam.getLang();
+        String srclang = wrParam.getSrclang();
+        String tgtlang = wrParam.getTgtlang();
         String cycle = wrParam.getCycle();
         String sensitive = wrParam.getSensitive();
 
@@ -151,7 +153,8 @@ public class RetrievalController extends BaseController {
         JSONObject params = new JSONObject();
         params.put("key_word", keyword);
         params.put("author_name", blogger);
-        params.put("lang", lang);
+        params.put("src_lang", srclang);
+        params.put("tgt_lang", tgtlang);
         params.put("sensitive", sensitive);
         params.put("time_limit", cycle);
 
@@ -230,20 +233,21 @@ public class RetrievalController extends BaseController {
     @ResponseBody
     public JSONObject websiteSearchEs(WebsiteRetrievalParam webParam) {
         String keyword = webParam.getKeyword();
-        String lang = webParam.getLang();
+        String srclang = webParam.getSrclang();
+        String tgtlang = webParam.getTgtlang();
         String sensitive = webParam.getSensitive();
         String cycle = webParam.getCycle();
 
-        String cacheKey = "search_news_es_" + keyword + "_" + lang + "_" + sensitive + "_" + cycle;
+        String cacheKey = "search_news_es_" + keyword + "_" + srclang + "_" + tgtlang+"_"+sensitive + "_" + cycle;
         JSONObject websiteEsCache = (JSONObject) localCache.getIfPresent(cacheKey);
         if (websiteEsCache != null) {
             return websiteEsCache;
         }
-
         String url = "http://10.119.130.183:9201/inquiry_by_cn";
         JSONObject params = new JSONObject();
         params.put("key_word", keyword);
-        params.put("lang", lang);
+        params.put("src_lang", srclang);
+        params.put("tgt_lang", tgtlang);
         params.put("sensitive", sensitive);
         params.put("time_limit", cycle);
 

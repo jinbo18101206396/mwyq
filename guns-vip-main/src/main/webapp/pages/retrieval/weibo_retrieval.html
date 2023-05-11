@@ -7,16 +7,24 @@
                     <div class="layui-form">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <input class="layui-input" id="weibo_key_words" placeholder="请输入微博关键词" style="width: 250px;"
+                                <input class="layui-input" id="weibo_key_words" placeholder="请输入微博关键词" style="width: 200px;"
                                        type="text" value="中国"/>
                             </div>
                             <div class="layui-inline">
-                                <input class="layui-input" id="blogger" placeholder="请输入博主" type="text"/>
+                                <input class="layui-input" id="blogger" placeholder="请输入博主" style="width: 150px;" type="text"/>
                             </div>
                             <div class="layui-inline">
-                                <select id="weibo_lang">
-                                    <option value="all">单/跨语言检索</option>
-                                    <option value="all">全部</option>
+                                <select id="weibo_src_lang">
+                                    <option value="cn">源语言</option>
+                                    <option value="cn">汉语</option>
+                                    <option value="zang">藏语</option>
+                                    <option value="meng">蒙古语</option>
+                                    <option value="wei">维吾尔语</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="weibo_tgt_lang">
+                                    <option value="all">目标语言</option>
                                     <option value="cn">汉语</option>
                                     <option value="zang">藏语</option>
                                     <option value="meng">蒙古语</option>
@@ -26,7 +34,6 @@
                             <div class="layui-inline">
                                 <select id="weibo_sensitive">
                                     <option value="all">情感类型</option>
-                                    <option value="all">全部</option>
                                     <option value="3">正面</option>
                                     <option value="1">中性</option>
                                     <option value="2">负面</option>
@@ -35,7 +42,6 @@
                             <div class="layui-inline">
                                 <select id="weibo_cycle">
                                     <option value="all">检索周期</option>
-                                    <option value="all">全部</option>
                                     <option value="week">一周内</option>
                                     <option value="month">一月内</option>
                                     <option value="year">一年内</option>

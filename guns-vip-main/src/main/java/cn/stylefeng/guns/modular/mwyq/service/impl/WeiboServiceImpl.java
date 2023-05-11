@@ -59,7 +59,13 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
 
     @Override
     public List<WeiboResult> findListBySpec(WeiboParam param) {
-        return null;
+        String timeLimit = param.getTimeLimit();
+        if (ToolUtil.isNotEmpty(timeLimit)) {
+            String[] split = timeLimit.split("至");
+            param.setBeginTime(split[0]);
+            param.setEndTime(split[1]);
+        }
+        return this.baseMapper.customList(param);
     }
 
     @Override

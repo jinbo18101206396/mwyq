@@ -25,6 +25,8 @@ public class WeiboRetrievalParam implements Serializable, BaseValidatingParam {
     private String blogger;
     private String scope;
     private String lang;
+    private String srclang;
+    private String tgtlang;
     private String sensitive;
     private String cycle;
 

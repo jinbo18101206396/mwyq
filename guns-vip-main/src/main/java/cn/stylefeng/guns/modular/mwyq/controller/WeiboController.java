@@ -27,7 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -68,7 +71,22 @@ public class WeiboController extends BaseController {
     @ResponseBody
     @RequestMapping("/list")
     public LayuiPageInfo list(WeiboParam weiboParam) {
+
+//        String keyword = weiboParam.getKeyword();
         LayuiPageInfo weiboPage = this.weiboService.findPageBySpec(weiboParam);
+//        if(keyword == null){
+//            return weiboPage;
+//        }
+//        List<WeiboResult> weiboList = new ArrayList();
+//        List<WeiboResult> weiboResults = weiboPage.getData();
+//        for(WeiboResult weibo:weiboResults){
+//            String content = weibo.getContent();
+//            if(content.contains(keyword)){
+//                weiboList.add(weibo);
+//            }
+//        }
+//        weiboPage.setData(weiboList);
+//        weiboPage.setCount(weiboList.size());
         return weiboPage;
     }
 
@@ -88,6 +106,64 @@ public class WeiboController extends BaseController {
             JSONObject json = new JSONObject();
             json.put("value", weiboSource.getNum());
             json.put("name", SentimentType.getDescription(weiboSource.getSentiment()));
+            jsonArray.add(json);
+        }
+        sentimentTypeJson.put("sentimentTypeData", jsonArray);
+        return sentimentTypeJson;
+    }
+
+    /**
+     * 微博情感分析图(带关键词)
+     *
+     * @param weiboParam
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sentiment/type/keyword", method = RequestMethod.GET)
+    public JSONObject weiboSentimentByKeyword(WeiboParam weiboParam) {
+
+        LayuiPageInfo weiboPage = this.weiboService.findPageBySpec(weiboParam);
+        List<WeiboResult> weiboResults = weiboPage.getData();
+
+        List<WeiboResult> weiboList = new ArrayList();
+        String keyword = weiboParam.getKeyword();
+        if(!"".equals(keyword)){
+            for(WeiboResult weiboResult:weiboResults){
+                String content = weiboResult.getContent();
+                if(content.contains(keyword)){
+                    weiboList.add(weiboResult);
+                }
+            }
+        }else{
+            weiboList.addAll(weiboResults);
+        }
+
+        Map<Integer,Integer> countMap = new HashMap();
+
+        int positive = 0;
+        int neural = 0;
+        int negative = 0;
+
+        for(WeiboResult weibo : weiboList){
+            Integer sentiment = weibo.getSentiment();
+            if(sentiment == 1){
+                neural += 1;
+            }else if(sentiment == 2){
+                negative += 1;
+            }else if(sentiment == 3){
+                positive += 1;
+            }
+        }
+        countMap.put(1,neural);
+        countMap.put(2,negative);
+        countMap.put(3,positive);
+
+        JSONObject sentimentTypeJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        for(Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+            JSONObject json = new JSONObject();
+            json.put("value", entry.getValue());
+            json.put("name", SentimentType.getDescription(entry.getKey()));
             jsonArray.add(json);
         }
         sentimentTypeJson.put("sentimentTypeData", jsonArray);

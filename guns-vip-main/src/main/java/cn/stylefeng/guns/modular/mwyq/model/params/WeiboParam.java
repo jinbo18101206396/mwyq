@@ -41,6 +41,11 @@ public class WeiboParam implements Serializable, BaseValidatingParam {
     private String content;
 
     /**
+     * 关键词
+     */
+    private String keyword;
+
+    /**
      * 博文地址
      */
     private String articleUrl;

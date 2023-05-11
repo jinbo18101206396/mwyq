@@ -1,0 +1,130 @@
+@layout("/common/_container.html",{js:["/assets/report/report.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">首页</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md12">
+            <div class="layui-card" style="">
+                <div class="layui-card-header"></div>
+                <div class="layui-card-body" style="height: 420px;">
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-col-xs11 layui-col-sm11 layui-col-md11">
+                                <label class="layui-form-label">报告主题</label>
+                                <div class="layui-input-block">
+                                    <input class="layui-input" placeholder="请输入舆情报告的主题关键词">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-col-xs11 layui-col-sm11 layui-col-md11">
+                                <label class="layui-form-label">报告类型</label>
+                                <div class="layui-input-block">
+                                    <select lay-verify="required" name="report_type">
+                                        <option value="">请选择报告类型</option>
+                                        <option value="0">日报</option>
+                                        <option value="1">周报</option>
+                                        <option value="2">月报</option>
+                                        <option value="3">季报</option>
+                                        <option value="4">年报</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-col-xs11 layui-col-sm11 layui-col-md11">
+                                <label class="layui-form-label">语言类型</label>
+                                <div class="layui-input-block">
+                                    <select lay-verify="required" name="lang_type">
+                                        <option value="">请选择语言类型</option>
+                                        <option value="0">中文</option>
+                                        <option value="1">藏文</option>
+                                        <option value="2">蒙古文</option>
+                                        <option value="3">外蒙古文</option>
+                                        <option value="4">维吾尔文</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-col-xs5 layui-col-sm5 layui-col-md5">
+                                <label class="layui-form-label">内容来源</label>
+                                <div class="layui-input-block">
+                                    <select lay-verify="required" name="report_source">
+                                        <option value="">请选择内容来源</option>
+                                        <option value="0">微博</option>
+                                        <option value="1">推特</option>
+                                        <option value="2">新闻</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label">内容作者</label>
+                                <div class="layui-input-block">
+                                    <input class="layui-input" placeholder="请输入新闻来源或者微博作者">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-col-xs5 layui-col-sm3 layui-col-md5">
+                                <label class="layui-form-label">敏感类别</label>
+                                <div class="layui-input-block">
+                                    <select lay-verify="required" name="report_sensitive">
+                                        <option value>请选择敏感类别</option>
+                                        <option value="0">国家安全</option>
+                                        <option value="1">政治</option>
+                                        <option value="2">色情</option>
+                                        <option value="3">民生</option>
+                                        <option value="4">暴恐</option>
+                                        <option value="5">贪腐</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label">情感类型</label>
+                                <div class="layui-input-block">
+                                    <select lay-verify="required" name="report_affection">
+                                        <option value>请选择情感类型</option>
+                                        <option value="0">正向</option>
+                                        <option value="1">中性</option>
+                                        <option value="2">负向</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-col-xs11 layui-col-sm11 layui-col-md11">
+                                <label class="layui-form-label">时间范围</label>
+                                <div class="layui-input-block">
+                                    <input class="layui-input" id="timeLimit" placeholder="请选择时间范围"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs11 layui-col-sm11 layui-col-md11">
+                            <div class="layui-btn-container layui-col-lg-offset1" style="text-align: left">
+                                <button class="layui-btn layui-btn-normal" style="width: 48%">报告生成</button>
+                                <button class="layui-btn layui-btn-warm" style="width: 48%;">报告下载</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="${ctxPath}/assets/common/libs/echarts/echarts.min.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/common/libs/echarts/echartsTheme.js?v=${constants.getReleaseVersion()}"></script>
+<script src="${ctxPath}/assets/map/js/china.js?v=${constants.getReleaseVersion()}"></script>
+
+@}

@@ -28,7 +28,23 @@
             parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
-        from weibo order by createTime desc
+        from weibo WHERE 1=1
+        <if test="paramCondition.lang != null and paramCondition.lang != ''">
+            and lang = #{paramCondition.lang}
+        </if>
+        <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+            and sentiment = #{paramCondition.sentiment}
+        </if>
+        <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+            and author_name = #{paramCondition.authorName}
+        </if>
+        <if test="paramCondition.location != null and paramCondition.location != ''">
+            and location = #{paramCondition.location}
+        </if>
+        <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+        </if>
+        order by createTime desc
     </select>
 
     <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
