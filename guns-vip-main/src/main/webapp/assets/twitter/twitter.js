@@ -58,90 +58,78 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
     };
 
     var authorCharts = echarts.init(document.getElementById('author'),myEchartsTheme);
-    authorCharts.showLoading();
-    $.get(Feng.ctxPath + '/twitter/author/rank?top=10', function (data) {
-        authorCharts.hideLoading();
-        authorCharts.setOption({
-            color: ['#33a3dc'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            xAxis: [
-                {
-                    name:'作者',
-                    type: 'category',
-                    data: data.authors,
-                    axisLabel: { //X轴字体倾斜设置
-                        interval: 0,
-                        rotate: -10 //倾斜的程度
+    function loadBloggerRankData(lang,sentiment,timeLimit,name,keyword,location){
+        authorCharts.showLoading();
+        $.get(Feng.ctxPath + '/twitter/author/rank?top=10&lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&name='+name+'&keyword='+keyword+'&location='+location, function (data) {
+            authorCharts.hideLoading();
+            authorCharts.setOption({
+                color: ['#33a3dc'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                     }
-                }
-            ],
-            yAxis: [
-                {
-                    name: '数量',
-                    type: 'value'
-                }
-            ],
-            series: [
-                {
-                    type: 'bar',
-                    barWidth: 50,
-                    data: data.twitterCount
-                }
-            ]
+                },
+                xAxis: [
+                    {
+                        name:'作者',
+                        type: 'category',
+                        data: data.authors,
+                        axisLabel: { //X轴字体倾斜设置
+                            interval: 0,
+                            rotate: -10 //倾斜的程度
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        name: '数量',
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        type: 'bar',
+                        barWidth: 50,
+                        data: data.twitterCount
+                    }
+                ]
+            });
         });
-    });
+    }
 
-    // var senTypeCharts = echarts.init(document.getElementById('senType'), myEchartsTheme);
-    // senTypeCharts.showLoading();
-    // $.get(Feng.ctxPath + '/twitter/sentiment', function (data) {
-    //     senTypeCharts.hideLoading();
-    //     senTypeCharts.setOption({
-    //         title : {
-    //             text: '',
-    //             x: 'center'
-    //         },
-    //         tooltip: {
-    //             trigger: 'item',
-    //             formatter: "{a} <br/>{b} : {c} ({d}%)"
-    //         },
-    //         color:["green","blue","red"],
-    //         series : [
-    //             {
-    //                 name: '情感分析',
-    //                 type: 'pie',
-    //                 radius: '80%',
-    //                 center: ['50%', '50%'],
-    //                 data:data.sentimentData,
-    //                 itemStyle: {
-    //                     emphasis: {
-    //                         shadowBlur: 10,
-    //                         shadowOffsetX: 0,
-    //                         shadowColor: 'rgba(0, 0, 0, 0.5)'
-    //                     }
-    //                 }
-    //             }
-    //         ]
-    //     })
-    // }, 'json');
+
+    function loadTwitterData(lang,sentiment,timeLimit,name,keyword,location){
+        var queryData = {};
+        queryData['lang'] = lang;
+        queryData['sentiment'] = sentiment;
+        queryData['timeLimit'] = timeLimit;
+        queryData['name'] = name;
+        queryData['keyword'] = keyword;
+        queryData['location'] = location;
+        table.reload(Twitter.tableId, {
+            where: queryData, page: {curr: 1}
+        });
+    }
+
+    // 初始加载数据
+    loadTwitterData("","","","","","")
+    loadBloggerRankData("","","","","","")
 
         /**
      * 点击查询按钮
      */
     Twitter.search = function () {
-        var queryData = {};
-        queryData['name'] = $("#name").val();
-        queryData['sentiment'] = $("#sentiment").val();
-        queryData['timeLimit'] = $("#timeLimit").val();
-        queryData['lang'] = $("#lang").val();
-        queryData['location'] = $("#location").val();
-        table.reload(Twitter.tableId, {
-            where: queryData, page: {curr: 1}
-        });
+
+        var lang = $("#lang").val();
+        var sentiment = $("#sentiment").val();
+        var timeLimit = $("#timeLimit").val();
+        var name = $("#name").val();
+        var keyword = $("#keyword").val();
+        var location = $("#location").val();
+
+        loadTwitterData(lang,sentiment,timeLimit,name,keyword,location)
+        loadBloggerRankData(lang,sentiment,timeLimit,name,keyword,location);
     };
 
     /**

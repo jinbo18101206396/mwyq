@@ -119,8 +119,10 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
     }
     //加载微博情感趋势数据
     var weiboTrendChart = echarts.init(document.getElementById('weiboTrend'));
-    function loadWeiboTrendData(lang,sentiment,timeLimit,authorName,location){
-        $.get(Feng.ctxPath + '/weibo/sentiment/trend?lang=' +lang+ '&sentiment=' +sentiment+ '&timeLimit=' +timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+    function loadWeiboTrendData(lang,sentiment,timeLimit,authorName,keyword,location){
+        weiboTrendChart.showLoading();
+        $.get(Feng.ctxPath + '/weibo/sentiment/trend?lang=' +lang+ '&sentiment=' +sentiment+ '&timeLimit=' +timeLimit+'&authorName='+authorName +'&keyword='+keyword+'&location='+location, function (data) {
+            weiboTrendChart.hideLoading();
             weiboTrendChart.setOption({
                 tooltip: {
                     trigger: 'axis',
@@ -196,7 +198,9 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
     //加载微博情感分布数据
     var sentimentCharts = echarts.init(document.getElementById('weiboSentiment'), myEchartsTheme);
     function loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,keyword,location){
+        sentimentCharts.showLoading();
         $.get(Feng.ctxPath + '/weibo/sentiment/type?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&keyword='+keyword+'&location='+location, function (data) {
+            sentimentCharts.hideLoading();
             sentimentCharts.setOption({
                 title : {
                     text: '',
@@ -238,8 +242,10 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
 
     //微博语言分布
     var langTypeCharts = echarts.init(document.getElementById('langType'));
-    function loadLangTypeData(lang,sentiment,timeLimit,authorName,location){
-        $.get(Feng.ctxPath + '/weibo/lang/type?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+    function loadLangTypeData(lang,sentiment,timeLimit,authorName,keyword,location){
+        langTypeCharts.showLoading();
+        $.get(Feng.ctxPath + '/weibo/lang/type?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&keyword='+keyword+'&location='+location, function (data) {
+            langTypeCharts.hideLoading();
             langTypeCharts.setOption({
                 tooltip: {
                     trigger: 'item',
@@ -278,8 +284,10 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
 
     //博主发文量排行
     var bloggerCharts = echarts.init(document.getElementById('blogger'), myEchartsTheme);
-    function loadBloggerRankData(lang,sentiment,timeLimit,authorName,location){
-        $.get(Feng.ctxPath + '/weibo/blogger/rank?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+    function loadBloggerRankData(lang,sentiment,timeLimit,authorName,keyword,location){
+        bloggerCharts.showLoading();
+        $.get(Feng.ctxPath + '/weibo/blogger/rank?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&keyword='+keyword+'&location='+location, function (data) {
+            bloggerCharts.hideLoading();
             bloggerCharts.setOption({
                 tooltip: {
                     trigger: 'axis',
@@ -296,7 +304,11 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
                 },
                 xAxis: [{
                     type: 'category',
-                    data: data.authorName
+                    data: data.authorName,
+                    animation: true,
+                    axisLabel: {
+                        rotate: 45
+                    }
                 }],
                 yAxis: [{
                     type: 'value'
@@ -354,8 +366,10 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
 
     //博主地域分布
     var areaMapCharts = echarts.init(document.getElementById('areaMap'), myEchartsTheme);
-    function loadAreaMapData(lang,sentiment,timeLimit,authorName,location){
-        $.get(Feng.ctxPath + '/weibo/areaMap?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&location='+location, function (data) {
+    function loadAreaMapData(lang,sentiment,timeLimit,authorName,keyword,location){
+        areaMapCharts.showLoading();
+        $.get(Feng.ctxPath + '/weibo/areaMap?lang='+lang+'&sentiment='+sentiment+'&timeLimit='+timeLimit+'&authorName='+authorName+'&keyword='+keyword+'&location='+location, function (data) {
+            areaMapCharts.hideLoading();
             areaMapCharts.setOption({
                 tooltip: {
                     formatter:function(params,ticket, callback){
@@ -425,15 +439,15 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
         }
     }
     //初始化加载情感走势数据
-    loadWeiboTrendData('','','','','');
+    loadWeiboTrendData('','','','','','');
     //初始化加载情感分析数据
     loadWeiboSentimentData('','','','','','');
     //初始化博主排行数据
-    loadBloggerRankData('','','','','');
+    loadBloggerRankData('','','','','','');
     //初始博主地域分布数据
-    loadAreaMapData('','','','','');
+    loadAreaMapData('','','','','','');
     //初始化加载语言分布数据
-    loadLangTypeData('','','','','');
+    loadLangTypeData('','','','','','');
 
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
@@ -446,10 +460,10 @@ layui.use(['table', 'admin', 'ax', 'func', 'layer', 'laydate', 'element'], funct
 
         loadWeiboData(lang,sentiment,timeLimit,authorName,keyword,location);
         loadWeiboSentimentData(lang,sentiment,timeLimit,authorName,keyword,location);
-        loadWeiboTrendData(lang,sentiment,timeLimit,authorName,location);
-        loadBloggerRankData(lang,sentiment,timeLimit,authorName,location);
-        loadAreaMapData(lang,sentiment,timeLimit,authorName,location);
-        loadLangTypeData(lang,sentiment,timeLimit,authorName,location);
+        loadWeiboTrendData(lang,sentiment,timeLimit,authorName,keyword,location);
+        loadBloggerRankData(lang,sentiment,timeLimit,authorName,keyword,location);
+        loadAreaMapData(lang,sentiment,timeLimit,authorName,keyword,location);
+        loadLangTypeData(lang,sentiment,timeLimit,authorName,keyword,location);
     });
 
     // 窗口大小改变事件

@@ -57,6 +57,9 @@
         select
         <include refid="Base_Column_List"/>
         FROM weibo WHERE 1=1
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
@@ -83,6 +86,9 @@
 
     <select id="sentimentTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT create_time,sentiment,COUNT(*) AS num FROM weibo WHERE sentiment is not null
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
@@ -105,6 +111,9 @@
 
     <select id="langTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT lang,COUNT(*) AS num FROM weibo WHERE lang is not null
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
@@ -127,6 +136,9 @@
 
     <select id="bloggerRankList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT author_name As authorName,COUNT(*) AS num FROM weibo where author_name is not null
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
@@ -144,11 +156,14 @@
         </if>
         GROUP BY
         author_name
-        ORDER BY num desc limit 10
+        ORDER BY num desc limit 7
     </select>
 
     <select id="authorSentimentList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT sentiment,count(*) as num FROM weibo where sentiment is not null
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
@@ -169,6 +184,9 @@
 
     <select id="areaMapList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select left(location, 4) as location,COUNT(*) as num from weibo t where t.location is NOT NULL
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>
@@ -198,6 +216,9 @@
         COUNT(IF(sentiment=2,2,NULL)) AS senNum,
         COUNT(IF(sentiment=3,3,NULL)) AS forNum
         FROM weibo where 1=1
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>

@@ -37,6 +37,9 @@
         select
         <include refid="Base_Column_List"/>
         from twitter where 1 = 1
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.name != null and paramCondition.name != ''">
             and name like CONCAT('%',#{paramCondition.name},'%')
         </if>
@@ -63,6 +66,9 @@
 
     <select id="authorRankList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.TwitterResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.TwitterParam">
         SELECT name,count(*) as twitterCount from twitter where name is not null
+        <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+            and content like concat('%', #{paramCondition.keyword},'%')
+        </if>
         <if test="paramCondition.lang != null and paramCondition.lang != ''">
             and lang = #{paramCondition.lang}
         </if>

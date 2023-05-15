@@ -24,6 +24,8 @@ public class TwitterParam implements Serializable, BaseValidatingParam {
 
     private String content;
 
+    private String keyword;
+
     private String name;
 
     private String lang;

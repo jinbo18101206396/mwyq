@@ -72,21 +72,7 @@ public class WeiboController extends BaseController {
     @RequestMapping("/list")
     public LayuiPageInfo list(WeiboParam weiboParam) {
 
-//        String keyword = weiboParam.getKeyword();
         LayuiPageInfo weiboPage = this.weiboService.findPageBySpec(weiboParam);
-//        if(keyword == null){
-//            return weiboPage;
-//        }
-//        List<WeiboResult> weiboList = new ArrayList();
-//        List<WeiboResult> weiboResults = weiboPage.getData();
-//        for(WeiboResult weibo:weiboResults){
-//            String content = weibo.getContent();
-//            if(content.contains(keyword)){
-//                weiboList.add(weibo);
-//            }
-//        }
-//        weiboPage.setData(weiboList);
-//        weiboPage.setCount(weiboList.size());
         return weiboPage;
     }
 
@@ -127,40 +113,40 @@ public class WeiboController extends BaseController {
 
         List<WeiboResult> weiboList = new ArrayList();
         String keyword = weiboParam.getKeyword();
-        if(!"".equals(keyword)){
-            for(WeiboResult weiboResult:weiboResults){
+        if (!"".equals(keyword)) {
+            for (WeiboResult weiboResult : weiboResults) {
                 String content = weiboResult.getContent();
-                if(content.contains(keyword)){
+                if (content.contains(keyword)) {
                     weiboList.add(weiboResult);
                 }
             }
-        }else{
+        } else {
             weiboList.addAll(weiboResults);
         }
 
-        Map<Integer,Integer> countMap = new HashMap();
+        Map<Integer, Integer> countMap = new HashMap();
 
         int positive = 0;
         int neural = 0;
         int negative = 0;
 
-        for(WeiboResult weibo : weiboList){
+        for (WeiboResult weibo : weiboList) {
             Integer sentiment = weibo.getSentiment();
-            if(sentiment == 1){
+            if (sentiment == 1) {
                 neural += 1;
-            }else if(sentiment == 2){
+            } else if (sentiment == 2) {
                 negative += 1;
-            }else if(sentiment == 3){
+            } else if (sentiment == 3) {
                 positive += 1;
             }
         }
-        countMap.put(1,neural);
-        countMap.put(2,negative);
-        countMap.put(3,positive);
+        countMap.put(1, neural);
+        countMap.put(2, negative);
+        countMap.put(3, positive);
 
         JSONObject sentimentTypeJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        for(Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
             JSONObject json = new JSONObject();
             json.put("value", entry.getValue());
             json.put("name", SentimentType.getDescription(entry.getKey()));
@@ -207,7 +193,7 @@ public class WeiboController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/blogger/rank", method = RequestMethod.GET)
     public JSONObject weiboBloggerRank(WeiboParam weiboParam) {
-        String cacheKey = "blogger_rank_" + weiboParam.getLang() + "_" + weiboParam.getSentiment() + "_" + weiboParam.getAuthorName() + "_" + weiboParam.getLocation() + "_" + weiboParam.getTimeLimit();
+        String cacheKey = "blogger_rank_" + weiboParam.getLang() + "_" + weiboParam.getSentiment() + "_" + weiboParam.getAuthorName() + "_" + weiboParam.getKeyword() + "_" + weiboParam.getLocation() + "_" + weiboParam.getTimeLimit();
         JSONObject weiboBloggerRankCache = (JSONObject) localCache.getIfPresent(cacheKey);
         if (weiboBloggerRankCache != null) {
             return weiboBloggerRankCache;
