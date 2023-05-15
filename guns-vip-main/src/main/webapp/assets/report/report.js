@@ -14,8 +14,7 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element'], fu
         max: Feng.currentDate()
     });
 
-    // 搜索按钮点击事件
-    $('#btnSearch').click(function () {
-
+    $('#download').click(function () {
+        // $(location).attr('href', '/report/download');
     });
 });
