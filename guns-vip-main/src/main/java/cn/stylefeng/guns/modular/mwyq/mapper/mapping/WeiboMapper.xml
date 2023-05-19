@@ -24,6 +24,10 @@
         AS "id", author_id AS "authorId",author_name AS "authorName", content AS "content", article_url AS "articleUrl", location AS "location",create_time AS "createTime", like_count AS "likeCount", transmit_count AS "transmitCount",  comment_count AS "commentCount",  sentiment AS "sentiment", lang AS "lang"
     </sql>
 
+    <select id="getWeiboById" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult">
+        select <include refid="Base_Column_List"/> from weibo WHERE id = #{id}
+    </select>
+
     <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
             parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
@@ -42,7 +46,8 @@
             and location = #{paramCondition.location}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         order by createTime desc
     </select>
@@ -53,7 +58,8 @@
         from weibo order by createTime desc
     </select>
 
-    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
         FROM weibo WHERE 1=1
@@ -73,18 +79,21 @@
             and location = #{paramCondition.location}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         order by createTime desc,like_count desc,comment_count desc,transmit_count desc
     </select>
 
-    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="customPageMapList" resultType="map"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select
         <include refid="Base_Column_List"/>
         from weibo order by createTime desc
     </select>
 
-    <select id="sentimentTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="sentimentTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT create_time,sentiment,COUNT(*) AS num FROM weibo WHERE sentiment is not null
         <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
             and content like concat('%', #{paramCondition.keyword},'%')
@@ -102,14 +111,16 @@
             and location = #{paramCondition.location}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
         sentiment
         ORDER BY num desc
     </select>
 
-    <select id="langTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="langTypeList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT lang,COUNT(*) AS num FROM weibo WHERE lang is not null
         <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
             and content like concat('%', #{paramCondition.keyword},'%')
@@ -127,14 +138,16 @@
             and location = #{paramCondition.location}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
         lang
         ORDER BY num desc
     </select>
 
-    <select id="bloggerRankList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="bloggerRankList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT author_name As authorName,COUNT(*) AS num FROM weibo where author_name is not null
         <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
             and content like concat('%', #{paramCondition.keyword},'%')
@@ -152,14 +165,16 @@
             and location = #{paramCondition.location}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
         author_name
         ORDER BY num desc limit 7
     </select>
 
-    <select id="authorSentimentList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="authorSentimentList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT sentiment,count(*) as num FROM weibo where sentiment is not null
         <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
             and content like concat('%', #{paramCondition.keyword},'%')
@@ -177,12 +192,14 @@
             and sentiment = #{paramCondition.sentiment}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY sentiment
     </select>
 
-    <select id="areaMapList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="areaMapList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         select left(location, 4) as location,COUNT(*) as num from weibo t where t.location is NOT NULL
         <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
             and content like concat('%', #{paramCondition.keyword},'%')
@@ -200,12 +217,14 @@
             and sentiment = #{paramCondition.sentiment}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
-        GROUP BY  location order by num desc
+        GROUP BY location order by num desc
     </select>
 
-    <select id="sentimentTrendList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
+    <select id="sentimentTrendList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult"
+            parameterType="cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam">
         SELECT
         create_time,
         YEAR(create_time) as yearTime,
@@ -232,7 +251,8 @@
             and sentiment = #{paramCondition.sentiment}
         </if>
         <if test="paramCondition.beginTime != null and paramCondition.beginTime != '' and paramCondition.endTime != null and paramCondition.endTime != ''">
-            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and CONCAT(#{paramCondition.endTime},' 23:59:59'))
+            and (create_time between CONCAT(#{paramCondition.beginTime},' 00:00:00') and
+            CONCAT(#{paramCondition.endTime},' 23:59:59'))
         </if>
         GROUP BY
         data_time

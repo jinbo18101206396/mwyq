@@ -8,6 +8,7 @@ import cn.stylefeng.guns.modular.mwyq.model.result.WeiboTrendResult;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -115,4 +116,6 @@ public interface WeiboService extends IService<Weibo> {
      * @Date 2022-07-29
      */
     JSONObject getAuthorSentiment(WeiboParam weiboParam);
+
+    WeiboResult getWeiboById(Serializable id);
 }

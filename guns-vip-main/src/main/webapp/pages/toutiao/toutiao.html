@@ -1,0 +1,56 @@
+@layout("/common/_container.html",{js:["/assets/toutiao/toutiao.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="keyword" class="layui-input" type="text" placeholder="关键词" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="authorName" class="layui-input" type="text" placeholder="作者" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="lang">
+                                    <option value="">语言类型</option>
+                                    <option value="cn">中文</option>
+                                    <option value="zang">藏文</option>
+                                    <option value="meng">蒙古文</option>
+                                    <option value="waimeng">外蒙古文</option>
+                                    <option value="wei">维吾尔文</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="sentiment">
+                                    <option value="">情感类型</option>
+                                    <option value="3">正向</option>
+                                    <option value="1">中性</option>
+                                    <option value="2">负向</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="toutiaoTable" lay-filter="toutiaoTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
+@}

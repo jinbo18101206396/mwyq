@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.mwyq.mapper.ToutiaoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.mwyq.entity.Toutiao">
+        <id column="id" property="id" />
+        <result column="author_id" property="authorId" />
+        <result column="author_name" property="authorName" />
+        <result column="keyword" property="keyword" />
+        <result column="description" property="description" />
+        <result column="content" property="content" />
+        <result column="article_url" property="articleUrl" />
+        <result column="create_time" property="createTime" />
+        <result column="like_count" property="likeCount" />
+        <result column="comment_count" property="commentCount" />
+        <result column="sentiment" property="sentiment" />
+        <result column="lang" property="lang" />
+        <result column="Queryword" property="Queryword" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", author_id AS "authorId", author_name AS "authorName", keyword AS "keyword", description AS "description", content AS "content", article_url AS "articleUrl", create_time AS "createTime", like_count AS "likeCount", comment_count AS "commentCount", sentiment AS "sentiment", lang AS "lang", Queryword AS "Queryword"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.ToutiaoResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.ToutiaoParam">
+        select
+        <include refid="Base_Column_List"/>
+        from toutiao where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
+                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
+            </if>
+            <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+                and author_name like CONCAT('%',#{paramCondition.authorName},'%')
+            </if>
+            <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+                and keyword like CONCAT('%',#{paramCondition.keyword},'%')
+            </if>
+            <if test="paramCondition.content != null and paramCondition.content != ''">
+                and content like CONCAT('%',#{paramCondition.content},'%')
+            </if>
+            <if test="paramCondition.articleUrl != null and paramCondition.articleUrl != ''">
+                and article_url like CONCAT('%',#{paramCondition.articleUrl},'%')
+            </if>
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
+                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
+            </if>
+            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
+                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
+            </if>
+            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang like CONCAT('%',#{paramCondition.lang},'%')
+            </if>
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.ToutiaoParam">
+        select
+        <include refid="Base_Column_List"/>
+        from toutiao where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
+                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
+            </if>
+            <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+                and author_name like CONCAT('%',#{paramCondition.authorName},'%')
+            </if>
+            <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+                and keyword like CONCAT('%',#{paramCondition.keyword},'%')
+            </if>
+            <if test="paramCondition.content != null and paramCondition.content != ''">
+                and content like CONCAT('%',#{paramCondition.content},'%')
+            </if>
+            <if test="paramCondition.articleUrl != null and paramCondition.articleUrl != ''">
+                and article_url like CONCAT('%',#{paramCondition.articleUrl},'%')
+            </if>
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
+                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
+            </if>
+            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
+                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
+            </if>
+            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang like CONCAT('%',#{paramCondition.lang},'%')
+            </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.mwyq.model.result.ToutiaoResult" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.ToutiaoParam">
+        select
+        <include refid="Base_Column_List"/>
+        from toutiao where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
+                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
+            </if>
+            <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+                and author_name like CONCAT('%',#{paramCondition.authorName},'%')
+            </if>
+            <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+                and keyword like CONCAT('%',#{paramCondition.keyword},'%')
+            </if>
+            <if test="paramCondition.content != null and paramCondition.content != ''">
+                and content like CONCAT('%',#{paramCondition.content},'%')
+            </if>
+            <if test="paramCondition.articleUrl != null and paramCondition.articleUrl != ''">
+                and article_url like CONCAT('%',#{paramCondition.articleUrl},'%')
+            </if>
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
+                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
+            </if>
+            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
+                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
+            </if>
+            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang like CONCAT('%',#{paramCondition.lang},'%')
+            </if>
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.mwyq.model.params.ToutiaoParam">
+        select
+        <include refid="Base_Column_List"/>
+        from toutiao where 1 = 1
+            <if test="paramCondition.id != null and paramCondition.id != ''">
+                and id like CONCAT('%',#{paramCondition.id},'%')
+            </if>
+            <if test="paramCondition.authorId != null and paramCondition.authorId != ''">
+                and author_id like CONCAT('%',#{paramCondition.authorId},'%')
+            </if>
+            <if test="paramCondition.authorName != null and paramCondition.authorName != ''">
+                and author_name like CONCAT('%',#{paramCondition.authorName},'%')
+            </if>
+            <if test="paramCondition.keyword != null and paramCondition.keyword != ''">
+                and keyword like CONCAT('%',#{paramCondition.keyword},'%')
+            </if>
+            <if test="paramCondition.content != null and paramCondition.content != ''">
+                and content like CONCAT('%',#{paramCondition.content},'%')
+            </if>
+            <if test="paramCondition.articleUrl != null and paramCondition.articleUrl != ''">
+                and article_url like CONCAT('%',#{paramCondition.articleUrl},'%')
+            </if>
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and create_time like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+            <if test="paramCondition.likeCount != null and paramCondition.likeCount != ''">
+                and like_count like CONCAT('%',#{paramCondition.likeCount},'%')
+            </if>
+            <if test="paramCondition.commentCount != null and paramCondition.commentCount != ''">
+                and comment_count like CONCAT('%',#{paramCondition.commentCount},'%')
+            </if>
+            <if test="paramCondition.sentiment != null and paramCondition.sentiment != ''">
+                and sentiment like CONCAT('%',#{paramCondition.sentiment},'%')
+            </if>
+            <if test="paramCondition.lang != null and paramCondition.lang != ''">
+                and lang like CONCAT('%',#{paramCondition.lang},'%')
+            </if>
+    </select>
+
+</mapper>

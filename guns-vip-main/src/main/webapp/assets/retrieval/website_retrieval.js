@@ -40,12 +40,15 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
         if (newsArray.length > 0) {
             for (let j = 0; j < newsArray.length; j++) {
                 var newsObject = newsArray[j];
+                console.log(newsObject)
+                var newsId = newsObject.id;
                 var newsTitle = newsObject.news_title;
                 newsTitle = newsTitle.replace(keyWords, '<span style="color:red">' + keyWords + '</span>')
                 for (let i = 0; i < minWords.length; i++) {
                     min = minWords[i];
                     newsTitle = newsTitle.replace(min, '<span style="color:red">' + min + '</span>')
                 }
+                var langType = newsObject.lang_type;
                 var newsUrl = newsObject.news_url
                 var newsTime = newsObject.news_time;
                 newsTime = newsTime.substr(0, 10)
@@ -54,13 +57,12 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
                 if (sensitive == "1") {
                     sensitive = "<span style=\"color:blue\">中性</span>";
                 } else if (sensitive == "2") {
-                    sensitive = "<span style=\"color:red\">负向</span>";
+                    sensitive = "<span style=\"color:red\">敏感</span>";
                 } else {
                     sensitive = "<span style=\"color:green\">正向</span>";
                 }
                 addhtml += "<div style=\"width:100%;height:4%;text-align:left;vertical-align: center;\">" +
-                    "<a href=" + newsUrl + " className=\"layui-table-link\" target=\"_blank\">" +
-                    // "<a href=\"/retrieval/news/detail/page?newsId=" + newsId + "&langType=" +langType+"&newsTitle="+newsTitle+"&newsUrl="+newsUrl+"&keyWords="+keyWords+ " \">" +
+                    "<a href=/retrieval/news/detail/page?newsId=" + newsId + " className=\"layui-table-link\" target=\"_blank\">" +
                     "<div style=\"width:80%;float:left;font:40px;color: #00a0e9;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">" + newsTitle + "</div>" +
                     "<div style=\"width:10%;float:left;font:20px;\">" + sensitive + "</div>" +
                     "<div style=\"width:10%;float:left;font:20px;\">" + newsTime + "</div>" +

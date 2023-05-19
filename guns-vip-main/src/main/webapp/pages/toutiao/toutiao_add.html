@@ -1,0 +1,93 @@
+@layout("/common/_form.html",{js:["/assets/toutiao/toutiao/toutiao_add.js"]}){
+
+<form class="layui-form" id="toutiaoForm" lay-filter="toutiaoForm">
+    <div class="layui-fluid" style="padding-bottom: 75px;">
+        <div class="layui-card">
+            <div class="layui-card-header">基本信息</div>
+            <div class="layui-card-body">
+                <div class="layui-form-item layui-row">
+                    <input name="id" type="hidden"/>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">作者id<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="authorId" name="authorId" placeholder="请输入作者id" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">作者姓名<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="authorName" name="authorName" placeholder="请输入作者姓名" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">文章内部关键词<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="keyword" name="keyword" placeholder="请输入文章内部关键词" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">摘要<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="description" name="description" placeholder="请输入摘要" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">头条内容<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="content" name="content" placeholder="请输入头条内容" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">文章地址<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="articleUrl" name="articleUrl" placeholder="请输入文章地址" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">create_time<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="createTime" name="createTime" placeholder="请输入create_time" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">点赞量<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="likeCount" name="likeCount" placeholder="请输入点赞量" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">评论量<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="commentCount" name="commentCount" placeholder="请输入评论量" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">情感类型<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="sentiment" name="sentiment" placeholder="请输入情感类型" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">语言语种<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="lang" name="lang" placeholder="请输入语言语种" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">搜索关键词<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="Queryword" name="Queryword" placeholder="请输入搜索关键词" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group-bottom text-center">
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>&emsp;提交&emsp;</button>
+        <button type="reset" class="layui-btn layui-btn-primary" ew-event="closeDialog">&emsp;取消&emsp;</button>
+    </div>
+
+</form>
+
+@}

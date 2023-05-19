@@ -33,6 +33,8 @@ layui.use(['table', 'admin','laydate', 'ax', 'func'], function () {
                         return "<p>维吾尔文</p>";
                     }else if(d.lang == 'meng'){
                         return "<p>蒙古文</p>";
+                    }else if(d.lang == 'en'){
+                        return "<p>英文</p>";
                     }else{
                         return "<p></p>";
                     }

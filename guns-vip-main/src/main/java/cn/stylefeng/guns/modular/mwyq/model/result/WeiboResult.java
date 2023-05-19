@@ -42,6 +42,11 @@ public class WeiboResult implements Serializable {
     private String content;
 
     /**
+     * 译文内容
+     */
+    private String translateContent;
+
+    /**
      * 博文地址
      */
     private String articleUrl;

@@ -24,7 +24,9 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
         if (weiboList != null && weiboList != "undefined") {
             for (var j = 0; j < weiboList.length; j++) {
                 var weibo = weiboList[j];
+                console.log(weibo)
                 var sentiment = weibo.sentiment;
+                var weiboId = weibo.id;
                 var content = weibo.content;
                 content = content.replace(cnWord, '<span style="color:red">' + cnWord + '</span>')
                 for (let i = 0; i < minWords.length; i++) {
@@ -52,7 +54,7 @@ layui.use(['table', 'ax', 'func', 'layer', 'element', 'form', 'carousel'], funct
                 }
 
                 addhtml += "<div style='width: 100%;margin-bottom: 60px;text-align: left;vertical-align: middle;'>" +
-                    "<a href=" + url + " className=\"layui-table-link\" target=\"_blank\"><div  style=\"width: 100%;float:left;font:13px '微软雅黑';color: #61B2FC;text-align: left;margin-bottom: 20px;\">" + content + "</div>\n" +
+                    "<a href=/retrieval/weibo/detail/page?id=" + weiboId + " className=\"layui-table-link\" target=\"_blank\"><div  style=\"width: 100%;float:left;font:13px '微软雅黑';color: #61B2FC;text-align: left;margin-bottom: 20px;\">" + content + "</div>\n" +
                     "<div  style=\"width: 20%;float:left;font:12px '微软雅黑';text-align: center;\">" + authorName + "</div>" +
                     "<div  style=\"width: 10%;float:left;font:12px '微软雅黑';text-align: center;\">" + location + "</div>" +
                     "<div  style=\"width: 10%;float:left;font:12px '微软雅黑';text-align: center;\">" + sentiment + "</div>" +

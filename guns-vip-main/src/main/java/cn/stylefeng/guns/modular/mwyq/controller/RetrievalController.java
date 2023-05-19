@@ -2,9 +2,14 @@ package cn.stylefeng.guns.modular.mwyq.controller;
 
 import cn.stylefeng.guns.modular.mwyq.entity.News;
 import cn.stylefeng.guns.modular.mwyq.entity.SolrWeiboDocResEntity;
+import cn.stylefeng.guns.modular.mwyq.entity.Weibo;
 import cn.stylefeng.guns.modular.mwyq.model.params.NewsParam;
 import cn.stylefeng.guns.modular.mwyq.model.params.WebsiteRetrievalParam;
+import cn.stylefeng.guns.modular.mwyq.model.params.WeiboParam;
 import cn.stylefeng.guns.modular.mwyq.model.params.WeiboRetrievalParam;
+import cn.stylefeng.guns.modular.mwyq.model.result.WeiboResult;
+import cn.stylefeng.guns.modular.mwyq.service.NewsService;
+import cn.stylefeng.guns.modular.mwyq.service.WeiboService;
 import cn.stylefeng.guns.modular.mwyq.utils.*;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -16,8 +21,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +52,12 @@ public class RetrievalController extends BaseController {
     private static final WebsiteDocQuery moSolrDoc = new WebsiteDocQuery();
 
     private final String PREFIX = "/retrieval";
+
+    @Autowired
+    private NewsService newsService;
+
+    @Autowired
+    private WeiboService weiboService;
 
     @RequestMapping("")
     public String index() {
@@ -238,7 +251,7 @@ public class RetrievalController extends BaseController {
         String sensitive = webParam.getSensitive();
         String cycle = webParam.getCycle();
 
-        String cacheKey = "search_news_es_" + keyword + "_" + srclang + "_" + tgtlang+"_"+sensitive + "_" + cycle;
+        String cacheKey = "search_news_es_" + keyword + "_" + srclang + "_" + tgtlang + "_" + sensitive + "_" + cycle;
         JSONObject websiteEsCache = (JSONObject) localCache.getIfPresent(cacheKey);
         if (websiteEsCache != null) {
             return websiteEsCache;
@@ -289,7 +302,7 @@ public class RetrievalController extends BaseController {
         websiteJson.put("negativeNum", negativeNum);
         websiteJson.put("neutralNum", neutralNum);
 
-//        localCache.put(cacheKey,websiteJson);
+        localCache.put(cacheKey,websiteJson);
 
         return websiteJson;
     }
@@ -305,21 +318,21 @@ public class RetrievalController extends BaseController {
     public String websiteNews(NewsParam newsParam, Model model) {
 
         Integer newsId = newsParam.getNewsId();
-        String keyWords = newsParam.getKeyWords();
-        String langType = newsParam.getLangType();
-        Date newsTime = newsParam.getNewsTime();
-        String newsUrl = newsParam.getNewsUrl();
-        String newsTitle = newsParam.getNewsTitle();
-        String newsContent = newsParam.getNewsContent();
-
         model.addAttribute("newsId", newsId);
-        model.addAttribute("keyWords", keyWords);
-        model.addAttribute("langType", langType);
-        model.addAttribute("newsTime", newsTime);
-        model.addAttribute("newsUrl", newsUrl);
-        model.addAttribute("newsTitle", newsTitle);
-        model.addAttribute("newsContent", newsContent);
         return PREFIX + "/website_news_detail.html";
+    }
+
+    /**
+     * 跳转到微博详情页（翻译页面）
+     *
+     * @author jinbo
+     * @Date 2021/1/17
+     */
+    @RequestMapping("/weibo/detail/page")
+    public String weiboNews(WeiboParam weiboParam, Model model) {
+        String weiboId = weiboParam.getId();
+        model.addAttribute("weiboId", weiboId);
+        return PREFIX + "/weibo_detail.html";
     }
 
     /**
@@ -378,21 +391,23 @@ public class RetrievalController extends BaseController {
     @ResponseBody
     public ResponseData retrieveDetail(NewsParam newsParam) {
 
-        String keyWords = newsParam.getKeyWords();
-        String langType = newsParam.getLangType();
-        Date newsTime = newsParam.getNewsTime();
-        String newsUrl = newsParam.getNewsUrl();
-        String newsTitle = newsParam.getNewsTitle();
-        String newsContent = newsParam.getNewsContent();
+        Integer newsId = newsParam.getNewsId();
+        News news = newsService.getById(newsId);
+        String newsTitle = news.getNewsTitle();
+        String keyWords = news.getKeyWords();
+        String langType = news.getLangType();
+        Date newsTime = news.getNewsTime();
+        String time = DateUtils.formatDate(newsTime, "yyyy-MM-dd HH:mm:ss");
+        String newsUrl = news.getNewsUrl();
+        String newsContent = news.getNewsContent();
 
         String queryString = CrossLangQE.getMnFromZhInCrossVali(keyWords, 2);
-        newsTitle = newsTitle.replace(queryString, "<span style=\"color:red\">" + queryString + "</span>");
+        newsTitle = newsTitle.replace(queryString, "<a href=" + newsUrl + "><span style=\"color:red\">" + queryString + "</span>");
         newsContent = newsContent.replace("\u1800", "\u202f").replace(queryString, "<span style=\"color:red\">" + queryString + "</span>");
         newsContent = "<span style='font-size:20px;font-weight:bold;text-align:center;display:block;padding-bottom:5px'>" + newsTitle + "</span>" +
-                "<span style='font-size:10px;text-align:center;display:block;'>" + newsTime + "</span>" +
+                "<span style='font-size:10px;text-align:center;display:block;'>" + time + "</span>" +
                 "<span style='color:blue;font-size:12px;text-align:center;display:block;'>" + newsUrl + "</span>" + newsContent;
 
-        News news = new News();
         news.setNewsContent(newsContent);
 
         //翻译少数语言
@@ -404,11 +419,44 @@ public class RetrievalController extends BaseController {
                 String transTitle = transTitleAndContent.split("\n")[0];
                 String transContent = transTitleAndContent.replace("\n", "\n<br>").replace("\r", "\n<br>").replace(transTitle, "");
                 transContent = "<span style='font-size:17px;font-weight:bold;text-align:center;display:block;padding-bottom:5px'>" + transTitle + "</span>" +
-                        "<span style='font-size:10px;text-align:center;display:block;'>" + newsTime + "</span>" + transContent;
+                        "<span style='font-size:10px;text-align:center;display:block;'>" + time + "</span>" + transContent;
                 news.setTranslateContent(transContent);
             }
         }
         SuccessResponseData responseData = ResponseData.success(news);
+        return responseData;
+    }
+
+    /**
+     * 翻译微博（跨语言检索模块）
+     *
+     * @author jinbo
+     * @Date 2023/5/18
+     */
+    @RequestMapping("/weibo/translate/es")
+    @ResponseBody
+    public ResponseData retrieveWeiboDetail(WeiboParam weiboParam) {
+
+        String weiboId = weiboParam.getId();
+        WeiboResult weiboResult = weiboService.getWeiboById(weiboId);
+        String weiboContent = weiboResult.getContent();
+        Date weiboTime = weiboResult.getCreateTime();
+        String time = DateUtils.formatDate(weiboTime, "yyyy-MM-dd HH:mm:ss");
+        String weiboUrl = weiboResult.getArticleUrl();
+        String langType = weiboResult.getLang();
+        //翻译少数语言
+        if (!langType.equals("cn")) {
+            TranslationUtil trans = new TranslationUtil();
+            String transContent = trans.sendPost(weiboContent, langType, "paragraph");
+            if (ToolUtil.isNotEmpty(transContent)) {
+                weiboResult.setTranslateContent(transContent);
+            }
+        }
+
+        weiboContent = "<span style='font-size:10px;text-align:center;display:block;'>发布时间：" + time + "</span>" +
+                "<span style='color:blue;font-size:12px;text-align:center;display:block;'>原文地址：" + weiboUrl + "</span>" + weiboContent;
+        weiboResult.setContent(weiboContent);
+        SuccessResponseData responseData = ResponseData.success(weiboResult);
         return responseData;
     }
 }

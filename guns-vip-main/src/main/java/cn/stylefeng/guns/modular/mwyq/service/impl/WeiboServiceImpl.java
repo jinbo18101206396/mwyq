@@ -185,4 +185,9 @@ public class WeiboServiceImpl extends ServiceImpl<WeiboMapper, Weibo> implements
         authorSentimentObject.put("negative",negativeArray);
         return authorSentimentObject;
     }
+
+    @Override
+    public WeiboResult getWeiboById(Serializable id) {
+        return weiboMapper.getWeiboById(id);
+    }
 }

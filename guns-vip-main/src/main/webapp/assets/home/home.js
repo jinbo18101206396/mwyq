@@ -32,8 +32,24 @@ layui.use(['table', 'ax', 'treetable','laydate', 'func', 'layer', 'element','for
             {field: 'topicId',align: "center", hide: true, title: '话题id'},
             {
                 field: 'topicName',align: "center", sort: true, title: '话题名称',minWidth: 400,templet:function (d) {
-                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + d.topicId +'&topicName='+d.topicName+'&clusterTopicName='+d.clusterTopicName+'&langType=' + d.langType+'&topwords='+d.topwords+'&newsCount='+d.newsCount+'&newsTime='+d.newsTime+'&summarize='+d.summarize;
-                    return '<div style="text-align: left"><a style="color: #01AAED;" href="'+url+'">'+d.topicName+'</a></div>';
+                    var topicId = d.topicId;
+                    var topicName = d.topicName;
+                    var clusterTopicName = d.clusterTopicName;
+                    var langType = d.langType;
+                    var topwords = d.topwords;
+                    var newsCount = d.newsCount;
+                    var newsTime = d.newsTime;
+                    var summarize = d.summarize;
+
+                    if(topicName.includes("20%")){
+                        topicName = topicName.replace("20%"," ")
+                    }
+                    if(clusterTopicName.includes("20%")){
+                        clusterTopicName = clusterTopicName.replace("20%"," ")
+                    }
+
+                    var url = Feng.ctxPath + '/home/topic/detail?topicId=' + topicId +'&topicName='+topicName+'&clusterTopicName='+clusterTopicName+'&langType=' + langType+'&topwords='+topwords+'&newsCount='+newsCount+'&newsTime='+newsTime+'&summarize='+summarize;
+                    return '<div style="text-align: left"><a style="color: #01AAED;" href="'+url+'" target=\"_blank\">'+d.topicName+'</a></div>';
                 }
             },
             {field: 'newsCount',align: "center", sort: true, title: '新闻数量',width:100},

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -95,5 +96,13 @@ public interface WeiboMapper extends BaseMapper<Weibo> {
      * @return
      */
     List<WeiboTrendResult> sentimentTrendList(@Param("paramCondition") WeiboParam paramCondition);
+
+    /**
+     * 获取微博
+     *
+     * @author jinbo
+     * @Date 2023-5-18
+     */
+    WeiboResult getWeiboById(Serializable id);
 
 }

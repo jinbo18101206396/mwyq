@@ -13,46 +13,60 @@ import java.io.Serializable;
  * 
  * </p>
  *
- * @author jinbo
- * @since 2020-12-16
+ * @author 金波
+ * @since 2023-05-18
  */
-@TableName("weibo")
-public class Weibo implements Serializable {
+@TableName("toutiao")
+public class Toutiao implements Serializable {
 
     private static final long serialVersionUID=1L;
-    public Object getContent;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    /**
+     * 文章id
+     */
+      @TableId(value = "id", type = IdType.ID_WORKER)
     private String id;
 
     /**
-     * 博主id
+     * 作者id
      */
     @TableField("author_id")
-    private Long authorId;
+    private String authorId;
 
     /**
-     * 博主姓名
+     * 作者姓名
      */
     @TableField("author_name")
-    private Long authorName;
+    private String authorName;
 
     /**
-     * 微博内容
+     * 文章内部关键词
+     */
+    @TableField("keyword")
+    private String keyword;
+
+    /**
+     * 摘要
+     */
+    @TableField("description")
+    private String description;
+
+    /**
+     * 头条内容
      */
     @TableField("content")
     private String content;
 
+    /**
+     * 文章地址
+     */
     @TableField("article_url")
     private String articleUrl;
 
-    @TableField("location")
-    private String location;
-
     /**
-     * 创建时间
+     * create_time
      */
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
+      @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
@@ -62,17 +76,10 @@ public class Weibo implements Serializable {
     private Integer likeCount;
 
     /**
-     * 转发量
-     */
-    @TableField("transmit_count")
-    private Integer transmitCount;
-
-    /**
      * 评论量
      */
     @TableField("comment_count")
     private Integer commentCount;
-
 
     /**
      * 情感类型
@@ -81,13 +88,17 @@ public class Weibo implements Serializable {
     private Integer sentiment;
 
     /**
-     * 微博语言
+     * 语言语种
      */
     @TableField("lang")
     private String lang;
 
-    @TableField(exist = false)
-    private String translateContent;
+    /**
+     * 搜索关键词
+     */
+    @TableField("Queryword")
+    private String Queryword;
+
 
     public String getId() {
         return id;
@@ -97,20 +108,36 @@ public class Weibo implements Serializable {
         this.id = id;
     }
 
-    public Long getAuthorId() {
+    public String getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Long authorId) {
+    public void setAuthorId(String authorId) {
         this.authorId = authorId;
     }
 
-    public Long getAuthorName() {
+    public String getAuthorName() {
         return authorName;
     }
 
-    public void setAuthorName(Long authorName) {
+    public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getContent() {
@@ -129,14 +156,6 @@ public class Weibo implements Serializable {
         this.articleUrl = articleUrl;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -151,14 +170,6 @@ public class Weibo implements Serializable {
 
     public void setLikeCount(Integer likeCount) {
         this.likeCount = likeCount;
-    }
-
-    public Integer getTransmitCount() {
-        return transmitCount;
-    }
-
-    public void setTransmitCount(Integer transmitCount) {
-        this.transmitCount = transmitCount;
     }
 
     public Integer getCommentCount() {
@@ -185,30 +196,30 @@ public class Weibo implements Serializable {
         this.lang = lang;
     }
 
-    public String getTranslateContent() {
-        return translateContent;
+    public String getQueryword() {
+        return Queryword;
     }
 
-    public void setTranslateContent(String translateContent) {
-        this.translateContent = translateContent;
+    public void setQueryword(String Queryword) {
+        this.Queryword = Queryword;
     }
 
     @Override
     public String toString() {
-        return "Weibo{" +
-                "id='" + id + '\'' +
-                ", authorId=" + authorId +
-                ", authorName=" + authorName +
-                ", content='" + content + '\'' +
-                ", articleUrl='" + articleUrl + '\'' +
-                ", location='" + location + '\'' +
-                ", createTime=" + createTime +
-                ", likeCount=" + likeCount +
-                ", transmitCount=" + transmitCount +
-                ", commentCount=" + commentCount +
-                ", sentiment=" + sentiment +
-                ", lang='" + lang + '\'' +
-                ", translateContent='" + translateContent + '\'' +
-                '}';
+        return "Toutiao{" +
+        "id=" + id +
+        ", authorId=" + authorId +
+        ", authorName=" + authorName +
+        ", keyword=" + keyword +
+        ", description=" + description +
+        ", content=" + content +
+        ", articleUrl=" + articleUrl +
+        ", createTime=" + createTime +
+        ", likeCount=" + likeCount +
+        ", commentCount=" + commentCount +
+        ", sentiment=" + sentiment +
+        ", lang=" + lang +
+        ", Queryword=" + Queryword +
+        "}";
     }
 }

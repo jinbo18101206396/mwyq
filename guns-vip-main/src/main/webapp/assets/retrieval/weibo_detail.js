@@ -8,15 +8,15 @@ layui.use(['table', 'ax', 'func', 'layer', 'element','form','carousel'], functio
     var form = layui.form;
     var laydate = layui.laydate;
 
-    var newsId = $("#newsId").val();
+    var weiboId = $("#weiboId").val();
 
     //获取新闻内容、译文内容、敏感词、关键词
-    var ajax = new $ax(Feng.ctxPath + '/retrieval/news/translate/es?newsId='+newsId);
+    var ajax = new $ax(Feng.ctxPath + '/retrieval/weibo/translate/es?id='+weiboId);
     var result = ajax.start();
 
     console.log(result.data)
 
 
-    $("#newsContent").html(result.data.newsContent);
-    $("#translateContent").html(result.data.translateContent);
+    $("#weiboContent").html(result.data.content);
+    $("#transContent").html(result.data.translateContent);
 });

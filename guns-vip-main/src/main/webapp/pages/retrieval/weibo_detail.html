@@ -1,4 +1,4 @@
-@layout("/common/_container.html",{js:["/assets/retrieval/website_news_detail.js"]}){
+@layout("/common/_container.html",{js:["/assets/retrieval/weibo_detail.js"]}){
 
 <div class="layui-fluid" style="text-align: left;">
     <div class="layui-row layui-col-space15">
@@ -13,12 +13,12 @@
         </div>
     </div>
     <div class="layui-row layui-col-space15">
-        <input id="newsId" type="hidden" value="${newsId}">
+        <input id="weiboId" type="hidden" value="${weiboId}">
         <div class="layui-col-xs12 layui-col-md6">
             <div class="layui-card">
                 <div class="layui-card-header">原 文</div>
                 <div class="layui-card-body" style="height: 400px;">
-                    <div id="newsContent" style="height: 100%;text-align: left;overflow: auto;"></div>
+                    <div id="weiboContent" style="height: 100%;text-align: left;overflow: auto;"></div>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">译 文</div>
                 <div class="layui-card-body" style="height: 400px;">
-                    <div id="translateContent" style="height: 100%;text-align: left;overflow: auto;"></div>
+                    <div id="transContent" style="height: 100%;text-align: left;overflow: auto;"></div>
                 </div>
             </div>
         </div>
